@@ -1,0 +1,12 @@
+#!/usr/bin/zsh
+
+varname=$1
+currentpath=${(P)varname}
+separator=$2
+
+IFS=$separator read -A actualpath <<< "$currentpath"
+actualpath+=(${@:3})
+
+typeset -U actualpath
+
+export "$varname"="${(pj/$separator/)actualpath}"

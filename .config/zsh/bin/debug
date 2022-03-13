@@ -1,0 +1,14 @@
+#!/usr/bin/zsh
+
+if ! (($#)); then
+  echo Debug necesita parametros
+  exit 1
+fi
+
+echo $*
+
+set -x
+for comm in "$@"; do
+  echo ${comm}
+done
+set +x

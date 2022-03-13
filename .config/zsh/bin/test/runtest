@@ -1,0 +1,105 @@
+#!/usr/bin/zsh
+
+autoload -U colors && colors
+
+RESULT_TEST_KEYS=(result actual expected)
+RESULT_SEPARATOR="#"
+
+function out {
+  usage $uh[@]
+  exit 1
+}
+
+function list {
+    echo
+    print -- --- Tests ---
+    for test in $available_tests; do
+      print -- $test
+    done
+    print -- -------------
+    echo
+}
+
+function runtest {
+  arrvalues=${(@s:#:)1}
+  for idx in {1..${#RESULT_TEST_KEYS[@]}}; do
+    key=$RESULT_TEST_KEYS[$idx]
+    val=$arrvalues[$idx]
+    declare -r $key=$value
+  done 
+}
+
+debug=0
+runall=0
+
+TESTPREFIX=tests
+
+OK=("Passed!" "$fg_bold[green]")
+KO=("Failed!\n  Actual:   $actual  Expected: $expected" "$fg_bold[red]")
+
+uh=(
+  h "display this message"
+  a "run every available test"
+  l "list available tests"
+  x "debug test"
+)
+
+available_tests=$(find tests -type f -printf '%f\n')
+
+while getopts :hlxa opt; do
+  case $opt in
+    a)
+      runall=1
+      ;;
+    h)
+      out
+      exit 1
+      ;;
+    l)
+      list
+      exit 1
+      ;;
+    x)
+      debug=1
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+if (($runall)); then
+  tests_to_run=$available_tests[@]
+elif [[ $# -ge 1 ]]; then
+  tests_to_run+=($@)
+else
+  out 
+fi
+
+filecounter=1
+
+for testname in ${(f)tests_to_run}; do
+  testfile="$TESTPREFIX/$testname"
+  if ! [ -x $testfile ]; then
+    echo "$testfile not found"
+    continue 
+  fi
+
+  echo "#$filecounter -> Testing $testname"
+  testcounter=1
+  for testcase in $(./$testfile); do
+    runtest "$testcase"
+    
+    echo $result
+    if [[ $result -eq 0 ]]; then
+      resultcolor=$OK[2]
+      resultstr=$OK[1]
+    else
+      resultcolor=$KO[2]
+      resultstr=$KO[1]
+    fi
+    
+    print "$resultcolor" " #$filecounter.$testcounter $resultstr"
+    ((testcounter++))
+  done
+  ((filecounter++))
+done <<< "$tests_to_run"

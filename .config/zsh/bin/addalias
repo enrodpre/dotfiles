@@ -1,0 +1,11 @@
+#!/usr/bin/bash
+
+if [[ $# -ne 2 ]]    
+then
+  echo "Create alias and persists it"
+  echo "Usage: addalias 1 2"
+  exit 1
+fi
+
+echo "alias $1=\"$2\"" >> $HOME/.aliases
+rlzsh

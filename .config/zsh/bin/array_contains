@@ -1,0 +1,10 @@
+#!/usr/bin/zsh
+
+arr="$1[@]"
+
+for elem in "${arr[@]}"; do
+  shift
+  val=$1
+
+  [[ $elem != $val ]] && return $?
+done
