@@ -56,20 +56,7 @@ bindsym $mod+Shift+n gaps inner all set 0; gaps outer all set 0
 # Hide edge borders only if there is one window with no gaps
 hide_edge_borders smart_no_gaps
 
-# Press $mod+o followed by either f, t, Escape or Return to launch firefox,
-# thunderbird or return to the default mode, respectively.
-set $mode_launcher Launch: [f]irefox [p]ycharm [s]team [v]irtualbox
-bindsym $mod+o mode "$mode_launcher"
-
-mode "$mode_launcher" {
-    bindsym f exec firefox
-    bindsym p exec pycharm.sh
-    bindsym s exec steam
-    bindsym v exec virtualbox
-
-    bindsym Escape mode "default"
-    bindsym Return mode "default"
-} 
+for_window [class="^.*"] border pixel 1
 
 include 'mapping'
 include 'startup'

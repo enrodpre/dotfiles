@@ -6,6 +6,7 @@
 exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 
 exec --no-startup-id nm-applet
+
 # Polybar
 exec-always --no-startup-id ~/.config/polybar/launch.sh
 

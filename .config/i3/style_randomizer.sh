@@ -1,6 +1,8 @@
 #!/bin/bash
 
-wallpaper=$HOME/wallpapers/$(ls $HOME/wallpapers* | sort -R | head -n1)
+wallpapers_folder=$HOME/.config/wallpapers
+
+wallpaper=$(find $wallpapers_folder -type f | sort -R | head -n1)
 
 xwallpaper --output HDMI-0 --stretch "$wallpaper" --output DVI-D-0 --stretch "$wallpaper"
 

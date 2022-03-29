@@ -3,6 +3,12 @@
 
 set $mod Mod1
 
+set $up k
+set $down j
+set $left h
+set $right l
+
+
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status
@@ -32,19 +38,20 @@ bindsym $mod+d exec dmenu_run -nb "$fg" -nf "$bg" -sb "$bg" -sf "$fg"
 # bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 
 # change focus
-bindsym $mod+h focus left
-bindsym $mod+j focus down
-bindsym $mod+k focus up
-bindsym $mod+l focus right
+
+bindsym $mod+$left focus left
+bindsym $mod+$down focus down
+bindsym $mod+$up focus up
+bindsym $mod+$right focus right
 
 # focus firefox
 bindsym $mod+x [class="firefox"] focus
 
 # move focused window
-bindsym $mod+Shift+h move left
-bindsym $mod+Shift+j move down
-bindsym $mod+Shift+k move up
-bindsym $mod+Shift+l move right
+bindsym $mod+Shift+$left move left
+bindsym $mod+Shift+$down move down
+bindsym $mod+Shift+$up move up
+bindsym $mod+Shift+$right move right
 
 # split in horizontal orientation
 bindsym $mod+b split h
@@ -60,7 +67,7 @@ bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
 
 # Use Mouse+$mod to drag floating windows to their wanted position
-floating_modifier $mod
+# floating_modifier $mod
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
