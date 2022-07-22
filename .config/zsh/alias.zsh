@@ -18,5 +18,7 @@ alias ls="exa -h"
 alias lsa="exa -lah"
 alias debugzsh="zsh -x ~/.zshrc"
 
-alias dtf='git --git-dir="$HOME/.dotfiles.git" --work-tree="$HOME"' 
+alias dotfiles='git --git-dir="$HOME/.dotfiles.git" --work-tree="$HOME"' 
 alias gitignoreall='echo "/*" > .gitignore'
+
+alias cat='bat'
