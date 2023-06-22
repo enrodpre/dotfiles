@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [[ -z "$1" ]]
+then
+  timeout 2s 1=$(cat -) 
+  if [[ -z "$1" ]] 
+  then
+    echo I got nothing .. 
+    exit
+  fi
+fi
+
+local py="import funcs; print(funcs.split_into_lines('${1}','${2}'))"
+python3 -c "$py" | head -n -1

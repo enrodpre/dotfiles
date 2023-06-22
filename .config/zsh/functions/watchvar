@@ -1,0 +1,8 @@
+#!/bin/bash
+
+while :
+do
+  echo "${(P)1}"
+  tput cuu1
+  sleep 1
+done

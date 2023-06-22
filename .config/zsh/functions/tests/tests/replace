@@ -1,0 +1,23 @@
+#!/usr/bin/zsh
+
+before=before
+after=after
+textbefore="beforelassdufhsd edbeforeafterjasdssjdhnas"
+textafter="afterlassdufhsd edafterafterjasdssjdhnas"
+
+testroot=dirtest
+testfiles=("$testroot/f1" "$testroot/d1/f1" "$testroot/d1/f2")
+
+mkdir $testroot
+echo $textbefore > "$testroot/f1"
+mkdir "$testroot/d1"
+echo $textbefore > "$testroot/d1/f1"
+echo $textbefore > "$testroot/d1/f2"
+
+replace $testroot "$textbefore" "$textafter"
+
+for file in $testfiles; do
+  addtestresult $(< $file) "$textafter"
+done 
+
+rm -rf $testroot

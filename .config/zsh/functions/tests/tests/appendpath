@@ -1,0 +1,17 @@
+#!/usr/bin/zsh
+
+declare -a results 
+
+export VARTEST=first,second,third
+a="fourth"
+b="fifth"
+
+expected="$VARTEST,$a,$b"
+
+. appendpath VARTEST "," "$a" "$b" "$a"
+
+actual=$VARTEST
+
+addtestresult $actual $expected
+
+unset VARTEST

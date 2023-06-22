@@ -1,0 +1,7 @@
+set $config $HOME/.config/i3
+
+for_window [title="Exclude"] floating enable
+
+include 'style'
+include 'mapping'
+include 'startup'

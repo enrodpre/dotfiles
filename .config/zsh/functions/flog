@@ -1,0 +1,54 @@
+#!/bin/zsh
+
+set -x
+
+unset NAME
+usage() {
+  echo "Usage: log [ -n NAME ]" 1>&2
+}
+
+exit_abnormal() {
+  usage
+  #exit 1
+}
+
+if [[ ! -d $LOGS_PATH ]]; then
+  mkdir -p "$LOGS_PATH"
+fi
+
+while getopts "n:h" opt; do
+  case "$opt" in
+    h)
+      usage
+      exit
+      ;;
+    n)
+      NAME=$OPTARG
+      ;;
+    :)
+      echo "Error: -${OPTARG} requires an argument."
+      exit_abnormal
+      ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+PROGRAM=$1
+LOG_PROGRAM_PATH="$LOGS_PATH/$PROGRAM"
+
+if [[ ! -d "$LOG_PROGRAM_PATH" ]]; then
+  mkdir "$LOG_PROGRAM_PATH"
+fi
+
+if [[ $# = 0 ]]; then
+  exit_abnormal
+fi
+if [[ -z "$NAME" ]]; then
+  NAME=$PROGRAM
+fi
+
+NAME_OUT=$LOG_PROGRAM_PATH/$NAME.out
+NAME_ERR=$LOG_PROGRAM_PATH/$NAME.err
+
+eval "$@ 1>$NAME_OUT 2>$NAME_ERR"

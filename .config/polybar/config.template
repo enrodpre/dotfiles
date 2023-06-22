@@ -1,0 +1,8 @@
+background = ${wal.color0}
+background-alt = ${wal.color8}
+foreground = ${wal.color7}
+foreground-alt = ${wal.color7}
+primary = ${wal.color1}
+secondary = ${wal.color2}
+alert = ${wal.color3}
+

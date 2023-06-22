@@ -1,0 +1,11 @@
+/*
+
+!.gitignore
+!LICENSE
+!.Xauthority
+!.Xmodmap
+!.xinitrc
+!.zshrc
+
+!.config
+!.local

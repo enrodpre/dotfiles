@@ -1,0 +1,13 @@
+#!/usr/bin/zsh
+
+function pprint {
+  print -- " -> $1: $2"
+}
+
+print -- "Usage: $(basename $0)"
+
+while (($#)); do
+  pprint $1 $2
+  shift 2
+done
+    

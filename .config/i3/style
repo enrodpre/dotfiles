@@ -1,0 +1,63 @@
+# i3 config file (v4)
+# vim: filetype=i3config
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
+
+# class                 border  backgr. text indicator child_border
+client.focused          $bg     $bg     $fg  $bg       $bg
+client.focused_inactive $bg     $bg     $fg  $bg       $bg
+client.unfocused        $bg     $bg     $fg  $bg       $bg
+client.urgent           $bg     $bg     $fg  $bg       $bg
+client.placeholder      $bg     $bg     $fg  $bg       $bg
+
+client.background       $bg
+
+font agave Nerd Font Mono:style=r:size=15;3
+font pango:DejaVu Sans Mono 8
+
+# special
+set_from_resource $fg i3wm.color7 #f0f0f0
+set_from_resource $bg i3wm.color2 #f0f0f0
+set_from_resource $cursos i3wm.color3 #f0f0f0 
+
+# black
+set_from_resource $black1 color0 #303030
+set_from_resource $black2 color8 #444444
+set $trueblack #000000
+
+# red
+set_from_resource $red1 color1 #d75f5f
+set_from_resource $red2 color9 #d75f5f
+
+# green
+set_from_resource $green1 color2 #87AF87
+set_from_resource $green2 color10 #87AF87
+
+# yellow
+set_from_resource $yellow1 color3 #ffd75f
+set_from_resource $yellow2 color11 #ffd75f
+
+# blue
+set_from_resource $blue1 color4 #87afd7
+set_from_resource $blue2 color12 #87afd7
+
+# magenta
+set_from_resource $cyan1 color5 #afafd7
+set_from_resource $cyan2 color13 #afafd7
+
+# cyan
+set_from_resource $cyan1 color6 #afd7ff
+set_from_resource $cyan2 color14 #afd7ff
+
+# white
+set_from_resource $white1 color7 #4E4E4E
+set_from_resource $white2 color15 #ffffff
+
+gaps inner 10
+gaps outer 6
+
+# Hide edge borders only if there is one window with no gaps
+hide_edge_borders smart_no_gaps
+smart_borders on
+
+for_window [class="^.*"] border pixel 1

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+splitlines "$1" "$2" | bat -

@@ -1,0 +1,64 @@
+#!/bin/bash
+
+function usage {
+  echo "./$(basename $0) -h --> shows usage"
+}
+
+function checkdb {
+  case $1 in 
+    "py" | "python")
+      echo python;;
+    "zsh")
+      echo zsh;;
+    "sh" | "bash")
+      echo bash;;
+    "lua")
+      echo lua;;
+    *)
+      return 1 ;;
+  esac 
+}
+
+function find_path {
+  echo $(checkdb $1 || which $1 || return 1)  
+}
+
+if [[ "$#" -ne 1 && "$#" -ne 2 ]]; then
+  echo "Parameters -> filename, language"
+  exit 1
+fi
+
+optstring=":hn"
+    
+while getopts ${optstring} arg; do
+  case ${arg} in
+    h)
+      usage
+      return 1
+      ;;
+    :)
+      echo "$0: Must supply an argument to -$OPTARG." >&2
+      return 1
+      ;;
+    ?)
+      echo "Invalid option: -${OPTARG}."
+      return 2
+      ;;
+  esac 
+done
+
+if [ -z $? ]; then
+  exit "$?"
+fi
+
+name=$1
+lang=${2:-zsh}
+PREFIX='#!'
+
+if [ -z ${found_path=$(find_path $lang)} ]; then 
+  echo "$lang path not found"
+  exit 1
+fi
+
+echo -e "$PREFIX$found_path" >> "$name"
+chmod ug+x "$name"

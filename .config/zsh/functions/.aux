@@ -1,0 +1,45 @@
+#!/bin/bash
+
+function python_error_line {
+   grep -f - -Eo '"[a-zA-Z\\./]+", line [0-9]+,' |  tr -d '\",' | sed -e "s/ line /:/p" | tail -n1
+}
+
+function color_last_command {
+  
+}
+
+function reload_nvim {
+  kill -15 $1
+  nvim &
+}
+
+function relaunch_vim {
+  if [[ -z "$1" ]]
+  then
+    echo 'This script needs something for identifying the instance'
+    exit
+  fi
+
+  pid=$(pgrep "$1")
+  number_of_results=$(echo $pid | wc -l)
+  if [[ $number_of_results -eq 0 ]]
+  then
+    echo There has been lack of communication ...
+    exit
+  elif [[ $number_of_results -gt 1 ]]
+  then
+    another_query=$(pgrep nvim)
+    another_number=$(echo "$another_query" | wc -l)
+    if [[ $another_number -eq 1 ]]
+    then
+      reload_nvim "$another_query"
+    fi
+  fi
+  real_pid=$(grep -Fxv -f "$pid" "$another_query")
+  if [[ $(echo "$real_pid" | wc -l) -ne 1 ]]
+  then
+    echo There is no solution for this mess
+    exit
+  fi
+  reload_nvim "$real_pid"
+}

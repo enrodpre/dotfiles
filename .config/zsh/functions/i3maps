@@ -1,0 +1,3 @@
+#!/bin/bash
+
+grep -Eo "^[^#].*mod\+[0-9A-Za-z\+]+.*" $HOME/.config/i3/mapping | sed -e "s/mod+//" | grep "\$$1"
