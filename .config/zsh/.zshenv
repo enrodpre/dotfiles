@@ -1,18 +1,24 @@
-#!/bin/zsh
+#!/usr/bin/zsh
 
-ZDOTDIR=~/.config/zsh
-ZDOTENV="$ZDOTDIR"/.zshenv 
+export XDG_DATA_HOME=$HOME/.local/share
+export XDG_STATE_HOME=$HOME/.local/state
+export XDG_CONFIG_HOME=$HOME/.config
+export XDG_CACHE_HOME=$HOME/.cache
 
-# Aliases
-alias dotfiles='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
-alias reloadzsh="source $ZDOTENV && echo 'ZSH config reloaded from $ZDOTENV'"
+export CONFIG=$XDG_CONFIG_HOME
 
-alias -g tree='exa --tree -a'
-alias -g ls='exa -a'
-alias -g lsa='exa -lB@aa'
+export ZDOTDIR=$CONFIG/zsh
+export KITTY_ORIG_ZDOTDIR=$ZDOTDIR
+export EDITOR=nvim
+export SHELL=/usr/bin/zsh
 
-search() {
-  grep "$1" -R "${2:-.}"
-}
+export PYTHON_PATH=$XDG_DATA_HOME/python
+export LUA_PATH=/home/kike/.local/share/lua/?.lua
 
-# source -- $ZDOTENV
+# Add custom functions
+fpath+=(
+  $ZDOTDIR/functions
+)
+autoload -Uz $ZDOTDIR/functions/*(.:t)
+
+source $ZDOTDIR/alias

@@ -2,6 +2,7 @@
 
 !.gitignore
 !LICENSE
+!.packages_list
 !.Xauthority
 !.Xmodmap
 !.xinitrc

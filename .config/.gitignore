@@ -1,0 +1,12 @@
+*
+
+!.gitignore
+
+!i3
+!kitty
+!nvim/**
+!picom
+!polybar
+!wal
+!wallpaper
+!zsh

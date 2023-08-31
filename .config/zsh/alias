@@ -1,0 +1,14 @@
+#!/bin/zsh
+
+alias dotfiles='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
+alias reloadzsh="source $ZDOTDIR/.zshenv && source $ZDOTDIR/.zshrc && echo ZSH config reloaded from $ZDOTDIR"
+alias icat="kitty +kitten icat"
+
+alias -g tree='exa -aT'
+alias -g ls='exa -a'
+alias -g lsa='exa -lBaa'
+alias -g lsag='exa -lB@aa --git'
+alias -g top='btop'
+alias -g du="du -h"
+alias -g cat='bat'
+alias -g grep='grep --color=auto'
