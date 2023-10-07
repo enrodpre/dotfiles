@@ -9,16 +9,24 @@ export CONFIG=$XDG_CONFIG_HOME
 
 export ZDOTDIR=$CONFIG/zsh
 export KITTY_ORIG_ZDOTDIR=$ZDOTDIR
-export EDITOR=nvim
-export SHELL=/usr/bin/zsh
+export EDITOR='which nvim'
+export SUDO_EDITOR='which nvim'
+
+export SHELL='zsh'
 
 export PYTHON_PATH=$XDG_DATA_HOME/python
 export LUA_PATH=/home/kike/.local/share/lua/?.lua
 
+# Add custom path
+path+=(
+  $HOME/.local/bin
+  $HOME/.cargo/bin
+)
+
 # Add custom functions
 fpath+=(
-  $ZDOTDIR/functions
+  $ZDOTDIR/scripts
 )
-autoload -Uz $ZDOTDIR/functions/*(.:t)
+autoload -Uz $ZDOTDIR/scripts/* #(.:t)
 
 source $ZDOTDIR/alias

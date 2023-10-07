@@ -1,12 +1,15 @@
-*
+/*
 
 !.gitignore
+!gamemode.ini
 
-!i3
-!kitty
-!nvim/**
-!picom
-!polybar
-!wal
-!wallpaper
-!zsh
+!bat/
+!i3/
+!kitty/
+!nvim/
+!picom/
+!polybar/
+!redshift/
+!wal/
+!wallpaper/
+!zsh/

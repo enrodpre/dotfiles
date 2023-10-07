@@ -1,14 +1,24 @@
 #!/bin/zsh
 
-alias dotfiles='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
+alias -g dots='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
+alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias reloadzsh="source $ZDOTDIR/.zshenv && source $ZDOTDIR/.zshrc && echo ZSH config reloaded from $ZDOTDIR"
 alias icat="kitty +kitten icat"
+alias visudo='EDITOR=nvim visudo'
 
-alias -g tree='exa -aT'
-alias -g ls='exa -a'
-alias -g lsa='exa -lBaa'
-alias -g lsag='exa -lB@aa --git'
-alias -g top='btop'
-alias -g du="du -h"
-alias -g cat='bat'
-alias -g grep='grep --color=auto'
+#Paru utils
+alias pquery='paru -Q --info'
+function pfiles() {
+  paru -Ql "$1" | grep -e '/bin/.' | cut -f 2- -d ' '
+}
+
+#Replaces
+alias tree='eza -aT'
+alias ls='eza -a'
+alias lsa='eza -lBaa'
+alias lsag='eza -lB@aa --git'
+alias top='btop'
+alias mv='mv -i'
+alias du="du -h"
+alias find='fd'
+alias -g grep='rg --color=auto'

@@ -1,12 +1,14 @@
 /*
 
 !.gitignore
+!.gitmodules
+!.gitconfig
 !LICENSE
 !.packages_list
 !.Xauthority
 !.Xmodmap
 !.xinitrc
-!.zshrc
+!.zshenv
 
-!.config
-!.local
+!.config/
+!.local/

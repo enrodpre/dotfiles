@@ -1,0 +1,16 @@
+#/usr/bin/zsh
+
+text=$1
+module_name="message"
+
+if [ -z "$text" ]
+then
+  echo "Need text as first parameter to send"
+  exit
+fi
+
+polybar-msg action $module_name send "$text" 
+
+sleep 3
+
+polybar-msg action $module_name reset

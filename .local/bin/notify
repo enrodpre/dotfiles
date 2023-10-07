@@ -1,0 +1,10 @@
+#/usr/bin/zsh
+
+text=$1
+module_name="message"
+
+polybar-msg action $module_name send "$text" 
+
+sleep 3
+
+polybar-msg action $module_name reset

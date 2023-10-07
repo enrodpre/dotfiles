@@ -5,73 +5,65 @@ PFILE="$HOME/.config/polybar/colors.ini"
 RFILE="$HOME/.config/polybar/scripts/rofi/colors.rasi"
 WFILE="$HOME/.cache/wal/colors.sh"
 
-# Get colors
-pywal_get() {
-	wal -i "$1" -q -t
-}
-
 # Change colors
 change_color() {
 	# polybar
 	sed -i -e "s/background = #.*/background = $BG/g" $PFILE
 	sed -i -e "s/foreground = #.*/foreground = $FG/g" $PFILE
-	sed -i -e "s/foreground_warning = #.*/foreground_warning = $FGA/g" $PFILE
-	sed -i -e "s/shade1 = #.*/shade1 = $SH1/g" $PFILE
-	sed -i -e "s/shade2 = #.*/shade2 = $SH2/g" $PFILE
-	sed -i -e "s/shade3 = #.*/shade3 = $SH3/g" $PFILE
-	sed -i -e "s/shade4 = #.*/shade4 = $SH4/g" $PFILE
-	sed -i -e "s/shade5 = #.*/shade5 = $SH5/g" $PFILE
-	sed -i -e "s/shade6 = #.*/shade6 = $SH6/g" $PFILE
-	sed -i -e "s/shade7 = #.*/shade7 = $SH7/g" $PFILE
-	sed -i -e "s/shade8 = #.*/shade8 = $SH8/g" $PFILE
+	sed -i -e "s/foreground-alt = #.*/foreground-alt = $FGA/g" $PFILE
+	sed -i -e "s/module-fg = #.*/module-fg = $MF/g" $PFILE
+	sed -i -e "s/primary = #.*/primary = $AC/g" $PFILE
+	sed -i -e "s/secondary = #.*/secondary = $SC/g" $PFILE
+	sed -i -e "s/alternate = #.*/alternate = $AL/g" $PFILE
 	
 	# rofi
 	cat > $RFILE <<- EOF
 	/* colors */
 
 	* {
-	  al:    #00000000;
-	  bg:    ${BG}FF;
-	  bg1:   ${SH8}FF;
-	  bg2:   ${SH7}FF;
-	  bg3:   ${SH6}FF;
-	  fg:    ${FGA}FF;
+	  al:   #00000000;
+	  bg:   ${BG}FF;
+	  bga:  ${AC}33;
+	  bar:  ${MF}FF;
+	  fg:   ${FG}FF;
+	  ac:   ${AC}FF;
 	}
 	EOF
-	
-	polybar-msg cmd restart
 }
 
-# Main
-if [[ -x "`which wal`" ]]; then
-	if [[ "$1" ]]; then
-		pywal_get "$1"
+hex_to_rgb() {
+    # Convert a hex value WITHOUT the hashtag (#)
+    R=$(printf "%d" 0x${1:0:2})
+    G=$(printf "%d" 0x${1:2:2})
+    B=$(printf "%d" 0x${1:4:2})
+}
 
-		# Source the pywal color file
-		if [[ -e "$WFILE" ]]; then
-			. "$WFILE"
-		else
-			echo 'Color file does not exist, exiting...'
-			exit 1
-		fi
+get_fg_color(){
+    INTENSITY=$(calc "$R*0.299 + $G*0.587 + $B*0.114")
+    
+    if [ $(echo "$INTENSITY>186" | bc) -eq 1 ]; then
+        MF="#202020"
+    else
+        MF="#F5F5F5"
+    fi
+}
 
-		BG=`printf "%s\n" "$background"`
-		FG=`printf "%s\n" "$color0"`
-		FGA=`printf "%s\n" "$color7"`
-		SH1=`printf "%s\n" "$color1"`
-		SH2=`printf "%s\n" "$color2"`
-		SH3=`printf "%s\n" "$color1"`
-		SH4=`printf "%s\n" "$color2"`
-		SH5=`printf "%s\n" "$color1"`
-		SH6=`printf "%s\n" "$color2"`
-		SH7=`printf "%s\n" "$color1"`
-		SH8=`printf "%s\n" "$color2"`
-
-		change_color
-	else
-		echo -e "[!] Please enter the path to wallpaper. \n"
-		echo "Usage : ./pywal.sh path/to/image"
-	fi
+if [[ -e "$WFILE" ]]; then
+        . "$WFILE"
 else
-	echo "[!] 'pywal' is not installed."
+        echo 'Color file does not exist, exiting...'
+        exit 1
 fi
+
+BG=`printf "%s\n" "$background"`
+FG=`printf "%s\n" "$foreground"`
+FGA=`printf "%s\n" "$color8"`
+AC=`printf "%s\n" "$color1"`
+SC=`printf "%s\n" "$color2"`
+AL=`printf "%s\n" "$color3"`
+
+HEX=${AC:1}
+
+hex_to_rgb $HEX
+get_fg_color
+change_color

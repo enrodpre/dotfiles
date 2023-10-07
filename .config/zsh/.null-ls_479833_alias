@@ -1,0 +1,20 @@
+#!/bin/zsh
+
+alias -g dots='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
+alias dotsreload='dots rm -r --cached $HOME ; dots add $HOME ; dots status'
+alias reloadzsh="source $ZDOTDIR/.zshenv && source $ZDOTDIR/.zshrc && echo ZSH config reloaded from $ZDOTDIR"
+alias icat="kitty +kitten icat"
+
+alias tree='eza -aT'
+alias ls='eza -a'
+alias lsa='eza -lBaa'
+alias lsag='eza -lB@aa --git'
+alias top='btop'
+alias mv='mv -i'
+alias du="du -h"
+alias find='fd'
+alias grep='grep --color=auto'
+alias visudo='EDITOR=nvim visudo'
+
+alias query='paru -Q --info'
+alias files='paru -Ql'

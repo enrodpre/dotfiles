@@ -12,8 +12,7 @@ client.placeholder      $bg     $bg     $fg  $bg       $bg
 
 client.background       $bg
 
-font agave Nerd Font Mono:style=r:size=15;3
-font pango:DejaVu Sans Mono 8
+font "Fira Code"
 
 # special
 set_from_resource $fg i3wm.color7 #f0f0f0
@@ -61,3 +60,5 @@ hide_edge_borders smart_no_gaps
 smart_borders on
 
 for_window [class="^.*"] border pixel 1
+
+exec_always setwal -s river

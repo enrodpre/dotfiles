@@ -1,4 +1,0 @@
-#!/usr/bin/zsh
-
-#file="$(<${1:-/dev/stdin})"
-basename $1 | sed -r 's/([^\.]+)(\..*)?/\1/'

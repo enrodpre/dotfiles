@@ -1,3 +1,0 @@
-#!/usr/bin/bash
-
-echo $(filename $(cat $HOME/.cache/wal/wal))
