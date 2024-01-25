@@ -1,0 +1,4 @@
+#!/usr/bin/zsh
+
+printenv | grep "$1"
+

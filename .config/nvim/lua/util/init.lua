@@ -1,5 +1,3 @@
-#/usr/bin/lua
-
 local F = {}
 local namemodify = vim.fn.fnamemodify
 
@@ -16,20 +14,20 @@ function F.notifier_table(inspector)
   })
 end
 
-function F.tbl_flatten(t, depth)
+function F.tbl_flatten(tbl, depth)
   local result = {} -- F.notifier_table()
 
-  local function flatten(t, depth)
+  local function flatten(t, d)
     for k, v in pairs(t) do
       if type(v) == 'table' and depth > 0 then
-        flatten(v, depth - 1)
+        flatten(v, d - 1)
       else
         result[k] = v
       end
     end
   end
 
-  flatten(t, depth)
+  flatten(tbl, depth)
 
   return result
 end
@@ -55,7 +53,7 @@ end
 
 local file_filterer = function(filename)
   local is_lua_module = "lua" == namemodify(filename, ':e')
-  local is_this_file = 'init.lua' == namemodify(filename, '%:t')
+  local is_this_file = 'init.lua' == namemodify(filename, ':t')
   return is_lua_module and not is_this_file and filename ~= 'profiler.lua'
 end
 
@@ -66,13 +64,12 @@ local function get_folder_content_filenames(directory)
   end
 end
 
-local function get_module_abs_path(module_name)
-  local file_abs_path = debug.getinfo(1, "S").source:sub(2)
-  return namemodify(file_abs_path, ":h")
+function F.module_abspath(module_name)
+  return os.getenv("XDG_CONFIG_HOME") .. "/nvim/lua/" .. module_name:gsub("%p", "/")
 end
 
 local function load_files_from_folder(module_name)
-  local abs_path = get_module_abs_path(module_name)
+  local abs_path = F.module_abspath(module_name)
   local filenames = get_folder_content_filenames(abs_path)
 
   local result = {}
@@ -88,13 +85,17 @@ local function load_files_from_folder(module_name)
   return result
 end
 
-function F.load_module(module_name)
-  local loaded_files = load_files_from_folder(module_name)
+function F.load_function_module(module_name)
+  local loaded_files = F.load_module(module_name)
   return F.tbl_flatten(loaded_files, 1)
 end
 
+function F.load_module(module_name)
+  return load_files_from_folder(module_name)
+end
+
 local module_name = 'utils'
-local extern_F = F.load_module(module_name)
+local extern_F = F.load_function_module(module_name)
 local F = vim.tbl_extend("force", extern_F, F)
 
 return F

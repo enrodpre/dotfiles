@@ -42,16 +42,6 @@ function F.partial(lambda, ...)
   end
 end
 
-function F.test()
-  local script = {
-    "pushd " .. os.getenv "CURRENT_PROJECT",
-    "pytest | tee test.out",
-    "popd",
-  }
-
-  os.execute(table.concat(script, ";"))
-end
-
 function F.on_attach(on_attach)
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
@@ -66,6 +56,33 @@ function F.fg(name)
   ---@type {foreground?:number}?
   local hlgrp = vim.api.nvim_get_hl(0, { name = name })
   return hlgrp and hlgrp.foreground
+end
+
+function F.split(str, sep)
+  local regex = nil
+  if sep == nil or sep == '' then
+    regex = '.'
+  else
+    regex = "([^" .. sep .. "]+)"
+  end
+
+  return str:gmatch(regex)
+end
+
+function F.map(table_map)
+  for shortcut, described_action in pairs(table_map) do
+    local desc, modes, action, opts = unpack(described_action)
+    opts = opts or {}
+    for mode in vim.lua.split(modes, '') do
+      vim.keymap.set(mode, shortcut, action, { desc = desc, expr = opts['expr'], silent = opts['silent'] })
+    end
+  end
+end
+
+function F.loader(fn, tbl)
+  return {
+    load = function() fn(tbl) end
+  }
 end
 
 return F

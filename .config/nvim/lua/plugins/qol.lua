@@ -1,17 +1,5 @@
 return {
-  {
-    "nvim-telescope/telescope.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    keys = {
-      { "<leader>cc", ":Telescope <CR>", mode = 'n', desc = "Open telescope" },
-      {
-        "<leader>ck", ":Telescope keymaps <CR>", mode = 'n', desc = "Open keymaps"
-      },
-    },
-  },
-  { "nvim-lua/plenary.nvim" },
+  { "dbeniamine/cheat.sh-vim", cmd = "Cheat" },
   {
     "max397574/better-escape.nvim",
     event = "InsertEnter",
@@ -33,6 +21,22 @@ return {
   },
   {
     "ggandor/leap.nvim",
-
+    config = function()
+      require('leap').create_default_mappings()
+    end
+  },
+  {
+    "kylechui/nvim-surround",
+    event = "InsertEnter",
+  },
+  {
+    "windwp/nvim-autopairs",
+    dependencies = {
+      "hrsh7th/nvim-cmp"
+    },
+    event = "InsertEnter",
+    opts = {
+      enable_check_bracket_line = true,
+    },
   },
 }

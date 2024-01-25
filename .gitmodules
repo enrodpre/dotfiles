@@ -7,3 +7,9 @@
 [submodule "git-prompt.sh"]
       path = .config/zsh/plugins/git-prompt.sh
       url = https://github.com/git/git/blob/master/contrib/completion/git-prompt.sh
+[submodule ".config/zsh/plugins/zhooks"]
+	path = .config/zsh/plugins/zhooks
+	url = https://github.com/agkozak/zhooks.git
+[submodule ".config/zsh/plugins/zsh-hooks"]
+	path = .config/zsh/plugins/zsh-hooks
+	url = https://github.com/zsh-hooks/zsh-hooks.git

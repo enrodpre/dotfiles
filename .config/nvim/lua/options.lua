@@ -1,62 +1,57 @@
-local options = {
-  o = {
-    sidescroll = 5,
-    clipboard = "unnamedplus",
-    cmdheight = 1,
-    ruler = false,
-    hidden = true,
-    ignorecase = true,
-    smartcase = true,
-    mapleader = " ",
-    mouse = "a",
-    number = true,
-    numberwidth = 2,
-    relativenumber = false,
-    expandtab = true,
-    shiftwidth = 2,
-    smartindent = true,
-    tabstop = 8,
-    timeoutlen = 700,
-    updatetime = 250,
-    undofile = true,
-    showcmd = true,
-    wrapmargin = 300,
-    --fillchars = { eob = " " },
-    -- path = vim.opt.path .. ":" .. vim.fn.stdpath "config" .. "/lua/functions",
-  },
-  g = {
-    mapleader = " ",
-    mapleaderlocal = " ",
-    debug = false,
-  }
-}
+-- sidescroll = 5,
+-- clipboard = "unnamedplus",
+-- cmdheight = 1,
+-- ruler = false,
+-- hidden = true,
+-- ignorecase = true,
+-- smartcase = true,
+-- number = true,
+-- numberwidth = 2,
+-- relativenumber = false,
+-- expandtab = true,
+-- shiftwidth = 2,
+-- smartindent = true,
+-- tabstop = 8,
+-- timeoutlen = 700,
+-- updatetime = 250,
+-- undofile = true,
+-- showcmd = true,
+-- wrapmargin = 300
 
-local load = {}
+-- Set highlight on search
+vim.o.hlsearch = false
 
-function load.load()
-  -- Noremap default
-  local keymap_set = vim.keymap.set
-  vim.keymap.set = function(mode, lhs, rhs, opts)
-    opts = opts or {}
-    opts.noremap = opts.noremap or true
-    -- opts.silent = opts.silent ~= false
-    return keymap_set(mode, lhs, rhs, opts)
-  end
+-- Make line numbers default
+vim.wo.number = true
 
-  -- In case there was nothing before
-  local ll = vim.list_extend
-  vim.list_extend = function(t, ...)
-    t = t or {}
-    return ll(t, ...)
-  end
+-- Enable mouse mode
+vim.o.mouse = 'a'
 
+-- Sync clipboard between OS and Neovim.
+vim.o.clipboard = 'unnamedplus'
 
+-- Enable break indent
+vim.o.breakindent = true
 
-  for target, parameter in pairs(options) do
-    for name, value in pairs(parameter) do
-      vim[target][name] = value
-    end
-  end
-end
+-- Save undo history
+vim.o.undofile = true
 
-return load
+-- Case-insensitive searching UNLESS \C or capital in search
+-- vim.o.ignorecase = true
+vim.o.smartcase = true
+
+-- Keep signcolumn on by default
+vim.wo.signcolumn = 'yes'
+
+-- Decrease update time
+vim.o.updatetime = 250
+vim.o.timeoutlen = 300
+
+-- Set completeopt to have a better completion experience
+vim.o.completeopt = 'menuone,noselect'
+
+-- NOTE: You should make sure your terminal supports this
+vim.o.termguicolors = true
+
+-- Relative numbers
+vim.o.relativenumber = false

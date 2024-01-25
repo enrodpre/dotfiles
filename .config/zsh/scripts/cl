@@ -1,0 +1,51 @@
+#!/usr/bin/zsh
+
+set -x
+ex() {
+  echo "\n\n [x] Saliendo.."
+  exit $1
+}
+
+copy() {
+  data="$1"
+  clipboard="$2"
+
+  # Remove last newline
+  perl -pe 'chomp if eof' <<< "$data" | xclip -selection "$clipboard" && notify "Copied to ${clipboard}"
+
+  ex 0
+}
+
+clipboard="clipboard"
+
+while [[ -n "${1}" ]]; do
+  echo "$@"
+  echo "$1"
+  case "${1}" in
+    -s|--secondary)
+      shift
+      clipboard='secondary'
+      ;;
+    -d|--data)
+      shift
+      data="${1}"
+      shift
+      ;;
+    -f|--file)
+      shift
+      data="$(cat $1)"
+      shift
+      ;;
+  esac
+done
+
+if [[ -z "$data" ]]; then
+  data=$(</dev/stdin)
+fi
+
+if [[ -n "$data" ]]; then
+  copy "$data" "$clipboard"
+else
+  ex 1
+fi
+
