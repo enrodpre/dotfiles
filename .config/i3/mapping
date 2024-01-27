@@ -83,6 +83,8 @@ bindsym $mod+Shift+c reload; exec --no-startup-id zsh -c 'notify "Reloaded i3 co
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
+bindsym $mod+Shift+w exec "$HOME/.config/polybar/launch.sh 2>$HOME/logs/polybar.log"
+
 bindsym $mod+r mode "Resize"
 
 mode "Resize" {
@@ -110,7 +112,7 @@ mode "$mode_gaps" {
 }
 
 
-set $mode_launcher [f]irefox [p]ycharm [s]team [n]etbeans 
+set $mode_launcher [f]irefox [p]ycharm [s]team [n]etbeans [b]urpsuite
 bindsym $mod+o mode "$mode_launcher"
 
 mode "$mode_launcher" {
@@ -118,6 +120,7 @@ mode "$mode_launcher" {
   bindsym p exec pycharm.sh
   bindsym s exec steam
   bindsym n exec netbeans
+  bindsym b exec burpsuite
 
   bindsym Escape mode "default"
   bindsym Return mode "default"

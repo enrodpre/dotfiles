@@ -1,12 +1,30 @@
 #!/usr/bin/zsh
 
+zle -R
+
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
-export HISTFILE=$ZSH/.zsh_history
-export HISTSIZE=10000
-export SAVEHIST=10000
+# (cat ~/.cache/wal/sequences &)
+source ~/.cache/wal/colors-tty.sh
+source ~/.cache/wal/colors.sh
 
-# Key bindings
+PLUGINS_PATH="$HOME/.local/lib/zsh/plugins/"
+
+# Source plugins in /plugins
+find $PLUGINS_PATH -maxdepth 1 -type d -not -name ".*" | while read plugin_dir; do find $plugin_dir -maxdepth 1 -type f -name "*.plugin.zsh" ; done | while read shplugin; do source $shplugin; done
+
+source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+
+[[ ! -f $ZDOTDIR/.p10k.zsh ]] || source "$ZDOTDIR/.p10k.zsh"
+
+source $ZDOTDIR/functions.zsh
+
+#Key bindings
 bindkey -r "^J"
 bindkey -r "^H"
 bindkey -r "^K"
@@ -14,16 +32,23 @@ bindkey -r "^L"
 
 bindkey '^R' history-incremental-search-backward
 
-source $ZDOTDIR/plugins/git-prompt.sh
+# Loads hooks
+() {
+    pushd "$ZDOTDIR/hooks" > /dev/null
+    set -o shwordsplit
 
-setopt PROMPT_SUBST
-# Prompt
-PROMPT='%F{green}%3c%f%F{blue} [ '
-RPROMPT='%F{white}$(__git_ps1 " %s")%f%F{blue} ] %F{green}%T'
+    EVENTS=("chpwd" "zshaddhistory")
 
-# (cat ~/.cache/wal/sequences &)
-source ~/.cache/wal/colors-tty.sh
-source ~/.cache/wal/colors.sh
+    for event in $EVENTS; do
+        file=$event.zsh
 
-source $ZDOTDIR/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source $ZDOTDIR/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+        source $file
+        filefnames=$(funcnames $file)
+
+        while read fname; do
+            add-zsh-hook $event $fname
+        done <<< "$filefnames"
+    done
+
+    popd > /dev/null
+}

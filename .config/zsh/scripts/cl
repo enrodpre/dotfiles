@@ -1,6 +1,7 @@
 #!/usr/bin/zsh
 
-set -x
+# Redirect to clipboard and notify polybar
+
 ex() {
   echo "\n\n [x] Saliendo.."
   exit $1

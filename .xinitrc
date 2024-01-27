@@ -13,11 +13,6 @@ if [ -f "$usermodmap" ]; then
     xmodmap "$usermodmap"
 fi
 
-picom -bc
-wal -R
-
-"$HOME"/.config/polybar/launch.sh
-
 if [[ "$debug" = true ]]
 then
   exec i3 -V -d all &>> "$HOME/logs/i3.log" 

@@ -13,35 +13,6 @@ function F.put_text(...)
   return ...
 end
 
-function F.apply(lambda, ...)
-  local params = { params }
-  local count = params.n
-  local offest = count - 1
-  local packed = params[count]
-
-  if type(packed) == "table" then
-    params[count] = nil
-    for index, item in pairs(packed) do
-      if type(index) == "number" then
-        count = offest + index
-        params[count] = item
-      end
-    end
-  end
-
-  return lambda(unpack(params, 1, count))
-end
-
-function F.partial(lambda, ...)
-  local curried = { ... }
-  local offset = #curried
-  return function(...)
-    local params = { unpack(curried, 1, offset) }
-    params[offset + 1] = { ... }
-    return apply(lambda, unpack(params, 1, offset + 1))
-  end
-end
-
 function F.on_attach(on_attach)
   vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
@@ -83,6 +54,41 @@ function F.loader(fn, tbl)
   return {
     load = function() fn(tbl) end
   }
+end
+
+-- local lfs = require("lfs")
+
+function F.read_files_from_folder(path, excluded_files)
+  local is_excluded = function(file)
+    for _, v in ipairs(excluded_files) do
+      if string.find(file, v) then
+        return true
+      end
+    end
+  end
+
+  local excluded = excluded_files or {}
+  table.insert(excluded_files, "init")
+
+  local loaded_files = {}
+
+  for name in lfs.dir(path) do
+    if not is_excluded(file) then
+      loaded_files[name] = require(path .. "." .. filename)
+    end
+  end
+
+  return loaded_files
+end
+
+local external_files_functions = vim.split(vim.fn.glob('~/.config/nvim/lua/util/functions/*.lua'), '\n')
+
+for _, file in pairs(external_files_functions) do
+  local filename = vim.fn.fnamemodify(file, ':t:r')
+  if filename ~= 'init' then
+    local func = require('util.functions.' .. filename)
+    F[filename] = func
+  end
 end
 
 return F

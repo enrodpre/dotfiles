@@ -1,5 +1,7 @@
 #!/usr/bin/zsh
 
+export PS4="%F{blue}+%1N:%I>%b%f "
+
 export XDG_DATA_HOME=$HOME/.local/share
 export XDG_STATE_HOME=$HOME/.local/state
 export XDG_CONFIG_HOME=$HOME/.config
@@ -9,24 +11,34 @@ export CONFIG=$XDG_CONFIG_HOME
 
 export ZDOTDIR=$CONFIG/zsh
 export KITTY_ORIG_ZDOTDIR=$ZDOTDIR
-export EDITOR='which nvim'
-export SUDO_EDITOR='which nvim'
+export EDITOR='nvim'
+export SUDO_EDITOR='nvim'
 
 export SHELL='zsh'
 
-export PYTHON_PATH=$XDG_DATA_HOME/python
-export LUA_PATH=/home/kike/.local/share/lua/?.lua
+export PYTHONPATH=${PYTHONPATH}:$XDG_DATA_HOME/python/functions:$XDG_DATA_HOME/python/pytest-testconfig:$HOME/.local/bin
+export LUA_PATH=$XDG_DATA_HOME/lua/?.lua:$HOME/.local/bin
+
+export WORDLISTS=/home/kike/.local/share/seclists/
+
+export HISTFILE=$ZDOTDIR/.zsh_history
+export HISTSIZE=10000
+export SAVEHIST=10000
+
+source $ZDOTDIR/.chatgpt.key
 
 # Add custom path
 path+=(
-  $HOME/.local/bin
-  $HOME/.cargo/bin
+    $HOME/.local/bin
+    $HOME/.cargo/bin
 )
 
 # Add custom functions
 fpath+=(
-  $ZDOTDIR/scripts
+    $ZDOTDIR/scripts/*
 )
-autoload -Uz $ZDOTDIR/scripts/* #(.:t)
+# autoload -Uz $ZDOTDIR/scripts/* #(.:t)
 
-source $ZDOTDIR/alias
+source $ZDOTDIR/alias.zsh
+
+[[ ! -z "$DEBUG" ]] && set -o xtrace && set -o SOURCE_TRACE

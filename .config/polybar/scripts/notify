@@ -9,8 +9,4 @@ then
   exit
 fi
 
-polybar-msg action $module_name send "$text" 
-
-sleep 3
-
-polybar-msg action $module_name reset
+polybar-msg action $module_name send "$text" &>/dev/null && sleep 3 && polybar-msg action $module_name reset &>/dev/null &!

@@ -16,4 +16,4 @@ launch_bar() {
 
 launch_bar >> $HOME/logs/polybar.log
 
-$HOME/.config/polybar/scripts/pywal.sh "$(cat $HOME/.cache/wal/wal)"
+# $HOME/.config/polybar/scripts/pywal.sh "$(cat $HOME/.cache/wal/wal)"

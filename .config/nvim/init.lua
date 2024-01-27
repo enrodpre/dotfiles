@@ -8,6 +8,12 @@ for name, func in pairs(functions) do
   vim.lua[name] = func
 end
 
+vim.lua.metatables = {}
+local metatables = require('util.metatables')
+for name, func in pairs(metatables) do
+  vim.lua.metatables[name] = func
+end
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {
@@ -49,10 +55,7 @@ require('lazy').setup({
     },
   },
   {
-    -- Add indentation guides even on blank lines
     'lukas-reineke/indent-blankline.nvim',
-    -- Enable `lukas-reineke/indent-blankline.nvim`
-    -- See `:help ibl`
     main = 'ibl',
     opts = {},
   },
@@ -83,7 +86,17 @@ require('lazy').setup({
       'nvim-treesitter/nvim-treesitter-textobjects',
     },
     build = ':TSUpdate',
+  }, {
+  "jay-babu/mason-null-ls.nvim",
+  event = { "BufReadPre", "BufNewFile" },
+  dependencies = {
+    "williamboman/mason.nvim",
+    "nvimtools/none-ls.nvim",
   },
+
+},
+  { "nvimtools/none-ls.nvim" },
+
 
   { import = 'plugins' },
 }, { default = { lazy = true } })
@@ -173,18 +186,43 @@ local on_attach = function(_, bufnr)
 end
 
 -- document existing key chains
+vim.lsp.set_log_level("warn")
+require('mason').setup({
+  ui = {
+    icons = {
+      package_installed = "✓",
+      package_pending = "➜",
+      package_uninstalled = "✗"
+    }
+  }
+})
 
-require('mason').setup()
-require('mason-lspconfig').setup()
+require('configs.nonels')
 
-local servers = require("configs.lsp")
+local function mason_to_lspconfig(next_server)
+  local mason_mapper = {
+    sumneko_lua = "lua-language-server",
+    bashls = "bash-language-server",
+    jsonls = "json-lsp"
+  }
+
+  local mapped_key = mason_mapper[next_server.k]
+  if mapped_key ~= nil then
+    next_server.k = mapped_key
+    return next_server
+  end
+end
+
+-- Map some keys
+local servers = vim.lua.metatables.pairs {
+  fn = mason_to_lspconfig,
+  tbl = require("configs.lsp")
+}
 
 -- Setup neovim lua configuration
 require('neodev').setup()
 
--- nvim-cmp supports additional completion capabilities, so broadcast that to servers
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
@@ -199,6 +237,7 @@ mason_lspconfig.setup_handlers {
       capabilities = capabilities,
       on_attach = on_attach,
       settings = servers[server_name],
+      filetypes = (servers[server_name] or {}).filetypes,
     }
   end,
 }

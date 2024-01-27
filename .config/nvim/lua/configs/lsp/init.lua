@@ -4,7 +4,7 @@ return {
       "sh",
       "zsh",
       "bash",
-    }
+    },
   },
   html = { filetypes = { 'html', 'twig', 'hbs' } },
   jsonls = {},

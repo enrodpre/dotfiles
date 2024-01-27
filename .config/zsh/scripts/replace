@@ -1,9 +1,0 @@
-#!/usr/bin/zsh
-
-root=$1
-old=$2
-new=$3
-
-for file in $(find "$root" -type f); do
-  sed -i "s/$old/$new/g" $file
-done

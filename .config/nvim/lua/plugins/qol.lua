@@ -19,15 +19,19 @@ return {
       vim.g.suda_smart_edit = true
     end
   },
-  {
-    "ggandor/leap.nvim",
-    config = function()
-      require('leap').create_default_mappings()
-    end
-  },
+  -- {
+  --   "ggandor/leap.nvim",
+  --   config = function()
+  --     require('leap').create_default_mappings()
+  --   end
+  -- },
   {
     "kylechui/nvim-surround",
-    event = "InsertEnter",
+    version = "*", -- Use for stability; omit to use `main` branch for the latest features
+    event = "VeryLazy",
+    config = function()
+      require("nvim-surround").setup()
+    end
   },
   {
     "windwp/nvim-autopairs",

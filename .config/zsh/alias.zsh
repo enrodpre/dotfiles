@@ -2,23 +2,25 @@
 
 alias -g dots='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
 alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
-alias reloadzsh="source $ZDOTDIR/.zshenv && source $ZDOTDIR/.zshrc && echo ZSH config reloaded from $ZDOTDIR"
 alias icat="kitty +kitten icat"
 alias visudo='EDITOR=nvim visudo'
 
 #Paru utils
 alias pquery='paru -Q --info'
-function pfiles() {
-  paru -Ql "$1" | grep -e '/bin/.' | cut -f 2- -d ' '
-}
 
 #Replaces
+alias cat='bat'
+alias rm='rip'
 alias tree='eza -aT'
 alias ls='eza -a'
-alias lsa='eza -lBaa'
-alias lsag='eza -lB@aa --git'
+alias l='eza -lBaa --color=auto'
+alias llg='eza -lB@aa --git'
 alias top='btop'
 alias mv='mv -i'
 alias du="du -h"
-alias find='fd'
-alias -g grep='rg --color=auto'
+alias luarocks='luarocks --lua-version 5.1'
+# alias find='fd'
+# alias -g grep='rg --color=auto'
+
+#Globals for the lazy
+alias -g noerr='2> /dev/null'
