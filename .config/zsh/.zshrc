@@ -52,3 +52,5 @@ bindkey '^R' history-incremental-search-backward
 
     popd > /dev/null
 }
+
+# source <(luarocks completion bash)

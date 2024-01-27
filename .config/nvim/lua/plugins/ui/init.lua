@@ -56,7 +56,7 @@ local U = {
   {
     "folke/noice.nvim",
     event = "VeryLazy",
-    enabled = false,
+    enabled = vim.cfg.noice.enabled,
     dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",

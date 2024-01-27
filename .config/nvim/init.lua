@@ -14,6 +14,8 @@ for name, func in pairs(metatables) do
   vim.lua.metatables[name] = func
 end
 
+vim.cfg = require('configs.startup').neovim
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system {

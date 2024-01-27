@@ -87,8 +87,8 @@ vim.api.nvim_create_autocmd("BufNewFile", {
       shebang = "/usr/bin/env " .. binary
     end
 
-    parent_dir = vim.api.nvim_command("echo fnamemodify(getcwd(),':t')")
-    print(parent_dir)
+    local parent_dir = vim.api.nvim_command("echo fnamemodify(getcwd(),':t')")
+
     if parent_dir == 'bin' then
       vim.cmd [[ autocmd BufWritePost *.* :autocmd VimLeave * :!chmod u+x % ]]
       vim.cmd [[ f expand("%:r") ]]
@@ -124,9 +124,13 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 
-vim.api.nvim_create_autocmd('BufLeave', {
+vim.api.nvim_create_autocmd('BufEnter', {
   desc = "Close file when changing file",
-  callback = function(d)
-    -- vim.api.nvim_buf_delete()
+  callback = function(t)
+    -- for buf in pairs(vim.api.nvim_list_bufs()) do
+    --   if not vim.api.nvim_buf_is_loaded(buf) then
+    --     vim.api.nvim_buf_delete(buf, {})
+    --   end
+    -- end
   end
 })

@@ -30,6 +30,7 @@ fd
 file
 findutils
 firefox
+fish
 flake8
 flatpak
 flex
@@ -61,6 +62,7 @@ linux
 linux-firmware
 linux-headers
 logrotate
+lua51
 luajit-2.1-lua52-git
 luarocks
 m4
