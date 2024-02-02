@@ -32,6 +32,24 @@ bindkey -r "^L"
 
 bindkey '^R' history-incremental-search-backward
 
+typeset mods=(
+    zsh/complist
+    zsh/mapfile
+    zsh/nearcolor
+    zsh/zleparameter
+    zsh/zprof
+    zsh/zselect
+    zsh/net/tcp
+)
+
+for module in "${mods[@]}";
+do
+    zmodload "$module"
+done
+
+autoload -Uz chpwd_recent_dirs cdr add-zsh-hook vcs_info edit-command-line insert-files
+add-zsh-hook chpwd chpwd_recent_dirs
+
 # Loads hooks
 () {
     pushd "$ZDOTDIR/hooks" > /dev/null
@@ -54,3 +72,5 @@ bindkey '^R' history-incremental-search-backward
 }
 
 # source <(luarocks completion bash)
+zle_highlight=(region:standout special:standout
+suffix:bold isearch:underline paste:standout)

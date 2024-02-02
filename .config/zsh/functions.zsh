@@ -1,5 +1,19 @@
 #!/usr/bin/zsh
 
+# Send to text to polybar with communitacion between processes
+# $1 text to send
+# $2 time to wait until send reset
+notifybar_multiplexing() {
+    test -n "$1" && {polybar-msg action message send "$1" >/dev/null && sleep ${2-3} && polybar-msg action message reset >/dev/null} > /dev/null &
+}
+
+# Send to text to polybar
+# $1 text to send
+# $2 time to wait until send reset
+notifybar() {
+    test -n "$1" && {polybar-msg action message send "$1" >/dev/null && sleep ${2-3} && polybar-msg action message reset >/dev/null} > /dev/null &
+}
+
 # Setups environment for hacking
 # $1 machine name
 # $2 machine ip
@@ -18,8 +32,8 @@ reloadzsh() {
     if [ -n "$(jobs)" ]; then
         print -P "Error: %j job(s) in background"
     else
-        notify "Reloaded zsh"
-        clear_this_line
+        notifybar "Reloaded zsh"
+        erase_lines 2
         printf '\033[1A';
         exec zsh
     fi
@@ -97,9 +111,10 @@ i3maps() {
     grep -Eo "^[^#].*mod\+[0-9A-Za-z\+]+.*" $HOME/.config/i3/mapping | sed -e "s/mod+//" | grep "\$$1"
 }
 
-# echoes() {
-#         echo "${1%% *}"
-# }
+echoes() {
+    echo $#
+    test -z "$1"
+}
 
 # Extract function names
 # $1 file to extract

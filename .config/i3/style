@@ -61,4 +61,4 @@ smart_borders on
 
 for_window [class="^.*"] border pixel 1
 
-exec_always setwal -s dark_clouds
+exec_always set_theme -s dark-corridor
