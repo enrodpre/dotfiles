@@ -14,7 +14,7 @@ export SUDO_EDITOR='nvim'
 
 export SHELL='zsh'
 
-export PYTHONPATH=${PYTHONPATH}:$XDG_DATA_HOME/python/functions:$XDG_DATA_HOME/python/pytest-testconfig:$HOME/.local/bin
+export PYTHONPATH=$XDG_DATA_HOME/python/functions:$XDG_DATA_HOME/python/pytest-testconfig:$HOME/.local/bin
 export LUA_PATH='/home/kike/.local/share/lua/5.1/?.lua;/home/kike/.local/share/lua/5.1/?/init.lua;/usr/share/lua/5.1/?.lua;/home/kike/.local/share/lua/?.lua;/home/kike/.local/share/lua/5.1/?/?.lua;/home/kike/.luarocks/share/lua/5.1/?.lua;/home/kike/.luarocks/share/lua/5.1/?/init.lua;/usr/share/lua/5.1/?/init.lua'
 export LUA_CPATH='/home/kike/.local/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/lib/lua/5.1/loadall.so;./?.so;/home/kike/.luarocks/lib/lua/5.1/?.so'
 
@@ -43,4 +43,4 @@ if [[ -z ${fpath[(r)$scripts_folder]} ]] ; then
     autoload -Uz $scripts_folder/*(.N:t)
 fi
 
-source $ZDOTDIR/alias.zsh
+source "$ZDOTDIR/alias.zsh"

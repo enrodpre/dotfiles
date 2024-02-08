@@ -1,9 +1,17 @@
 #!/bin/zsh
 
 function react_to_venv() {
-  MYVENV=./venv
-  # when you cd into a folder that contains $MYVENV
-  [[ -d $MYVENV ]] && source $MYVENV/bin/activate > /dev/null 2>&1
-  # when you cd into a folder that doesn't
-  [[ ! -d $MYVENV ]] && deactivate > /dev/null 2>&1
+
+    if [[ -d ".venv" ]];
+    then 
+        VENV_ROOTDIR=$(pwd)
+        source .venv/bin/activate 
+        # PYVENVPATH=$VIRTUAL_ENV/bin/python
+        # VENVMODULES=$VIRTUAL_ENV/lib/python3.12/site-packages
+        PROJECTSOURCE=$VENV_ROOTDIR/src
+        export PYTHONPATH=$PYTHONPATH:$PROJECTSOURCE
+        export MYPYPATH=$VENV_ROOTDIR
+    fi > /dev/null 2>&1
+
+    [[ $PWD != ${VENV_ROOTDIR}* ]] && deactivate > /dev/null 2>&1
 }

@@ -106,7 +106,12 @@ vim.api.nvim_create_autocmd("VimEnter", {
   desc = "Auto select virtualenv Nvim open",
   pattern = "*",
   callback = function()
+    local _, err = pcall(require, 'venv-selector')
+    if err then
+      return
+    end
     local venv = vim.fn.findfile("pyproject.toml", vim.fn.getcwd() .. ";")
+    print(venv)
     if venv ~= "" then
       require("venv-selector").retrieve_from_cache()
     end

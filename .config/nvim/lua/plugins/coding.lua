@@ -1,11 +1,27 @@
 return {
   {
     "linux-cultist/venv-selector.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim" },
-    event = "BufEnter *.py", -- Optional: needed only if you want to type `:VenvSelect` without a keymapping
+    dependencies = { 'neovim/nvim-lspconfig', "nvim-telescope/telescope.nvim" },
+    ft = "python",
+    enabled = false,
+    opts = {
+      name = ".venv"
+    },
+    -- event = "BufEnter *.py",
+    config = function()
+      require('venv-selector').setup {}
+    end
   },
   {
     "nathom/filetype.nvim"
+  },
+  {
+    "wookayin/vim-autoimport",
+    ft = "python",
+    config = function()
+      vim.api.nvim_set_keymap("n", "<leader>au", ":ImportSymbol<CR>", {})
+    end,
+    dev = true
   },
   {
     "nvim-neotest/neotest",

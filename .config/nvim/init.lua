@@ -52,6 +52,7 @@ require('lazy').setup({
 
       'hrsh7th/cmp-nvim-lsp',
       'hrsh7th/cmp-path',
+      "hrsh7th/cmp-cmdline",
 
       'rafamadriz/friendly-snippets',
     },
@@ -97,11 +98,17 @@ require('lazy').setup({
   },
 
 },
-  { "nvimtools/none-ls.nvim" },
 
 
   { import = 'plugins' },
-}, { default = { lazy = true } })
+}, {
+  default = { lazy = true },
+  config = {
+    env = {
+      path = '~/coding/nvim/plugins'
+    }
+  }
+})
 
 require('options')
 
@@ -201,34 +208,34 @@ require('mason').setup({
 
 require('configs.nonels')
 
-local function mason_to_lspconfig(next_server)
-  local mason_mapper = {
-    sumneko_lua = "lua-language-server",
-    bashls = "bash-language-server",
-    jsonls = "json-lsp"
-  }
-
-  local mapped_key = mason_mapper[next_server.k]
-  if mapped_key ~= nil then
-    next_server.k = mapped_key
-    return next_server
-  end
-end
-
--- Map some keys
-local servers = vim.lua.metatables.pairs {
-  fn = mason_to_lspconfig,
-  tbl = require("configs.lsp")
-}
-
+-- local function mason_to_lspconfig(next_server)
+--   local mason_mapper = {
+--     sumneko_lua = "lua-language-server",
+--     bashls = "bash-language-server",
+--     jsonls = "json-lsp"
+--   }
+--
+--   local mapped_key = mason_mapper[next_server.k]
+--   if mapped_key ~= nil then
+--     next_server.k = mapped_key
+--   end
+--
+--   return next_server
+-- end
+--
+-- -- Map some keys
+-- local servers = vim.lua.metatables.pairs {
+--   fn = mason_to_lspconfig,
+--   tbl = require("configs.lsp")
+-- }
+-- vim.print(vim.inspect(require("configs.lsp")))
 -- Setup neovim lua configuration
 require('neodev').setup()
-
+local servers = require('configs.lsp')
 local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 -- Ensure the servers above are installed
 local mason_lspconfig = require 'mason-lspconfig'
-
 mason_lspconfig.setup {
   ensure_installed = vim.tbl_keys(servers),
 }

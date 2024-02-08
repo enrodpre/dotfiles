@@ -6,7 +6,7 @@ return {
       "bash",
     },
   },
-  html = { filetypes = { 'html', 'twig', 'hbs' } },
+  -- html = { filetypes = { 'html', 'twig', 'hbs' } },
   jsonls = {},
   lua_ls = {
     single_file_support = true,
@@ -23,13 +23,26 @@ return {
       },
     },
   },
-  pyright = require('configs.lsp.pyright'),
-  ruff_lsp = {},
+  pylsp = {
+    plugins = {
+      rope_autoimport = {
+        enabled = true,
+      }
+    }
+  },
+  -- ruff_lsp = {},
   vimls = {},
   yamlls = {
     settings = {
       yaml = {
-        keyOrdering = false,
+        hover = true,
+        format = {
+          enable = true,
+          singleQuote = true,
+        },
+        completion = true,
+        validate = true,
+        customTags = { "!color", "!color" }
       },
     },
   },

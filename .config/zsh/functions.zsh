@@ -4,7 +4,9 @@
 # $1 text to send
 # $2 time to wait until send reset
 notifybar_multiplexing() {
-    test -n "$1" && {polybar-msg action message send "$1" >/dev/null && sleep ${2-3} && polybar-msg action message reset >/dev/null} > /dev/null &
+    MESSAGE_PIPE=$HOME/.local/state/polybar/cpipe
+    polybar-msg action message send "$1" >/dev/null
+    {echo 1 > $MESSAGE_PIPE && read -t ${2-3} <>$MESSAGE_PIPE && polybar-msg action message reset} >/dev/null &
 }
 
 # Send to text to polybar

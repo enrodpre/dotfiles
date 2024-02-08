@@ -55,3 +55,5 @@ vim.o.termguicolors = true
 
 -- Relative numbers
 vim.o.relativenumber = false
+
+vim.g.python3_host_prog = '/home/kike/.config/nvim/.venv/bin/python3'

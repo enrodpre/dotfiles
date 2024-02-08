@@ -61,15 +61,16 @@ add-zsh-hook chpwd chpwd_recent_dirs
         file=$event.zsh
 
         source $file
-        filefnames=$(funcnames $file)
 
-        while read fname; do
+        funcnames $file |  while read fname; do
             add-zsh-hook $event $fname
-        done <<< "$filefnames"
+        done
     done
 
     popd > /dev/null
 }
+
+[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
 
 # source <(luarocks completion bash)
 zle_highlight=(region:standout special:standout
