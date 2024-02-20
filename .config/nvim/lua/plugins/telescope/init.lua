@@ -1,6 +1,6 @@
 #!/usr/bin/luaq
 
-local load_mapping = function ()
+local load_mapping = function()
    vim.keymap.set("n", "<leader>?", require("telescope.builtin").oldfiles,
       {
          desc = "[?] Find recently opened files",
@@ -9,7 +9,7 @@ local load_mapping = function ()
       {
          desc = "[ ] Find existing buffers",
       })
-   vim.keymap.set("n", "<leader>/", function ()
+   vim.keymap.set("n", "<leader>/", function()
       -- You can pass additional configuration to telescope to change theme, layout, etc.
       require("telescope.builtin").current_buffer_fuzzy_find(require(
          "telescope.themes").get_dropdown {
@@ -48,15 +48,15 @@ local load_mapping = function ()
    vim.keymap.set("n", "<leader>k", require("telescope.builtin").keymaps,
       { desc = "See keymaps", })
 
-   vim.keymap.set({ "n", "v", }, "<leader>ti",
+   vim.keymap.set({ "n", "v", }, "<leader>i",
       require("plugins.telescope.builtin").inspect)
 
-   vim.keymap.set({ "n", "x", }, "<leader>tr", function ()
+   vim.keymap.set({ "n", "x", }, "<leader>tr", function()
       require("telescope").extensions.refactoring.refactors()
    end)
 end
 
-local go_up_cwd_find_files = function (prompt)
+local go_up_cwd_find_files = function(prompt)
    local current_picker = require("telescope.actions.state").get_current_picker(
       prompt)
    -- cwd is only set if passed as telescope option
@@ -93,7 +93,7 @@ return {
       },
       extension = require("plugins.telescope.extensions"),
    },
-   config = function (opts)
+   config = function(opts)
       local telescope = require("telescope")
 
       telescope.setup(opts)

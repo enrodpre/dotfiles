@@ -8,23 +8,18 @@ local trim = func.trim
 local dump = require("util.debug").dump
 
 local F = {}
+local ob = {
+   "asdb",
+   "asd",
+   "as1b",
+   {
+      "asd",
+   },
+}
 function F.inspect()
    local selected = get_selected_text()
-   if vim.api.nvim_list_uis() == 0 then
-      selected = vim.fn.input {
-         prompt = "> ",
-         default = selected,
-      }
-   end
-   local ob = {
-      "asdb",
-      "asd",
-      "as1b",
-      selected,
-      -- {
-      --    "asd",
-      -- },
-   }
+   print(selected)
+   local obj_to_inspect = vim.fn.input(selected)
    pickers.new({}, {
       prompt_title = "Inspect object",
       finder = finders.new_table { results = ob, },

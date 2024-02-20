@@ -9,13 +9,15 @@ export CONFIG=$XDG_CONFIG_HOME
 
 export ZDOTDIR=$CONFIG/zsh
 export KITTY_ORIG_ZDOTDIR=$ZDOTDIR
+export NPM_CONFIG_USERCONFIG=$CONFIG/npmrc
+export GITIGNORE_DIR=$XDG_DATA_HOME/gitignore
 export EDITOR='nvim'
 export SUDO_EDITOR='nvim'
 
 export SHELL='zsh'
 
 export PYTHONPATH=$XDG_DATA_HOME/python/functions:$XDG_DATA_HOME/python/pytest-testconfig:$HOME/.local/bin
-export LUA_PATH='/home/kike/.local/share/lua/5.1/?.lua;/home/kike/.local/share/lua/5.1/?/init.lua;/usr/share/lua/5.1/?.lua;/home/kike/.local/share/lua/?.lua;/home/kike/.local/share/lua/5.1/?/?.lua;/usr/share/lua/5.1/?/init.lua'
+export LUA_PATH='/home/kike/.local/share/lua/5.1/?.lua;/home/kike/.local/share/lua/5.1/?/init.lua;/usr/share/lua/5.1/?.lua;/home/kike/.local/share/lua/?.lua;/home/kike/.local/share/lua/5.1/?/?.lua;/usr/share/lua/5.1/?/init.lua;/home/kike/.local/share/lua/**'
 export LUA_CPATH='/home/kike/.local/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/lib/lua/5.1/loadall.so;./?.so'
 
 export WORDLISTS=$XDG_DATA_HOME/seclists/

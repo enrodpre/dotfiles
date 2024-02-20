@@ -31,7 +31,7 @@ local M = {
    ["<C-Q><C-Q>"] = {
       "Force quit", "n", ":q! <CR>",
    },
-   ["<C-s>"] = { "Save", "n", ":w <CR>", },
+   ["<C-s>"] = { "Save", "n", "<cmd>w<CR>", },
    -- ["<Space>"] = { "Map space to nop", "nv", "<Nop>", { silent = true } },
    go = {
       "Remap for <C-O>", "n", "<C-O>",
@@ -48,7 +48,7 @@ return {
       operators = { ["<leader>c"] = "Comments", },
       triggers_blacklist = { n = { "o", "oo", }, },
    },
-   config = function (opts)
+   config = function(opts)
       local wk = require("which-key")
 
       wk.setup(opts)
@@ -95,21 +95,22 @@ return {
          ["<leader>h"] = { "Git [H]unk", },
       }, { mode = "v", })
 
-      for lhs, described_action in pairs(M) do
-         local desc, modes, rhs, mapopts = unpack(described_action)
-         mapopts = mapopts or {}
-         for mode in vim.lua.split(modes) do
-            wk.register({
-               [lhs] = {
-                  rhs,
-                  desc,
-                  expr = opts["expr"],
-                  silent = opts["silent"],
-                  remap = opts["remap"],
-
-               },
-            }, { mode = mode, })
-         end
-      end
+      -- for lhs, described_action in pairs(M) do
+      --    local desc, modes, rhs, mapopts = unpack(described_action)
+      --    mapopts = mapopts or {}
+      --    for mode in vim.lua.split(modes) do
+      --       wk.register({
+      --          [lhs] = {
+      --             rhs,
+      --             desc,
+      --             expr = opts["expr"],
+      --             silent = opts["silent"],
+      --             remap = opts["remap"],
+      --
+      --          },
+      --       }, { mode = mode, })
+      --    end
+      -- end
+      vim.lua.map(M)
    end,
 }

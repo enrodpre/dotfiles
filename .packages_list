@@ -141,6 +141,7 @@ python-rope
 python-setuptools
 python-trove-classifiers
 python-validate-pyproject
+python-virtualenvwrapper
 python-wal-steam-git
 python-whatthepatch
 python312
@@ -165,6 +166,7 @@ steam
 strace
 stylua
 sudo
+symlinks
 tcl
 tcpdump
 texinfo

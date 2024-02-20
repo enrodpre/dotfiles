@@ -97,13 +97,12 @@ local M = {
 }
 
 
-local on_attach= function(client, bufnr)
-   vim.notify("attached")
+local on_attach = function(client, bufnr)
    -- Create an autocmd that will run *before* we save the buffer.
    --  Run the formatting command for the LSP that has just attached.
    vim.api.nvim_create_autocmd("BufWritePre", {
       buf = bufnr,
-      callback = function(info)
+      callback = function()
          vim.lsp.buf.format {
             async = false,
             -- filter = function(c) return c.id == client.id end,
@@ -111,23 +110,25 @@ local on_attach= function(client, bufnr)
       end,
    })
 
-   -- if vim.bo[bufnr].filetype == "python" then
-   --    vim.api.nvim_create_autocmd("BufWritePost", {
-   --       buffer = bufnr,
-   --       callback = function()
-   --          vim.g.eventignore =
-   --             "BufWritePre,BufWritePost,BufReadPost,BufRead,BufReadPre,FileReadPost,FileReadPre"
-   --
-   --          os.execute("autoimport " .. vim.fn.expand("%:S"))
-   --          vim.cmd[[ :e ]]
-   --
-   --          vim.g.ei = ""
-   --          vim.cmd[[ :echo "hi" ]]
-   --       end,
-   --    })
-   -- end
-
    vim.lua.map(M)
 end
+-- })
+
+-- if vim.bo[bufnr].filetype == "python" then
+--    vim.api.nvim_create_autocmd("BufWritePost", {
+--       buffer = bufnr,
+--       callback = function()
+--          vim.g.eventignore =
+--             "BufWritePre,BufWritePost,BufReadPost,BufRead,BufReadPre,FileReadPost,FileReadPre"
+--
+--          os.execute("autoimport " .. vim.fn.expand("%:S"))
+--          vim.cmd[[ :e ]]
+--
+--          vim.g.ei = ""
+--          vim.cmd[[ :echo "hi" ]]
+--       end,
+--    })
+-- end
+-- end
 
 return on_attach

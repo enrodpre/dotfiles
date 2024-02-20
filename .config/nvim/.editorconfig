@@ -58,7 +58,7 @@ space_before_function_call_single_arg = always
 ## always/keep/none
 # space_before_function_call_single_arg.string = always
 
-space_before_open_square_bracket = false
+space_before_open_square_bracket = true
 
 space_inside_function_call_parentheses = false
 

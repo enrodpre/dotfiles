@@ -1,15 +1,17 @@
-return {
+return
+{
    { "dbeniamine/cheat.sh-vim", cmd = "Cheat", },
    {
       "max397574/better-escape.nvim",
       event = "InsertEnter",
       config = function()
-         require("better_escape").setup({
-            mapping = { "kj", },
-            timeout = vim.o.timeoutlen,
-            clear_empty_lines = false,
-            keys = "<Esc>",
-         })
+         require("better_escape").setup(
+            {
+               mapping = { "kj", },
+               timeout = vim.o.timeoutlen,
+               clear_empty_lines = false,
+               keys = "<Esc>",
+            })
       end,
    },
    {
@@ -52,13 +54,14 @@ return {
          -- local bool_augend = augend.constant.alias.bool
          -- bool_augend.config.preserve_case = true
 
-         local default_augend = {
+         local default_augend =
+         {
             augend.integer.alias.decimal,
             augend.integer.alias.hex,
-            augend.date.alias["%Y/%m/%d"],
-            augend.date.alias["%Y-%m-%d"],
-            augend.date.alias["%m/%d"],
-            augend.date.alias["%H:%M"],
+            augend.date.alias ["%Y/%m/%d"],
+            augend.date.alias ["%Y-%m-%d"],
+            augend.date.alias ["%m/%d"],
+            augend.date.alias ["%H:%M"],
             -- bool_augend,
          }
 
@@ -69,7 +72,8 @@ return {
 
          for _, pair in ipairs(new_augends) do
             table.insert(default_augend,
-               augend.constant.new {
+               augend.constant.new
+               {
                   elements = pair,
                   preserve_case = true,
                   word = true,
@@ -102,11 +106,13 @@ return {
    },
    {
       "windwp/nvim-autopairs",
-      dependencies = {
+      dependencies =
+      {
          "hrsh7th/nvim-cmp",
       },
       event = "InsertEnter",
-      opts = {
+      opts =
+      {
          enable_check_bracket_line = true,
       },
    },
