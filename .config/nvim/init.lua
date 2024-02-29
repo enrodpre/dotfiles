@@ -4,11 +4,11 @@ vim.g.maplocalleader = " "
 local functions = require("util.functions")
 
 vim.lua = {}
-for name, func in pairs(functions) do vim.lua[name] = func end
+for name, func in pairs(functions) do vim.lua [name] = func end
 
 vim.lua.metatables = {}
 local metatables = require("util.metatables")
-for name, func in pairs(metatables) do vim.lua.metatables[name] = func end
+for name, func in pairs(metatables) do vim.lua.metatables [name] = func end
 
 local confpath = os.getenv("XDG_CONFIG_HOME") .. "/" .. "config.yaml"
 vim.cfg = require("config").read_config(confpath).neovim
@@ -26,20 +26,30 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local lazyopts =    {
-  default = { lazy = true },
+local lazyopts = {
+  default = { lazy = true, },
   config = {
-    env = { path = "~/coding/nvim/plugins" },
+    env = { path = "~/coding/nvim/plugins", },
   },
-  change_detection = { notify = false },
+  change_detection = { notify = false, },
   performance = {
     rtp = {
       disabled_plugins = {
-        "gzip",     -- "matchit",         -- "matchparen",
-        "netrwPlugin", "tarPlugin", "tohtml",
-        "tutor", "zipPlugin",
+        "gzip",
+        "netrwPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
       },
     },
+  },
+  profiling = {
+    -- Enables extra stats on the debug tab related to the loader cache.
+    -- Additionally gathers stats about all package.loaders
+    loader = false,
+    -- Track each new require in the Lazy profiling tab
+    require = false,
   },
 }
 

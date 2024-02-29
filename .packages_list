@@ -94,7 +94,6 @@ npm
 ntfs-3g
 nvidia-utils
 nvtop
-opencl-nvidia
 openvpn
 pacman
 pacman-contrib
@@ -114,10 +113,8 @@ proton-ge-custom-bin
 pulseaudio
 pulseaudio-alsa
 pulseaudio-control
-python-aenum
 python-annotated-types
 python-autocommand
-python-debugpy
 python-distutils-extra
 python-fastjsonschema
 python-inflect
@@ -126,6 +123,7 @@ python-jaraco.functools
 python-jaraco.text
 python-more-itertools
 python-ordered-set
+python-pew
 python-pip
 python-pipreqs
 python-pipx
@@ -134,18 +132,13 @@ python-pydantic-core
 python-pydocstyle
 python-pygame
 python-pynvim
-python-pytest
 python-pywal
 python-pywalfox
-python-rope
 python-setuptools
 python-trove-classifiers
 python-validate-pyproject
-python-virtualenvwrapper
 python-wal-steam-git
 python-whatthepatch
-python312
-python313
 redis
 redshift
 rhash
@@ -158,13 +151,10 @@ rust
 samba
 sane
 sed
-selene
-shellcheck
 smartmontools
 source-highlight
 steam
 strace
-stylua
 sudo
 symlinks
 tcl
@@ -172,7 +162,6 @@ tcpdump
 texinfo
 tk
 tldr
-tor
 tor-browser
 traceroute
 ttf-fira-code
@@ -208,7 +197,6 @@ xsane
 xsel
 xterm
 xwallpaper
-yapf
 zram-generator
 zsh
 zsh-theme-powerlevel10k-git

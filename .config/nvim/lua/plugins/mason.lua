@@ -31,7 +31,9 @@ return {
          "mfussenegger/nvim-dap",
       },
       opts = {
-         ensure_installed = { "python", },
+         ensure_installed = {
+            -- "python",
+         },
       },
    },
 }

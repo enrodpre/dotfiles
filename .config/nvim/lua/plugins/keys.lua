@@ -1,4 +1,4 @@
-#!/usr/bin/lua
+#!/usr/bin/luaAAAA
 
 local M = {
    -- ["<leader>at"] = {
@@ -6,12 +6,6 @@ local M = {
    -- },
    ["<F4>"] = {
       "Execute last command", "n", ":<UP><CR>",
-   },
-   [",i"] = {
-      "Insert one caracter", "n", "i_<Esc>r",
-   },
-   [",a"] = {
-      "Append one caracter", "n", "a_<Esc>r",
    },
    ["<C-o>"] = { "Insert new line in normal mode", "n", "a<CR><Esc>", },
    ["oo"] = {
@@ -27,7 +21,7 @@ local M = {
       "Execute selected text in a terminal", "v",
       "y:!<C-r>\"<CR>",
    },
-   ["<C-Q>"] = { "Quit neovim", "nv", ":q <CR>", },
+   ["<C-Q>"] = { "Quit neovim", "nv", ":q <CR>", {}, },
    ["<C-Q><C-Q>"] = {
       "Force quit", "n", ":q! <CR>",
    },
@@ -91,7 +85,7 @@ return {
          ["OO"] = { "which_key_ignore", },
       }
       wk.register({
-         ["<leader>"] = { name = "VISUAL <leader>", },
+         ["<leader>"] = { casa = "VISUAL <leader>", },
          ["<leader>h"] = { "Git [H]unk", },
       }, { mode = "v", })
 

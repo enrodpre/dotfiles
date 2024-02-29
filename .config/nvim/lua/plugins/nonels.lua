@@ -19,9 +19,9 @@ return {
 
       require("mason-null-ls").setup {
          ensure_installed = {
-            "mypy", "zsh", "shellcheck", "black",
-            "prettier", "beautysh", "shellcheck",
-            "shfmt", "yamlfmt",
+            -- "mypy", "zsh", "shellcheck", "black",
+            -- "prettier", "beautysh", "shellcheck",
+            -- "shfmt", "yamlfmt",
          },
          automatic_installation = true,
          handlers = {},
@@ -32,6 +32,8 @@ return {
          sources = {
             null_ls.builtins.code_actions.refactoring,
             null_ls.builtins.hover.printenv,
+            null_ls.builtins.diagnostics.pyproject_flake8,
+            null_ls.builtins.diagnostics.flake8,
          },
       }
    end,

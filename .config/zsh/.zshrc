@@ -7,6 +7,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
 fi
 
 autoload -Uz compinit && compinit
+autoload -U bashcompinit && bashcompinit
+eval "$(register-python-argcomplete pipx)"
+source $(pew shell_config)
+
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # (cat ~/.cache/wal/sequences &)
@@ -55,7 +59,8 @@ add-zsh-hook chpwd chpwd_recent_dirs
     pushd "$ZDOTDIR/hooks" > /dev/null
     set -o shwordsplit
 
-    EVENTS=("chpwd" "zshaddhistory")
+    EVENTS=("zshaddhistory")
+    # "chpwd"
 
     for event in $EVENTS; do
         file=$event.zsh
@@ -75,3 +80,7 @@ add-zsh-hook chpwd chpwd_recent_dirs
 # source <(luarocks completion bash)
 zle_highlight=(region:standout special:standout
 suffix:bold isearch:underline paste:standout)
+
+source $ZDOTDIR/plugins.zsh
+
+[[ -s $HOME/.local/pythonz/etc/bashrc ]] && source $HOME/.local/pythonz/etc/bashrc
