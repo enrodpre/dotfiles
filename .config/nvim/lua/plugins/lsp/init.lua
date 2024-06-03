@@ -3,8 +3,8 @@
 
 return {
    "neovim/nvim-lspconfig",
+   -- event="VeryLazy",
    dependencies = {
-      { "folke/neodev.nvim", opts = {}, },
       "williamboman/mason.nvim",
       "williamboman/mason-lspconfig.nvim",
       {
@@ -14,7 +14,6 @@ return {
       },
    },
    config = function()
-      require("neodev").setup()
       local servers = require("plugins.lsp.servers")
       local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
       local capabilities = vim.tbl_deep_extend(
@@ -25,7 +24,20 @@ return {
       )
 
       vim.api.nvim_create_autocmd("LspAttach", {
-         callback = require("plugins.lsp.on_attach"),
+         callback = function(_, bufnr)
+            vim.api.nvim_create_autocmd("BufWritePre", {
+               buf = bufnr,
+               callback = function()
+                  vim.lsp.buf.format {
+                     async = false,
+                     -- filter = function(c) return c.id == client.id end,
+                  }
+               end,
+            })
+
+            local lsp_mapping = require("keys").lsp
+            require("which-key").register(lsp_mapping)
+         end,
       })
 
       -- Ensure the servers above are installed
@@ -38,10 +50,10 @@ return {
 
       mason_lspconfig.setup_handlers {
          function(server_name)
-            require("lspconfig")[server_name].setup {
+            require("lspconfig") [server_name].setup {
                capabilities = capabilities,
-               settings = servers[server_name],
-               filetypes = (servers[server_name] or {}).filetypes,
+               settings = servers [server_name],
+               filetypes = (servers [server_name] or {}).filetypes,
             }
          end,
       }

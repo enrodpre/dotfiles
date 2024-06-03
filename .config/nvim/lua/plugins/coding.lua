@@ -1,10 +1,24 @@
 return
 {
-   { "tpope/vim-sleuth", event = "BufReadPre", },
+   {
+      "folke/lazydev.nvim",
+      ft = "lua", -- only load on lua files
+      opts = {
+         library = {
+            -- Library items can be absolute paths
+            -- "~/projects/my-awesome-lib",
+            -- Or relative, which means they will be resolved as a plugin
+            -- "LazyVim",
+            -- When relative, you can also provide a path to the library in the plugin dir
+            "luvit-meta/library", -- see below
+         },
+      },
+   },
+   { "Bilal2453/luvit-meta", lazy = true, }, -- optional `vim.uv` typings
+   { "tpope/vim-sleuth",     event = "BufReadPre", },
    {
       "linux-cultist/venv-selector.nvim",
-      dependencies =
-      {
+      dependencies = {
          "neovim/nvim-lspconfig",
          "nvim-telescope/telescope.nvim",
       },
@@ -24,20 +38,16 @@ return
    {
       "numToStr/Comment.nvim",
       event = "VeryLazy",
-      opts =
-      {
-         toggler =
-         {
+      opts = {
+         toggler = {
             line = "<leader>cc",
             block = "<leader>cbc",
          },
-         opleader =
-         {
+         opleader = {
             line = "<leader>c",
             block = "<leader>cb",
          },
-         extra =
-         {
+         extra = {
             above = "<leader>cO",
             below = "<leader>cbo",
             eol = "<leader>cA",
@@ -46,24 +56,19 @@ return
    },
    {
       "nvim-neotest/neotest",
-      enabled = true,
-      dependencies =
-      {
+      enabled = false,
+      dependencies = {
          "nvim-lua/plenary.nvim",
          "nvim-neotest/neotest-python",
          "nvim-neotest/neotest-plenary",
+         "nvim-neotest/nvim-nio",
       },
-      config = function()
-         require("neotest").setup(
-            {
-               adapters =
-               {
-                  require("neotest-python")(
-                     {
-                        runner = "pytest",
-                     }),
-               },
+      opts = {
+         adapters = function()
+            return require("neotest-python")({
+               runner = "pytest",
             })
-      end,
+         end,
+      },
    },
 }

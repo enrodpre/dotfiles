@@ -3,8 +3,10 @@
 return {
    "nvimtools/none-ls.nvim",
    enabled = true,
+   event = "VeryLazy",
    dependencies = {
       "nvim-lua/plenary.nvim",
+      "neovim/nvim-lspconfig",
       "jay-babu/mason-null-ls.nvim", {
       "ThePrimeagen/refactoring.nvim",
       dependencies = {
@@ -32,8 +34,8 @@ return {
          sources = {
             null_ls.builtins.code_actions.refactoring,
             null_ls.builtins.hover.printenv,
-            null_ls.builtins.diagnostics.pyproject_flake8,
-            null_ls.builtins.diagnostics.flake8,
+            -- null_ls.builtins.diagnostics.pyproject_flake8,
+            -- null_ls.builtins.diagnostics.flake8,
          },
       }
    end,

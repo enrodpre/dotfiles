@@ -1,12 +1,12 @@
 #!/usr/bin/lua
 
-
 return {
    -- Highlight, edit, and navigate code
    "nvim-treesitter/nvim-treesitter",
    dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
    },
+   lazy = false,
    build = ":TSUpdate",
    config = vim.defer_fn(function()
       require("nvim-treesitter.configs").setup {

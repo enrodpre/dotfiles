@@ -22,6 +22,7 @@ return
       -- opts = {
       --    remove_default_keybinds = true,
       -- },
+      event = "VeryLazy",
       config = function()
          local manipulate = require("dial.map").manipulate
          vim.keymap.set("n", "<C-a>", function()

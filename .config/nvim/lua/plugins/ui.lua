@@ -1,19 +1,48 @@
+local noice_config = function(opts)
+   local focused = true
+
+   vim.api.nvim_create_autocmd("FocusGained", {
+      callback = function()
+         focused = true
+      end,
+   })
+   vim.api.nvim_create_autocmd("FocusLost", {
+      callback = function()
+         focused = false
+      end,
+   })
+
+   table.insert(opts.routes or {}, 1, {
+      filter = {
+         ["not"] = {
+            event = "lsp",
+            kind = "progress",
+         },
+         cond = function()
+            return not focused
+         end,
+      },
+      view = "notify_send",
+      opts = { stop = false, },
+   })
+end
+
 return {
    {
       "norcalli/nvim-colorizer.lua",
-      lazy = false,
+      event = "UiEnter",
       config = function() require("colorizer").setup() end,
    },
    {
       "folke/tokyonight.nvim",
-      lazy = false,
-      priority = 1000,
+      event = "UiEnter",
       config = function() vim.cmd [[colorscheme tokyonight]] end,
       opts = { style = "night", },
    },
    {
       "nvim-lualine/lualine.nvim",
       dependencies = { "nvim-tree/nvim-web-devicons", },
+      event = "VeryLazy",
       opts = {
          options = {
             icons_enabled = true,
@@ -41,6 +70,7 @@ return {
    },
    {
       "rcarriga/nvim-notify",
+      event = "VeryLazy",
       opts = {
          timeout = 3000,
          max_height = function() return math.floor(vim.o.lines * 0.75) end,
@@ -54,8 +84,8 @@ return {
    },
    {
       "folke/noice.nvim",
-      event = "VeryLazy",
       enabled = vim.cfg.noice.enabled,
+      event = "VeryLazy",
       dependencies = {
          "MunifTanjim/nui.nvim",
          "rcarriga/nvim-notify",
@@ -74,7 +104,7 @@ return {
                ["cmp.entry.get_documentation"] = true,
             },
          },
-         popupmenu = { backend = "nui", },
+         popupmenu = { backend = "cmp", },
          presets = {
             bottom_search = true,         -- use a classic bottom cmdline for search
             command_palette = false,      -- position the cmdline and popupmenu together
@@ -113,6 +143,7 @@ return {
             },
          },
       },
+      config = noice_config,
    },
    {
       "rktjmp/lush.nvim",
@@ -162,6 +193,7 @@ return {
       dependencies = {
          "nvim-tree/nvim-web-devicons",
       },
+      enabled = false,
       cmd = { "TroubleToggle", "Trouble", },
       opts = { use_diagnostic_signs = true, },
       keys = {
@@ -207,4 +239,45 @@ return {
       config = true,
       enabled = false,
    },
-}
+   {
+      "catppuccin/nvim",
+      lazy = true,
+      name = "catppuccin",
+      opts = {
+         integrations = {
+            aerial = true,
+            alpha = true,
+            cmp = true,
+            dashboard = true,
+            flash = true,
+            gitsigns = true,
+            headlines = true,
+            illuminate = true,
+            indent_blankline = { enabled = true, },
+            leap = true,
+            lsp_trouble = true,
+            mason = true,
+            markdown = true,
+            mini = true,
+            native_lsp = {
+               enabled = true,
+               underlines = {
+                  errors = { "undercurl", },
+                  hints = { "undercurl", },
+                  warnings = { "undercurl", },
+                  information = { "undercurl", },
+               },
+            },
+            navic = { enabled = true, custom_bg = "lualine", },
+            neotest = true,
+            neotree = true,
+            noice = true,
+            notify = true,
+            semantic_tokens = true,
+            telescope = true,
+            treesitter = true,
+            treesitter_context = true,
+            which_key = true,
+         },
+      },
+   }, }

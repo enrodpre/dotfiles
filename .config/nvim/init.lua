@@ -14,7 +14,7 @@ local confpath = os.getenv("XDG_CONFIG_HOME") .. "/" .. "config.yaml"
 vim.cfg = require("config").read_config(confpath).neovim
 
 local debug = require("util.debug")
-vim.print = debug.dump
+-- vim.print = debug.dump
 
 local lazypath = vim.fn.stdpath "data" .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
