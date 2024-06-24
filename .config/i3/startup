@@ -3,10 +3,9 @@
 
 exec --no-startup-id picom -b
 
-exec_always set_theme -s dark-night -n
-
 exec_always --no-startup-id xautolock -time 10 -locker "home/kike/.config/i3/scripts/autolock_suspend.sh" -detectsleep
 
 exec_always --no-startup-id /home/kike/.config/polybar/launch.sh &
 
 exec --no-startup-id redshift
+exec set_theme -s dark-corridor -n

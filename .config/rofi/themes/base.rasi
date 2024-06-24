@@ -1,0 +1,17 @@
+
+@import "~/.local/share/rofi/colors/catppuccin.rasi"
+* {
+    font: "JetBrains Mono Nerd Font 10";
+    border-colour:               var(selected);
+    handle-colour:               var(foreground);
+    background-colour:           var(background);
+    foreground-colour:           var(foreground);
+    alternate-background:        var(background-alt);
+    normal-background:           var(background);
+    normal-foreground:           var(foreground);
+    selected-normal-background:  var(selected);
+    selected-normal-foreground:  var(background);
+    alternate-normal-background: var(background);
+    alternate-normal-foreground: var(foreground);
+}
+

@@ -1,7 +1,8 @@
+local enabled = false
 return {
    {
       "jay-babu/mason-nvim-dap.nvim",
-
+      enabled = enabled,
       dependencies = {
          "williamboman/mason.nvim",
       },
@@ -18,6 +19,7 @@ return {
 
       },
       {
+         enabled = enabled,
          "mfussenegger/nvim-dap-python",
          ft = "python",
          dependencies = {
@@ -25,6 +27,7 @@ return {
          },
       },
       {
+         enabled = enabled,
          "mfussenegger/nvim-dap",
          dependencies = {
             "rcarriga/nvim-dap-ui",

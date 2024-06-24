@@ -37,6 +37,15 @@ return function()
       ["<C-f>"] = cmp.mapping(function() cmp.scroll_docs(4) end, { "i", "c", }),
       ["<CR>"] = cmp.mapping(
          function(fallback)
+            -- if cmp.visible() then
+            --    cmp.confirm()
+            -- else
+            fallback()
+            -- end
+         end,
+         { "i", "c", }),
+      ["<C-CR>"] = cmp.mapping(
+         function(fallback)
             if cmp.visible() then
                cmp.confirm()
             else
