@@ -8,7 +8,7 @@ vim.api.nvim_create_autocmd({ "BufAdd", "BufEnter", }, {
 
          -- check for duplicates
          if not vim.tbl_contains(bufs, args.buf) and
-            (args.event == "BufAdd" or vim.bo[args.buf].buflisted) then
+            (args.event == "BufAdd" or vim.bo [args.buf].buflisted) then
             table.insert(bufs, args.buf)
             vim.t.bufs = bufs
          end
@@ -20,12 +20,12 @@ vim.api.nvim_create_autocmd("BufDelete", {
    pattern = "*",
    callback = function(args)
       for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
-         local bufs = vim.t[tab].bufks
+         local bufs = vim.t [tab].bufks
          if bufs then
             for i, bufnr in ipairs(bufs) do
                if bufnr == args.buf then
                   table.remove(bufs, i)
-                  vim.t[tab].bufs = bufs
+                  vim.t [tab].bufs = bufs
                   break
                end
             end
@@ -66,7 +66,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 
       if ext == nil or ext == "" then return end
 
-      local binary = ext_to_binary[ext]
+      local binary = ext_to_binary [ext]
 
       if binary == nil then return end
 
@@ -95,7 +95,7 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 
 vim.api.nvim_create_autocmd("VimEnter", {
    desc = "Auto select virtualenv Nvim open",
-   pattern = "*",
+   pattern = "*.py",
    callback = function()
       local _, err = pcall(require, "venv-selector")
       if err then return end
@@ -105,10 +105,10 @@ vim.api.nvim_create_autocmd("VimEnter", {
    end,
 })
 
-local highlight_group = vim.api.nvim_create_augroup("YankHighlight",
-   {
-      clear = true,
-   })
+local highlight_group = vim.api.nvim_create_augroup("YankHighlight", {
+   clear = true,
+})
+
 vim.api.nvim_create_autocmd("TextYankPost", {
    desc = "Highlights when yanking",
    callback = function() vim.highlight.on_yank() end,
@@ -116,17 +116,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
    pattern = "*",
 })
 
-vim.api.nvim_create_autocmd("BufEnter", {
-   desc = "Close file when changing file",
-   callback = function(t)
-      -- for buf in pairs(vim.api.nvim_list_bufs()) do
-      --   if not vim.api.nvim_buf_is_loaded(buf) then
-      --     vim.api.nvim_buf_delete(buf, {})
-      --   end
-      -- end
+
+-- Log every type of filetype opened
+vim.api.nvim_create_autocmd("FileType", {
+   callback = function(event)
+      local logfile = "filetypes.txt"
+      local filepath = "/home/kike/.config/nvim/" .. logfile
+      local comm = "grep -q " ..
+         event.match .. " " .. filepath .. "|| echo " .. event.match .. " >> " ..
+         filepath
+
+      os.execute(comm)
    end,
 })
-
 
 -- close some filetypes with <q>
 vim.api.nvim_create_autocmd("FileType", {
@@ -139,7 +141,7 @@ vim.api.nvim_create_autocmd("FileType", {
       "neotest-output-panel",
    },
    callback = function(event)
-      vim.bo[event.buf].buflisted = false
+      vim.bo [event.buf].buflisted = false
       vim.keymap.set("n", "q", "<cmd>close<cr>",
          {
             buffer = event.buf,

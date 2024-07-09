@@ -4,7 +4,6 @@ local metatables = require("util.lazy_require")
 local tb = metatables.require_on_exported_call("telescope.builtin")
 -- local provider = function() require("telescope.builtin") end
 
--- local K = metatables.default()
 local K = {
    general = {},
    lsp = {},
@@ -12,32 +11,12 @@ local K = {
    dap = {},
 }
 
-local dismiss_key_if_cmp = function(keymap)
-   if not keymap then return end
-
-   return function()
-      vim.print(keymap)
-      local loaded, cmp = pcall(require, "cmp")
-      if not loaded then return end
-
-      local is_cmp_visible = cmp.visible()
-      if is_cmp_visible then return end
-
-      local clean_keymap = vim.api.nvim_replace_termcodes(keymap, true, false,
-         true)
-      vim.api.nvim_feedkeys(clean_keymap, vim.fn.mode(), false)
-   end
-end
-
 K.general = {
    ["<F4>"] = {
       ":<UP><CR>", "Execute last command",
    },
    ["<C-o>"] = {
       "a<CR><Esc>", "Append new line",
-   },
-   o = {
-      name = "which_key_ignore",
    },
    oo = {
       "o<Esc>k",
@@ -47,7 +26,9 @@ K.general = {
       "0i<CR><Esc>", "Newline backwards",
    },
    ["<C-Q>"] = {
-      ":q <CR>", "Quit neovim",
+      ":q <CR>",
+      "Quit neovim",
+      noremap = false,
    },
    ["<C-Q><C-Q>"] = {
       ":q! <CR>", "Force quit",
@@ -61,20 +42,16 @@ K.general = {
       "Execute selected text in a terminal",
       mode = "v",
    },
+   ["<S-CR>"] = {
+      function() require("noice").redirect(vim.fn.getcmdline()) end,
+      "Redirect output of command line",
+      mode = "c",
+   },
+   ["<Esc>"] = {
+      "<Esc>:let @/ = ''<CR>",
+      "Escape will clear search pattern",
+   },
 }
-
-local cmp_aware_keymaps = {
-   "<Tab>", "<S-Tab>",
-}
-
---[[ for _, keymap in ipairs(cmp_aware_keymaps) do
-   K.general [keymap] = {
-      dismiss_key_if_cmp(keymap),
-      "override for" .. keymap,
-      mode = { "i", "c", },
-      noremap = false,
-   }
-end ]]
 
 K.general ["<leader>"] = {
    e = {
@@ -310,5 +287,8 @@ K.dap = function()
       },
    }
 end
+
+K.unmap = {}
+K.unmap.n = { "gc", }
 
 return K

@@ -5,11 +5,11 @@ TESTING=false
 SUSPENDER="systemctl suspend"
 
 no_sound() {
-  if pactl list sinks | grep -c "state: RUNNING"
+  if pactl list sinks | grep -c "State: RUNNING"
   then
-    return 0
-  else 
     return 1
+  else 
+    return 0
   fi
 }
 

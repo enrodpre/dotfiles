@@ -29,9 +29,12 @@ vim.opt.rtp:prepend(lazypath)
 local lazyopts = {
   default = { lazy = true, },
   config = {
-    env = { path = "~/coding/nvim/plugins", },
+    env = { path = "/home/kike/coding/nvim/plugins", },
   },
   change_detection = { notify = false, },
+  install = {
+    colorscheme = { "catppuccin", },
+  },
   performance = {
     rtp = {
       disabled_plugins = {
@@ -61,6 +64,7 @@ require("autocmds")
 
 require("user_functions")
 
+require("filetypes")
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
 --

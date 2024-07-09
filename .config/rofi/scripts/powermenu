@@ -1,5 +1,5 @@
-#!/usr/bin/env bash
-
+#!/usr/bin/env zsh
+set -x
 ## Author : Aditya Shakya (adi1090x)
 ## Github : @adi1090x
 #
@@ -10,7 +10,6 @@ theme='powermenu'
 
 # CMDs
 uptime="$(uptime -p | sed -e 's/up //g')"
-host=$(hostname)
 
 # Options
 shutdown=' Shutdown'
@@ -21,52 +20,56 @@ logout=' Logout'
 
 # Rofi CMD
 rofi_cmd() {
-	rofi -dmenu \
-		-p "$host" \
-		-mesg "Uptime: $uptime" \
-		-theme "$theme"
+    rofi -dmenu \
+        -sep '|' \
+        -mesg "Uptime: $uptime" \
+        -theme "$theme"
 }
 
 # Pass variables to rofi dmenu
 run_rofi() {
-	echo -e "$lock\n$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
+    echo -en "$lock|$suspend|$logout|$reboot|$shutdown" | rofi_cmd
 }
 
 # Execute Command
 run_cmd() {
-	if [[ $1 == '--shutdown' ]]; then
-		systemctl poweroff
-	elif [[ $1 == '--reboot' ]]; then
-		systemctl reboot
-	elif [[ $1 == '--suspend' ]]; then
-		mpc -q pause
-		amixer set Master mute
-		systemctl suspend
-	elif [[ $1 == '--logout' ]]; then
-		i3-msg exit
-	fi
+    if [[ $1 == '--shutdown' ]]; then
+        systemctl poweroff
+    elif [[ $1 == '--reboot' ]]; then
+        systemctl reboot
+    elif [[ $1 == '--suspend' ]]; then
+        mpc -q pause
+        amixer set Master mute
+        systemctl suspend
+    elif [[ $1 == '--logout' ]]; then
+        i3-msg exit
+    fi
 }
 
 # Actions
 chosen="$(run_rofi)"
+echo $?
+echo $chosen
 case ${chosen} in
 $shutdown)
-	run_cmd --shutdown
-	;;
+    run_cmd --shutdown
+    ;;
 $reboot)
-	run_cmd --reboot
-	;;
+    run_cmd --reboot
+    ;;
 $lock)
-	if [[ -x '/usr/bin/betterlockscreen' ]]; then
-		betterlockscreen -l
-	elif [[ -x '/usr/bin/i3lock' ]]; then
-		i3lock
-	fi
-	;;
+    if [[ -x '/usr/bin/betterlockscreen' ]]; then
+        betterlockscreen -l
+    elif [[ -x '/usr/bin/i3lock' ]]; then
+        i3lock
+    fi
+    ;;
 $suspend)
-	run_cmd --suspend
-	;;
+    run_cmd --suspend
+    ;;
 $logout)
-	run_cmd --logout
-	;;
+    run_cmd --logout
+    ;;
 esac
+
+set +x

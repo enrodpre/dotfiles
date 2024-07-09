@@ -1,0 +1,35 @@
+* {
+    background:  #1E1D2Fff;
+    background-alt: #1e1e2e;
+    border: #1e1e2e;
+    selected: #89DCEBff;
+    blue: #89b4fa;
+    foreground: #cdd6f4;
+    foreground-alt: #f38ba8;
+    grey: #6c7086;
+    active: #ABE9B3FF;
+    urgent: #F28FADFF;
+    debug: #FFFFFFFF;
+
+    // width: 600;
+    font: "JetBrainsMono Nerd Font 11";
+
+    normal-background:           var(background);
+    normal-foreground:           var(foreground);
+    urgent-background:           var(urgent);
+    urgent-foreground:           var(background);
+    active-background:           var(active);
+    active-foreground:           var(background);
+    selected-normal-background:  var(selected);
+    selected-normal-foreground:  var(background);
+    selected-urgent-background:  var(active);
+    selected-urgent-foreground:  var(background);
+    selected-active-background:  var(urgent);
+    selected-active-foreground:  var(background);
+    alternate-normal-background: var(background);
+    alternate-normal-foreground: var(foreground);
+    alternate-urgent-background: var(urgent);
+    alternate-urgent-foreground: var(background);
+    alternate-active-background: var(active);
+    alternate-active-foreground: var(background);
+}

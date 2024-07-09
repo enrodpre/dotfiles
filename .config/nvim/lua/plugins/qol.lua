@@ -3,22 +3,66 @@ return
    { "dbeniamine/cheat.sh-vim", cmd = "Cheat", },
    {
       "max397574/better-escape.nvim",
-      event = "InsertEnter",
-      config = function()
-         require("better_escape").setup(
-            {
-               mapping = { "kj", },
-               timeout = vim.o.timeoutlen,
-               clear_empty_lines = false,
-               keys = "<Esc>",
-            })
-      end,
+      event = "VeryLazy",
+      tag = "v2.1.1",
+      opts = {
+         timeoutlen = vim.o.timeoutlen,
+         mappings = {
+            i = {
+               j = {
+                  k = false,
+                  j = false,
+               },
+               k = {
+                  j = "<Esc>",
+                  k = false,
+               },
+            },
+            c = {
+               j = {
+                  k = false,
+                  j = false,
+               },
+               k = {
+                  k = false,
+                  j = false,
+               },
+            },
+            t = {
+               j = {
+                  k = false,
+                  j = false,
+               },
+               k = {
+                  k = false,
+                  j = false,
+               },
+            },
+            v = {
+               j = {
+                  j = false,
+                  k = false,
+               },
+               k = {
+                  j = "<Esc>",
+                  k = false,
+               },
+            },
+            s = {
+               j = {
+                  j = false,
+                  k = false,
+               },
+               k = {
+                  j = false,
+                  k = false,
+               },
+            },
+         },
+      },
    },
    {
       "monaqa/dial.nvim",
-      -- keys = {
-      --    "<leader>i",
-      -- },
       -- opts = {
       --    remove_default_keybinds = true,
       -- },
@@ -68,7 +112,7 @@ return
 
          local new_augends = {
             { "and",   "or", }, { "&", "|", }, { "&&", "||", }, { "always", "never", },
-            { "false", "true", },
+            { "false", "true", }, { "horizontal", "vertical", }, { "yes", "no", }, { "+", "-", },
          }
 
          for _, pair in ipairs(new_augends) do

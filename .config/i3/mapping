@@ -1,6 +1,3 @@
-# i3 config file (v4)
-# vim: filetype=i3config
-
 set $mod Mod1
 
 set $up k
@@ -113,6 +110,6 @@ mode "$mode_gaps" {
 # Rofi
 set $ROFI_SCRIPTS $HOME/.config/rofi/scripts
 bindsym $mod+x exec $ROFI_SCRIPTS/run
-bindsym $mod+t exec $ROFI_SCRIPTS/translate
+bindsym $mod+t exec zsh -c "translate"
 bindsym $mod+p exec $ROFI_SCRIPTS/powermenu
 

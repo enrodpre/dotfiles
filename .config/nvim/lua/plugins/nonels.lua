@@ -7,23 +7,23 @@ return {
    dependencies = {
       "nvim-lua/plenary.nvim",
       "neovim/nvim-lspconfig",
-      "jay-babu/mason-null-ls.nvim", {
-      "ThePrimeagen/refactoring.nvim",
-      dependencies = {
-         "nvim-lua/plenary.nvim",
-         "nvim-treesitter/nvim-treesitter",
+      {
+         "ThePrimeagen/refactoring.nvim",
+         dependencies = {
+            "nvim-lua/plenary.nvim",
+            "nvim-treesitter/nvim-treesitter",
+         },
+         config = true,
       },
-      config = function(_) require("refactoring").setup() end,
-   },
    },
    config = function()
       require("mason").setup()
 
       require("mason-null-ls").setup {
          ensure_installed = {
-            -- "mypy", "zsh", "shellcheck", "black",
+            --"shfmt", -- "mypy", "zsh", "shellcheck", "black",
             -- "prettier", "beautysh", "shellcheck",
-            -- "shfmt", "yamlfmt",
+            -- , "yamlfmt",
          },
          automatic_installation = true,
          handlers = {},
@@ -34,8 +34,10 @@ return {
          sources = {
             null_ls.builtins.code_actions.refactoring,
             null_ls.builtins.hover.printenv,
-            -- null_ls.builtins.diagnostics.pyproject_flake8,
-            -- null_ls.builtins.diagnostics.flake8,
+            null_ls.builtins.formatting.shfmt.with({
+               filetypes = { "sh", "bash", "zsh", },
+               extra_args = { "-i", "4", },
+            }),
          },
       }
    end,

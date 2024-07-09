@@ -20,89 +20,64 @@ configuration {
 
 /*****----- Main Window -----*****/
 window {
-    /* properties for window widget */
-    transparency:                "real";
-    location:                    center;
-    anchor:                      center;
-    width:                       400px;
-    location:			 center;
-    x-offset:                    0px;
-    y-offset:                    0px;
-
-    /* properties for all widgets */
-    margin:                      0px;
-    padding:                     0px;
-    border:                      0px solid;
-    border-radius:               8px;
-    border-color:                @border-colour;
-    // cursor:                      "default";
-    /* Backgroud Colors */
-    background-color:            @background-colour;
+    width:                       800px;
+    border-color:                @border;
+    background-color:            @background;
 }
 
 /*****----- Main Box -----*****/
 mainbox {
     // spacing:                     10px;
-    margin:                      0px;
     padding:                     30px;
-    border:                      0px solid;
-    border-radius:               0px 0px 0px 0px;
-    border-color:                @border-colour;
+    border-color:                @border;
     background-color:            transparent;
-    children:                    [ "inputbar", "listview" ];
+    children:                    [ inputbar, listview ];
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
     // spacing:                     10px;
-    margin:                      0px;
-    padding:                     0px;
-    border:                      0px solid;
-    border-radius:               0px;
-    border-color:                @border-colour;
     background-color:            transparent;
-    text-color:                  @foreground-colour;
-    children:                    ["message","prompt", "entry"];
+    text-color:                  @foreground;
+    orentation:			 horizontal;
+    children:                    [message,prompt, entry];
 }
 
 prompt {
     background-color:            inherit;
     text-color:                  inherit;
-    orientation: horizontal;
-    expand: false;
+    location:			 west;
+    width:			 25px;
+    // expand: true;
 }
 entry {
     background-color:            inherit;
     text-color:                  inherit;
-    cursor:                      text;
-    orientation: horizontal;
-    expand: false;
+    // expand: true;
 }
 
 /*****----- Message -----*****/
+message {
+    expand:			 true;
+    background-color:            @foreground;
+    horizontal-align:		 0;
+}
+
 textbox {
     border-color:                inherit;
-    // background-color:            inherit;
-    // text-color:                  inherit;
-    width:			10px;
-}
-message {
-    margin:                      4px;
-    padding:			 4px;
-    border-color:                @border-colour;
-    orientation:		 horizontal;
     background-color:            inherit;
-    text-color:                  inherit;
-    width:			10px;
-    expand:			 true;
+    text-color:                  @border;
+    horizontal-align:		 0;
+    width:			 250;
 }
+
 error-message {
     padding:                     10px;
     border:                      0px solid;
     border-radius:               4px;
-    border-color:                @border-colour;
-    background-color:            @background-colour;
-    text-color:                  @foreground-colour;
+    border-color:                @border;
+    background-color:            @background;
+    text-color:                  @foreground;
 }
 
 
@@ -111,28 +86,24 @@ listview {
     columns:                     1;
     lines:                       6;
     cycle:                       true;
-    dynamic:                     true;
     scrollbar:                   true;
     layout:                      vertical;
     reverse:                     false;
-    fixed-height:                true;
-    fixed-columns:               true;
     
     spacing:                     5px;
     margin:                      0px;
     padding:                     0px;
     border:                      0px solid;
     border-radius:               0px;
-    border-color:                @border-colour;
+    border-color:                @border;
     background-color:            transparent;
-    text-color:                  @foreground-colour;
-    cursor:                      "default";
+    text-color:                  @foreground;
 }
 scrollbar {
     handle-width:                5px ;
-    handle-color:                @handle-colour;
+    handle-color:                @handle;
     border-radius:               8px;
-    background-color:            @alternate-background;
+    background-color:            @background-alt;
 }
 
 /*****----- Elements -----*****/
@@ -142,9 +113,9 @@ element {
     padding:                     8px;
     border:                      0px solid;
     border-radius:               4px;
-    border-color:                @border-colour;
+    border-color:                @border;
     background-color:            transparent;
-    text-color:                  @foreground-colour;
+    text-color:                  @foreground;
     cursor:                      pointer;
 }
 element normal.normal {
@@ -171,5 +142,5 @@ element-text {
     highlight:                   inherit;
     cursor:                      inherit;
     vertical-align:              0.5;
-    horizontal-align:            0.0;
+    horizontal-align:            0.5;
 }

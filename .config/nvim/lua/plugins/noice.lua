@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 
-local config = function(opts)
+local config = function(_, opts)
    local focused = true
 
    vim.api.nvim_create_autocmd("FocusGained", {
@@ -14,7 +14,7 @@ local config = function(opts)
       end,
    })
 
-   table.insert(opts.routes or {}, 1, {
+   table.insert(opts.routes, 1, {
       filter = {
          ["not"] = {
             event = "lsp",
@@ -27,16 +27,18 @@ local config = function(opts)
       view = "notify_send",
       opts = { stop = false, },
    })
+   require("noice").setup(opts)
 end
 
 return {
    "folke/noice.nvim",
    enabled = vim.cfg.noice.enabled,
-   event = "VeryLazy",
+   event = "UiEnter",
    dependencies = {
       "MunifTanjim/nui.nvim",
       "rcarriga/nvim-notify",
    },
+   config = config,
    opts = {
       cmdline = { view = "cmdline_popup", },
       commands = {
@@ -51,18 +53,27 @@ return {
             ["cmp.entry.get_documentation"] = true,
          },
       },
-      popupmenu = { backend = "nui", },
+      messages = {
+         view_search = false,
+      },
+      popupmenu = { backend = "cmp", },
       presets = {
-         bottom_search = true,         -- use a classic bottom cmdline for search
          command_palette = false,      -- position the cmdline and popupmenu together
          long_message_to_split = true, -- long messages will be sent to a split
-         inc_rename = false,           -- enables an input dialog for inc-rename.nvim
          lsp_doc_border = true,        -- add a border to hover docs and signature help
+      },
+      routes = {
+         {
+            filter = {
+               event = "msg_show",
+               kind = "search_count",
+            },
+            opts = { skip = true, },
+         },
       },
       views = {
          cmdline_popup = {
             position = {
-               row = 5,
                col = "50%",
             },
             size = {
@@ -71,7 +82,7 @@ return {
             },
          },
          popupmenu = {
-            -- relative = "editor",
+            relative = "editor",
             position = {
                row = 8,
                col = "50%",
@@ -90,5 +101,4 @@ return {
          },
       },
    },
-   config = config,
 }

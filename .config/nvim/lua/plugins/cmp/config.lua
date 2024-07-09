@@ -1,15 +1,5 @@
 #!/usr/bin/lua
 
-
-local source_mapping = {
-   nvim_lsp = "[LSP]",
-   nvim_lua = "[LUA]",
-   luasnip = "[SNIP]",
-   buffer = "[BUF]",
-   path = "[PATH]",
-   treesitter = "[TREE]",
-}
-
 return function()
    local luasnip = require "luasnip"
    require("luasnip.loaders.from_vscode").lazy_load()
@@ -54,11 +44,24 @@ return function()
          end,
          { "i", "c", }),
       ["<C-y>"] = cmp.mapping(
-         function() cmp.confirm() end,
-         { "i", "c", }),
+         function()
+            cmp.confirm { select = true, }
+         end,
+         { "i", "c", }
+      ),
       ["<C-e>"] = cmp.mapping(
          function() cmp.abort() end,
-         { "i", "c", }),
+         { "i", "c", }
+      ),
+      ["<Tab>"] = cmp.mapping(
+         function(failback) return failback end,
+         { "c", }
+      ),
+   }
+
+   local default_lspkind = require("plugins.cmp.lspkind").cmp_format()
+   local default_formatting = {
+      format = default_lspkind,
    }
 
    cmp.setup {
@@ -67,19 +70,13 @@ return function()
             luasnip.lsp_expand(args.body)
          end,
       },
-      completion = {
-         completeopt = "menu,menuone,noinsert",
-      },
       mapping = mapping,
-      preselect = cmp.PreselectMode.Item,
-      keyword_length = 2,
       window = {
          completion = cmp.config.window.bordered(),
          documentation = cmp.config.window.bordered(),
       },
       view = {
          entries = {
-            name = "custom",
             selection_order = "near_cursor",
             follow_cursor = true,
          },
@@ -90,41 +87,13 @@ return function()
          { name = "nvim_lua", },
          { name = "lazydev", },
       }, { name = "buffer", }),
-      formatting = {
-         format = require("lspkind").cmp_format({
-            mode = "symbol_text",
-            ellipsis_char = "...",
-            before = function(entry, vim_item)
-               require("tailwindcss-colorizer-cmp").formatter(entry,
-                  vim_item)
-               return vim_item
-            end,
-            menu = source_mapping,
-         }),
-         expandable_indicator = true,
-      },
-      sorting = {
-         priority_weight = 2,
-         comparators = {
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.score,
-            cmp.config.compare.recently_used,
-            cmp.config.compare.locality,
-            cmp.config.compare.kind,
-            cmp.config.compare.sort_text,
-            cmp.config.compare.length,
-            cmp.config.compare.order,
-         },
-      },
-      experimental = {
-         -- native_menu = false,
-         ghost_text = false,
-      },
+      formatting = default_formatting,
    }
 
    -- `/` cmdline setup.
    cmp.setup.cmdline("/", {
+      mapping = cmp.mapping.preset.cmdline(),
+      formatting = default_formatting,
       sources = {
          { name = "buffer", },
       },
@@ -132,6 +101,8 @@ return function()
 
    -- `:` cmdline setup.
    cmp.setup.cmdline(":", {
+      mapping = mapping,
+      formatting = default_formatting,
       sources = cmp.config.sources({
          { name = "path", },
       }, {
@@ -139,7 +110,7 @@ return function()
       }),
    })
 
-
    cmp.event:on("confirm_done",
-      require("nvim-autopairs.completion.cmp").on_confirm_done())
+      require("nvim-autopairs.completion.cmp").on_confirm_done()
+   )
 end

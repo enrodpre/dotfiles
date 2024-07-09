@@ -1,32 +1,9 @@
 return {
    {
       "norcalli/nvim-colorizer.lua",
-      event = "UiEnter",
-      config = function() require("colorizer").setup() end,
-   },
-   {
-      "folke/tokyonight.nvim",
-      event = "UiEnter",
-      config = function() vim.cmd [[colorscheme tokyonight]] end,
-      opts = { style = "night", },
-   },
-   {
-      "nvim-lualine/lualine.nvim",
-      dependencies = { "nvim-tree/nvim-web-devicons", },
       event = "VeryLazy",
       opts = {
-         options = {
-            icons_enabled = true,
-            theme = "auto",
-            component_separators = "|",
-            -- section_separators = "",
-         },
-         sections = {
-            lualine_x = {
-               "encoding",
-               "filetype",
-            },
-         },
+         "*",
       },
    },
    {
@@ -34,10 +11,6 @@ return {
       enabled = false,
       version = false,
       config = true,
-   },
-   {
-      "AlphaTechnolog/pywal.nvim",
-      event = "UiEnter",
    },
    {
       "rcarriga/nvim-notify",
@@ -104,24 +77,21 @@ return {
    },
    {
       "catppuccin/nvim",
-      lazy = true,
+      event = "UiEnter",
+      config = function() vim.cmd [[colorscheme catppuccin]] end,
       name = "catppuccin",
       opts = {
+         flavour = "mocha",
          integrations = {
-            aerial = true,
-            alpha = true,
             cmp = true,
-            dashboard = true,
-            flash = true,
+            dap = true,
             gitsigns = true,
-            headlines = true,
-            illuminate = true,
             indent_blankline = { enabled = true, },
-            leap = true,
-            lsp_trouble = true,
             mason = true,
             markdown = true,
-            mini = true,
+            mini = {
+               enabled = true,
+            },
             native_lsp = {
                enabled = true,
                underlines = {
@@ -133,14 +103,15 @@ return {
             },
             navic = { enabled = true, custom_bg = "lualine", },
             neotest = true,
-            neotree = true,
-            noice = true,
+            noice = false,
             notify = true,
             semantic_tokens = true,
             telescope = true,
             treesitter = true,
             treesitter_context = true,
+            ufo = true,
             which_key = true,
          },
       },
-   }, }
+   },
+}

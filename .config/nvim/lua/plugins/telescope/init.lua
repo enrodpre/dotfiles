@@ -26,9 +26,9 @@ return {
    },
    event = "VeryLazy",
    opts = {
-      default = {
-         wrap_results = true,
-      },
+      -- default = {
+      --    wrap_results = true,
+      -- },
       pickers = {
          find_files = {
             mappings = {
@@ -40,9 +40,9 @@ return {
             prompt_title = vim.loop.cwd(),
          },
       },
-      extension = require("plugins.telescope.extensions"),
+      -- extension = require("plugins.telescope.extensions"),
    },
-   config = function(opts)
+   config = function(_, opts)
       require("telescope").setup(opts)
       local telescope_mapping = require("keys").telescope
       require("which-key").register(telescope_mapping)

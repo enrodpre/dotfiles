@@ -2,39 +2,25 @@
 
 zle -R
 
+# Themes
+source $ZDOTDIR/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
+
+source "$ZDOTDIR/completion.zsh"
+
+source "$ZDOTDIR/vi-mode.zsh"
+
+# Source plugins
+fd -L -t f -d 2 ".plugin.zsh" "$XDG_DATA_HOME/zsh/plugins" | while read -r zshplugin; do source $zshplugin; done
+
+################ p10k ##############
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-autoload -Uz compinit && compinit
-autoload -U bashcompinit && bashcompinit
-eval "$(register-python-argcomplete pipx)"
-source $(pew shell_config)
-
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-
-# (cat ~/.cache/wal/sequences &)
-source ~/.cache/wal/colors-tty.sh
-source ~/.cache/wal/colors.sh
-
-PLUGINS_PATH="$HOME/.local/lib/zsh/plugins/"
-
-# Source plugins in /plugins
-find $PLUGINS_PATH -maxdepth 1 -type d -not -name ".*" | while read plugin_dir; do find $plugin_dir -maxdepth 1 -type f -name "*.plugin.zsh" ; done | while read shplugin; do source $shplugin; done
-
 source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
-[[ ! -f $ZDOTDIR/.p10k.zsh ]] || source "$ZDOTDIR/.p10k.zsh"
-
-source $ZDOTDIR/functions.zsh
-
-#Key bindings
-bindkey -r "^J"
-bindkey -r "^H"
-bindkey -r "^K"
-bindkey -r "^L"
-
-bindkey '^R' history-incremental-search-backward
+[[ ! -f $ZDOTDIR/p10k.zsh ]] || source "$ZDOTDIR/p10k.zsh"
+####################################
 
 typeset mods=(
     zsh/complist
@@ -51,8 +37,19 @@ do
     zmodload "$module"
 done
 
-autoload -Uz chpwd_recent_dirs cdr add-zsh-hook vcs_info edit-command-line insert-files
-add-zsh-hook chpwd chpwd_recent_dirs
+autoload -Uz add-zsh-hook vcs_info 
+
+# Load scripts
+typeset -U fpath
+scripts_folder=$ZDOTDIR/scripts
+
+if [[ -z ${fpath[(r)$scripts_folder]} ]] ; then
+    fpath=($scripts_folder $fpath)
+
+    # Autoload every function substracting the extension
+    autoload -Uz $scripts_folder/*(.N:t)
+fi
+
 
 # Loads hooks
 () {
@@ -75,12 +72,13 @@ add-zsh-hook chpwd chpwd_recent_dirs
     popd > /dev/null
 }
 
-[ -f /opt/miniconda3/etc/profile.d/conda.sh ] && source /opt/miniconda3/etc/profile.d/conda.sh
-
 # source <(luarocks completion bash)
-zle_highlight=(region:standout special:standout
-suffix:bold isearch:underline paste:standout)
-
-source $ZDOTDIR/plugins.zsh
 
 [[ -s $HOME/.local/pythonz/etc/bashrc ]] && source $HOME/.local/pythonz/etc/bashrc
+
+setopt AUTO_PUSHD
+setopt PUSHD_IGNORE_DUPS
+setopt PUSHD_SILENT
+
+#Key bindings
+source $ZDOTDIR/mapping.zsh

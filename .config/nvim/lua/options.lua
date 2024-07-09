@@ -1,25 +1,17 @@
 -- sidescroll = 5,
--- clipboard = "unnamedplus",
 -- cmdheight = 1,
 -- ruler = false,
--- hidden = true,
 -- ignorecase = true,
--- smartcase = true,
--- number = true,
 -- numberwidth = 2,
--- relativenumber = false,
--- expandtab = true,
--- shiftwidth = 2,
--- smartindent = true,
--- tabstop = 8,
--- timeoutlen = 700,
--- updatetime = 250,
--- undofile = true,
 -- showcmd = true,
 -- wrapmargin = 300
 
+-- Close hidden buffers
+vim.g.hidden = false
+vim.g.bufhidden = "delete"
+
 -- Set highlight on search
-vim.o.hlsearch = false
+vim.o.hlsearch = true
 
 -- Make line numbers default
 vim.wo.number = true
@@ -30,8 +22,20 @@ vim.o.mouse = "a"
 -- Sync clipboard between OS and Neovim.
 vim.o.clipboard = "unnamedplus"
 
--- Enable break indent
+-- Indentation
 vim.o.breakindent = true
+vim.o.expandtab = true
+vim.o.smartindent = true
+vim.o.tabstop = 4
+vim.o.shiftwidth = 4
+
+
+-- Folding
+-- vim.o.foldmethod = "indent"
+-- vim.o.foldenable = false
+vim.o.foldcolumn = "0"
+vim.o.foldlevel = 99 -- Using ufdddo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 2
 
 -- Save undo history
 vim.o.undofile = true
@@ -48,7 +52,7 @@ vim.o.updatetime = 250
 vim.o.timeoutlen = 300
 
 -- Set completeopt to have a better completion experience
-vim.o.completeopt = "menuone,noselect"
+-- vim.o.completeopt = "menuone,noselect"
 
 -- NOTE: You should make sure your terminal supports this
 vim.o.termguicolors = true

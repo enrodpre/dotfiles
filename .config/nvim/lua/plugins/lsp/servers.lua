@@ -1,20 +1,21 @@
 return {
    bashls = { filetypes = { "sh", "zsh", "bash", }, },
+   -- cssls = { filetypes = "rasi", },
    -- html = { filetypes = { 'html', 'twig', 'hbs' } },
    jsonls = {},
-   lua_ls = {
-      settings = {
-         Lua = {
-            diagnostics = { severity = "warning", },
-            telemetry = { enable = false, },
-            workspace = { checkThirdParty = false, },
-            format = { enable = false, },
-            completion = { callSnippet = "Replace", },
-            hint = { enable = true, },
-            -- diagnostics = { disable = { 'missing-fields' } },
-         },
-      },
-   },
+   -- lua_ls = {
+   --    settings = {
+   --       Lua = {
+   --          diagnostics = { severity = "warning", },
+   --          telemetry = { enable = false, },
+   --          workspace = { checkThirdParty = false, },
+   --          format = { enable = false, },
+   --          completion = { callSnippet = "Replace", },
+   --          hint = { enable = true, },
+   --          -- diagnostics = { disable = { 'missing-fields' } },
+   --       },
+   --    },
+   -- },
    pylsp = {
       plugins = {
          rope_autoimport = { enabled = true, },

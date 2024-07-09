@@ -1,46 +1,37 @@
 #!/usr/bin/lua
 
-local config = function()
-   require("lspkind").init({
-      mode = "symbol_text",
-      preset = "default",
-      symbol_map = {
-         Text = "",
-         Method = "",
-         Function = "",
-         Constructor = "",
-         Field = "ﰠ",
-         Variable = "",
-         Class = "ﴯ",
-         Interface = "",
-         Module = "",
-         Property = "ﰠ",
-         Unit = "塞",
-         Value = "",
-         Enum = "",
-         Keyword = "",
-         Snippet = "",
-         Color = "",
-         File = "",
-         Reference = "",
-         Folder = "",
-         EnumMember = "",
-         Constant = "",
-         Struct = "פּ",
-         Event = "",
-         Operator = "",
-         TypeParameter = "",
-         Copilot = "",
-         Codeium = "",
-      },
-   })
-end
+local source_mapping = {
+   buffer = "[Buffer]",
+   nvim_lsp = "[LSP]",
+   luasnip = "[LuaSnip]",
+   nvim_lua = "[Lua]",
+   latex_symbols = "[Latex]",
+   path = "[Path]",
+   treesitter = "[Tree]",
+}
+
+local default = {
+   mode = "symbol_text",
+   show_labelDetails = true,
+   menu = source_mapping,
+   ellipsis_char = "...",
+   before = function(entry, item)
+      require("tailwindcss-colorizer-cmp").formatter(entry,
+         item)
+
+      if entry.source.name == "cmdline" then
+         item.kind = "󰘳 Cmdline"
+      end
+
+      return item
+   end,
+}
 
 return {
-   "onsails/lspkind-nvim",
-   config = config,
-   event = "InsertEnter",
-   dependencies = {
-      "hrsh7th/nvim-cmp",
-   },
+   cmp_format = function(opts)
+      opts = opts or {}
+      opts = vim.tbl_deep_extend("force", default, opts)
+
+      return require("lspkind").cmp_format(opts)
+   end,
 }

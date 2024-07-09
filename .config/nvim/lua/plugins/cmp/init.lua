@@ -2,7 +2,6 @@
 
 
 return {
-   require("plugins.cmp.lspkind"),
    {
       "hrsh7th/nvim-cmp",
       dependencies = {
@@ -20,8 +19,9 @@ return {
          "chrisgrieser/cmp-nerdfont",
          "roobert/tailwindcss-colorizer-cmp.nvim",
          "rafamadriz/friendly-snippets",
+         "onsails/lspkind-nvim",
       },
-      event = "InsertEnter",
+      event = "VeryLazy",
       config = require("plugins.cmp.config"),
    },
 }

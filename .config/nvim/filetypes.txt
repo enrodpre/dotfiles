@@ -1,0 +1,11 @@
+noice
+lua
+notify
+cmp_menu
+help
+cmp_docs
+checkhealth
+markdown
+WhichKey
+vim
+zsh
