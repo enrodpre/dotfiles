@@ -1,22 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
-TESTING=false
+TESTING=${1:-false}
 
-SUSPENDER="systemctl suspend"
+if [ "$TESTING" = true ]; then
+    SUSPENDER="echo suspender"
+else
+    SUSPENDER="systemctl suspend"
+fi
 
 no_sound() {
-  if pactl list sinks | grep -c "State: RUNNING"
-  then
-    return 1
-  else 
-    return 0
-  fi
+    sound=$(pactl list sinks | grep -c "State: RUNNING")
+    return "$sound"
 }
 
 if no_sound; then
-  if $TESTING; then
-    echo 'SUSPENDER'
-  else
     eval "$SUSPENDER"
-  fi
+    exit 1
+else
+    echo NO SUSPENDER
+    exit 0
 fi

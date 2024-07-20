@@ -34,9 +34,6 @@ export HISTSIZE=10000
 export SAVEHIST=10000
 
 export ZSH_ASK_API_KEY="(cat $ZDOTDIR/.chatgpt.key)"
-export ZVM_VI_INSERT_ESCAPE_BINDKEY=kj
-export ZVM_VI_SURROUND_BINDKEY=classic
-export ZVM_KEYTIMEOUT=300
 
 #Add custom functions
 source $ZDOTDIR/functions.zsh

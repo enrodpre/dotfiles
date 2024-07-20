@@ -1,4 +1,4 @@
-local once = require("../once")
+local once = require("util.functions.once")
 
 print("Run tests for `once`")
 

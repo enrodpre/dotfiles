@@ -26,6 +26,38 @@ function M.pairs(params)
    })
 end
 
+function M.mapper(fn)
+   local inner = {}
+   return setmetatable({}, {
+      __index = inner,
+      __newindex = function(_, key, value)
+         local newkey, newvalue = fn(key, value)
+         inner [newkey] = newvalue
+      end,
+   })
+end
+
+-- local function mapper(fn)
+--    local inner = {}
+--    return setmetatable({}, {
+--       __index = function(tbl, key)
+--          if not inner [tbl] then
+--             return nil
+--          else
+--             return inner [tbl] [key]
+--          end
+--       end,
+--       __newindex = function(tbl, key, value)
+--          if not inner.tbl then
+--             inner [tbl] = {}
+--          end
+--
+--          local newkey, newvalue = unpack(fn(key, value))
+--          inner [newkey] = newvalue
+--       end,
+--    })
+-- end
+
 function M.default(value)
    local new = {}
 

@@ -6,31 +6,19 @@ local warn = vim.health.warn
 local error = vim.health.error
 
 function M.check()
-   start("lazy.nvim")
+   start("util")
 
-   if vim.fn.has("nvim-0.8.0") == 1 then
-      ok("Using Neovim >= 0.8.0")
+   if not vim.lua then
+      warn("vim.lua does not exist")
    else
-      error("Neovim >= 0.8.0 is required")
-   end
-
-   for _, cmd in ipairs({ "git", "rg", { "fd", "fdfind", }, "lazygit", }) do
-      local name = type(cmd) == "string" and cmd or vim.inspect(cmd)
-      local commands = type(cmd) == "string" and { cmd, } or cmd
-      ---@cast commands string[]
-      local found = false
-
-      for _, c in ipairs(commands) do
-         if vim.fn.executable(c) == 1 then
-            name = c
-            found = true
-         end
+      if not vim.lua.fn then
+         warn("vim.lua.fn does not exist")
       end
-
-      if found then
-         ok(("`%s` is installed"):format(name))
-      else
-         warn(("`%s` is not installed"):format(name))
+      if not vim.lua.metatables then
+         warn("vim.lua.metatables does not exist")
+      end
+      if not vim.lua.lazyreq then
+         warn("vim.lua.lazyreq does not exist")
       end
    end
 end

@@ -32,6 +32,7 @@ expac
 exploitdb
 eza
 fakeroot
+fastfetch
 fd
 file
 findutils
@@ -128,10 +129,12 @@ pulseaudio-alsa
 pulseaudio-control
 python-annotated-types
 python-autocommand
+python-build
 python-caldav
 python-distutils-extra
 python-fastjsonschema
 python-inflect
+python-installer
 python-jaraco.context
 python-jaraco.functools
 python-jaraco.text
@@ -146,6 +149,7 @@ python-pydantic-core
 python-pydocstyle
 python-pygame
 python-pynvim
+python-pyproject-hooks
 python-pytest
 python-setuptools
 python-trove-classifiers
