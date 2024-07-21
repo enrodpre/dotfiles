@@ -1,15 +1,26 @@
 #!/usr/bin/lua
 
 return {
-  -- Highlight, edit, and navigate code
-  'nvim-treesitter/nvim-treesitter',
-  dependencies = {
-    'nvim-treesitter/nvim-treesitter-textobjects',
-  },
-  lazy = false,
-  build = ':TSUpdate',
-  config = vim.defer_fn(function()
-    require('nvim-treesitter.configs').setup {
+  {
+    -- Highlight, edit, and navigate code
+    'nvim-treesitter/nvim-treesitter',
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter-textobjects',
+      'RRethy/nvim-treesitter-endwise',
+    },
+    event = 'VeryLazy',
+    build = ':TSUpdate',
+    lazy = vim.fn.argc(-1) == 0,
+    init = function(plugin)
+      -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
+      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
+      -- no longer trigger the **nvim-treesitter** module to be loaded in time.
+      -- Luckily, the only things that those plugins need are the custom queries, which we make available
+      -- during startup.
+      require('lazy.core.loader').add_to_rtp(plugin)
+      require 'nvim-treesitter.query_predicates'
+    end,
+    opts = {
       ensure_installed = {
         'c',
         'cpp',
@@ -17,8 +28,6 @@ return {
         'python',
         'rasi',
         'tsx',
-        'javascript',
-        'typescript',
         'vimdoc',
         'vim',
         'bash',
@@ -33,12 +42,10 @@ return {
         'gitignore',
         'gitattributes',
       },
-
-      -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
       auto_install = true,
-
       highlight = { enable = true },
       indent = { enable = true },
+      incremental_selection = { enable = false },
       endwise = { enable = true },
       textobjects = {
         select = {
@@ -83,6 +90,6 @@ return {
           },
         },
       },
-    }
-  end, 0),
+    },
+  },
 }

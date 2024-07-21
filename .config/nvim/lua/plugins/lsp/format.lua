@@ -3,7 +3,6 @@
 return {
   'stevearc/conform.nvim',
   dependencies = { 'mason.nvim' },
-  lazy = true,
   cmd = 'ConformInfo',
   opts = {
     format = {
@@ -19,7 +18,7 @@ return {
     },
     format_on_save = { timeout_ms = 500, lsp_format = 'fallback' },
     formatters = {
-      injected = { options = { ignore_errors = true } },
+      injected = { options = { ignore_errors = false } },
       shfmt = { prepend_args = { '-i', '4', '-ci' } },
     },
   },

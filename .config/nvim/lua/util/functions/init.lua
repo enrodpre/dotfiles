@@ -61,10 +61,6 @@ function F.currentdir()
   return vim.fn.expand '%:p:h'
 end
 
-function F.error(msg)
-  vim.print(msg)
-end
-
 function F.module_path(_module)
   local config_path = vim.fn.stdpath 'config'
   local module_rel_path = _module:gsub('[.]', '/')
@@ -113,15 +109,7 @@ function F.load_submodules(_module)
   return submodules
 end
 
-function F.load_keymap(name)
-  local ok, wk = pcall(require, 'which-key')
-  if ok then
-    local ok2, keymap = pcall(require, 'keymaps.' .. name)
-    if ok2 then
-      wk.add(keymap)
-    end
-  end
-end
+function F.get_icons(group) end
 
 function F.ensure_execution(plugin_name, func)
   local lazy_cfg = require('lazy.core.config').plugins

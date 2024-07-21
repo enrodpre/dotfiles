@@ -14,19 +14,19 @@ local config = function(_, opts)
     end,
   })
 
-  -- table.insert(opts.routes, 1, {
-  --    filter = {
-  --       ["not"] = {
-  --          event = "lsp",
-  --          kind = "progress",
-  --       },
-  --       cond = function()
-  --          return not focused
-  --       end,
-  --    },
-  --    view = "notify_send",
-  --    opts = { stop = false, },
-  -- })
+  table.insert(opts.routes, 1, {
+    filter = {
+      ['not'] = {
+        event = 'lsp',
+        kind = 'progress',
+      },
+      cond = function()
+        return not focused
+      end,
+    },
+    view = 'notify_send',
+    opts = { stop = false },
+  })
   require('noice').setup(opts)
 end
 
@@ -37,7 +37,7 @@ return {
     'MunifTanjim/nui.nvim',
     'rcarriga/nvim-notify',
   },
-  config = config,
+  -- config = config,
   opts = {
     cmdline = { view = 'cmdline_popup' },
     commands = {

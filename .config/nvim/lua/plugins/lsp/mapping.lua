@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 
-local tb = vim.lua.lazyreq.on_module_call('telescope')
+local tb = lazyreq 'telescope.builtin'
 
 return {
   {
@@ -9,9 +9,9 @@ return {
     desc = '[G]o [D]ocument [D]iagnostics',
   },
   {
-    '<leader>z',
+    '<leader>ac',
     vim.lsp.buf.code_action,
-    desc = '[G]o [D]ocument [A]ctions',
+    desc = '[A]pply [C]ode Action',
   },
   {
     'gds',
@@ -47,16 +47,16 @@ return {
   },
   {
     '<leader>rv',
-    function()
-      require('refactoring').debug.print_var {}
+    function(...)
+      lazyreq('refactoring').debug.print_var(...)
     end,
     desc = 'Print [V]ar',
     mode = { 'x', 'n' },
   },
   {
     '<leader>rc',
-    function()
-      require('refactoring').debug.cleanup()
+    function(...)
+      require('refactoring').debug.cleanup(...)
     end,
     desc = '[C]leanup',
   },
@@ -65,16 +65,16 @@ return {
     vim.diagnostic.open_float,
     desc = '[O]pen Dianostic',
   },
-  {
-    '<leader>oi',
-    vim.lsp.buf.incoming_calls,
-    desc = '[O]pen incoming calls',
-  },
-  {
-    '<leader>oo',
-    vim.lsp.buf.outgoing_calls,
-    desc = '[O]pen outcoming calls',
-  },
+  -- {
+  --   '<leader>oi',
+  --   vim.lsp.buf.incoming_calls,
+  --   desc = '[O]pen incoming calls',
+  -- },
+  -- {
+  --   '<leader>oo',
+  --   vim.lsp.buf.outgoing_calls,
+  --   desc = '[O]pen outcoming calls',
+  -- },
   {
     '<leader>os',
     vim.lsp.buf.signature_help,
@@ -126,10 +126,5 @@ return {
     'gli',
     tb.lsp_implementations,
     desc = '[G]oto [I]mplementation',
-  },
-  {
-    '<leader>sb',
-    --      function() require("nvim-dap").set end,
-    desc = '[S]et Breakpoint',
   },
 }

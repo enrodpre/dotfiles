@@ -1,5 +1,3 @@
-local neocomposer = vim.lua.lazyreq.on_exported_call('NeoComposer.ui').status_recording
-
 return {
   'nvim-lualine/lualine.nvim',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
@@ -35,7 +33,14 @@ return {
         lualine_b = { 'diagnostics' },
         lualine_c = {
           'filename',
-          { neocomposer },
+          {
+            function()
+              return require('NeoComposer.ui').status_recording()
+            end,
+            cond = function()
+              return package.loaded['NeoComposer'] and true or false
+            end,
+          },
         },
         lualine_x = {
           'encoding',
@@ -60,20 +65,20 @@ return {
       },
     }
 
-    local trouble = require 'trouble'
-    local symbols = trouble.statusline
-      and trouble.statusline {
-        mode = 'symbols',
-        groups = {},
-        title = false,
-        filter = { range = true },
-        format = '{kind_icon}{symbol.name:Normal}',
-        hl_group = 'lualine_c_normal',
-      }
-    table.insert(opts.sections.lualine_c, {
-      symbols and symbols.get,
-      cond = symbols and symbols.has,
-    })
+    -- local trouble = require 'trouble'
+    -- local symbols = trouble.statusline
+    --   and trouble.statusline {
+    --     mode = 'lsp_document_symbols',
+    --     groups = {},
+    --     title = false,
+    --     filter = { range = true },
+    --     format = '{kind_icon}{symbol.name:Normal}',
+    --     hl_group = 'lualine_c_normal',
+    --   }
+    -- table.insert(opts.sections.lualine_x, {
+    --   symbols and symbols.get,
+    --   cond = symbols and symbols.has,
+    -- })
 
     return opts
   end,

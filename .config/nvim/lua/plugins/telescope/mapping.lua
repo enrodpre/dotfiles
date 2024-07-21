@@ -87,7 +87,9 @@ return {
   },
   {
     '<leader>nn',
-    --pickers.choose_neogen,
+    function()
+      vim.lua.lazyreq.on_module_call('plugins.telescope.pickers').choose_neogen()
+    end,
     desc = '[N]eogen',
   },
 }

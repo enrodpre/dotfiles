@@ -4,15 +4,11 @@ local M = {
   {
     'williamboman/mason.nvim',
     event = 'VeryLazy',
-    opts = {
-      ui = {
-        icons = {
-          package_installed = '✓',
-          package_pending = '➜',
-          package_uninstalled = '✗',
-        },
-      },
-    },
+    opts = { ui = { icons = {
+      package_installed = '✓',
+      package_pending = '➜',
+      package_uninstalled = '✗',
+    } } },
   },
   {
     'jay-babu/mason-null-ls.nvim',

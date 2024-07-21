@@ -1,7 +1,7 @@
 return {
   {
     'RRethy/vim-illuminate',
-    event = 'BufReadPre',
+    event = 'LazyFile',
     opts = {
       delay = 200,
       filetypes_denylist = {
@@ -47,7 +47,6 @@ return {
   },
   {
     'rcarriga/nvim-notify',
-    lazy = true,
     opts = {
       timeout = 3000,
       max_height = function()
@@ -76,7 +75,7 @@ return {
   },
   {
     'lukas-reineke/indent-blankline.nvim',
-    event = 'BufReadPre',
+    event = 'LazyFile',
     main = 'ibl',
     opts = {
       indent = { char = '│', tab_char = '│' },
@@ -84,9 +83,6 @@ return {
       exclude = {
         filetypes = {
           'help',
-          'alpha',
-          'dashboard',
-          'neo-tree',
           'Trouble',
           'trouble',
           'lazy',
@@ -100,7 +96,7 @@ return {
   },
   {
     'echasnovski/mini.indentscope',
-    event = 'BufReadPre',
+    event = 'LazyFile',
     opts = {
       symbol = '│',
       options = { try_as_border = true },
@@ -109,9 +105,6 @@ return {
       vim.api.nvim_create_autocmd('FileType', {
         pattern = {
           'help',
-          'alpha',
-          'dashboard',
-          'neo-tree',
           'Trouble',
           'trouble',
           'lazy',
@@ -126,16 +119,15 @@ return {
       })
     end,
   },
-  {
-    'richardbizik/nvim-toc',
-    event = 'VeryLazy',
-    config = true,
-    enabled = false,
-  },
+  -- {
+  --   'richardbizik/nvim-toc',
+  --   event = 'VeryLazy',
+  --   config = true,
+  --   enabled = false,
+  -- },
   {
     'catppuccin/nvim',
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    priority = 1000, -- make sure to load this before all the other start plugins
     config = function()
       vim.cmd [[colorscheme catppuccin]]
     end,
@@ -161,7 +153,6 @@ return {
             information = { 'undercurl' },
           },
         },
-        navic = { enabled = true, custom_bg = 'lualine' },
         neotest = true,
         noice = false,
         notify = true,

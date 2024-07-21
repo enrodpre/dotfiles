@@ -1,8 +1,0 @@
-#!/usr/bin/zsh
-
-actual=$1
-expected=$2
-
-test $actual = $expected
-
-print -R "$?#$actual#$expected"

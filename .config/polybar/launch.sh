@@ -14,4 +14,4 @@ launch_bar() {
     polybar -q main -c "$dir/config.ini" &
 }
 
-launch_bar >>$HOME/logs/polybar.log
+launch_bar 

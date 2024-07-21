@@ -34,9 +34,8 @@ return {
     'kevinhwang91/promise-async',
     'neovim/nvim-lspconfig',
   },
-  event = 'VeryLazy',
+  event = 'LazyFile',
   keys = 'z',
-  enabled = true,
   opts = {
     fold_virt_text_handler = handler,
     close_fold_kinds_for_ft = {
@@ -46,5 +45,4 @@ return {
       return { 'treesitter', 'indent' }
     end,
   },
-  -- config = true,
 }

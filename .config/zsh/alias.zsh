@@ -5,25 +5,21 @@ alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias icat="kitty +kitten icat"
 alias visudo='EDITOR=nvim visudo'
 
-#Paru utils
-alias pquery='paru -Q --info'
-
 #Replaces
 alias cat='bat'
 alias rm='rip'
 alias tree='eza -aT'
 alias ls='eza -a'
-alias l='eza -lbaa --color=auto'
+alias l='eza -lXbaa --color=auto'
+alias ll='eza -lbaa --color=auto'
 alias llg='eza -lB@aa --git'
 alias top='btop'
 alias mv='mv -i'
 alias rg='rg -p'
+alias rgh='rg -p --hidden'
 # alias du="du -h"
 # alias df="df -h"
 alias luarocks='luarocks --lua-version 5.1'
-
-#Globals for the lazy
-alias -g noerr='2> /dev/null'
 
 # HELP
 unalias run-help

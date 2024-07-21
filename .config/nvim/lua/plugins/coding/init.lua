@@ -36,11 +36,9 @@ local M = {
       },
     },
   },
-  { 'tpope/vim-sleuth', event = 'BufReadPre' },
   {
     'echasnovski/mini.comment',
-    version = false,
-    keys = '<leader>c',
+    event = 'LspAttach',
     opts = {
       mappings = {
         comment = '<leader>c',
@@ -50,50 +48,22 @@ local M = {
       },
     },
   },
-  -- {
-  --    "numToStr/Comment.nvim",
-  --    lazy = true,
-  --    keys = "<leader>c",
-  --    opts = {
-  --       toggler = {
-  --          line = "<leader>cc",
-  --          block = "<leader>cbc",
-  --       }, ---LHS of operator-pending mappings in NORMAL and VISUAL mode
-  --       opleader = {
-  --          ---Line-comment keymap
-  --          line = "<leader>c",
-  --          ---Block-comment keymap
-  --          block = "<leader>b",
-  --       },
-  --       extra = {
-  --          above = "<leader>cO",
-  --          below = "<leader>cbo",
-  --          eol = "<leader>cA",
-  --       },
-  --       mapping = {
-  --          basic = false,
-  --          extra = false,
-  --       },
-  --    },
-  -- },
   {
     'nvim-neotest/neotest',
-    lazy = true,
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-neotest/nvim-nio',
       'nvim-neotest/neotest-plenary',
     },
-    config = function()
-      require('neotest').setup {
-        adapters = {
-          require 'neotest-plenary',
-        },
-      }
-    end,
+    opts = {
+      adapters = {
+        vim.lua.lazyreq.on_index 'neotest-plenary',
+      },
+    },
   },
   {
     'ThePrimeagen/refactoring.nvim',
+    event = 'LspAttach',
     dependencies = {
       'nvim-lua/plenary.nvim',
       'nvim-treesitter/nvim-treesitter',

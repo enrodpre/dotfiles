@@ -3,19 +3,21 @@
 local mapdelay = vim.lua.metatables.default()
 local disablemap = vim.lua.metatables.default()
 
+local lazy_call = vim.lua.lazyreq.on_module_call
+
 local global_mapping = {
-  -- Disable
-  { 'gc', cond = false },
-  --Enable
+  {
+    '<leader>a',
+    group = '[A]pply',
+  },
   {
     '<C-o>',
     'a<CR><Esc>',
     desc = 'Put next line in next character',
   },
   {
-    '<C-:>',
-    ':lua=',
-    desc = 'Open cmdline directly in lua mode',
+    '<leader>d',
+    group = '[D]ap',
   },
   {
     'oo',
@@ -90,11 +92,6 @@ local global_mapping = {
     group = '[G]o',
   },
   {
-    'y:!<C-r>"<CR>',
-    desc = 'Execute selected text in a terminal',
-    mode = 'v',
-  },
-  {
     '<leader>t',
     group = '[T]elescope',
   },
@@ -117,7 +114,7 @@ local global_mapping = {
   },
   { '<leader>e', group = '[E]xecute' },
   {
-    '<leader>ea',
+    '<leader>aa',
     function()
       local ft = vim.bo.filetype
       if ft == 'python' then
@@ -125,12 +122,12 @@ local global_mapping = {
         vim.cmd 'e'
       end
     end,
-    desc = '[E]xecute [A]utoimport',
+    desc = '[A]pply [A]utoimport',
   },
   {
-    '<leader>et',
+    '<leader>at',
     '<Plug>PlenaryTestFile',
-    desc = '[T]est current file',
+    desc = '[A]pply [T]est current file',
   },
   {
     '<leader>n',
@@ -139,14 +136,14 @@ local global_mapping = {
   {
     '<leader>nc',
     function()
-      require('neogen').generate()
+      require('neogen').generate {}
     end,
     desc = '[C]lass',
   },
   {
-    '<leader>m',
+    '<leader>om',
     ':messages<CR>',
-    desc = 'Open messages',
+    desc = '[O]pen [M]essages',
   },
   {
     '<leader>o',
@@ -165,9 +162,7 @@ local global_mapping = {
   },
   {
     '<leader>uc',
-    function()
-      require('notify').dismiss {}
-    end,
+    lazy_call('notify').dismiss,
     desc = 'Notify [C]lose',
   },
   {
@@ -175,6 +170,11 @@ local global_mapping = {
     group = '[G]it',
   },
 }
+
+local unmap = { 'gc', 'gcc' }
+for _, rhs in ipairs(unmap) do
+  table.insert(global_mapping, { rhs, cond = false, hidden = true })
+end
 
 table.insert(mapdelay, {
   n = {

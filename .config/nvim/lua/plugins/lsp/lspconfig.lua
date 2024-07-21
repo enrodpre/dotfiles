@@ -2,14 +2,21 @@
 
 return {
   'neovim/nvim-lspconfig',
-  event = 'VeryLazy',
+  -- event = 'VeryLazy',
   dependencies = {
-    'williamboman/mason-lspconfig.nvim',
+    { 'williamboman/mason-lspconfig.nvim', config = function() end },
   },
+  event = 'LazyFile',
   keys = require 'plugins.lsp.mapping',
   opts = {
-    autoformat = true,
-    capabilities = {},
+    capabilities = {
+      workspace = {
+        fileOperations = {
+          didRename = true,
+          willRename = true,
+        },
+      },
+    },
     diagnostic = {
       underline = true,
       update_in_insert = true,
@@ -23,20 +30,12 @@ return {
       virtual_text = {
         spacing = 4,
         source = 'if_many',
-        -- prefix = "●",
-        -- this will set set the prefix to a function that returns the diagnostics icon based on the severity
-        -- this only works on a recent 0.10.0 build. Will be set to "●" when not supported
-        prefix = 'icons',
+        prefix = '●',
       },
     },
     document_highlight = { enabled = false },
-    format = {
-      formatting_options = nil,
-      timeout_ms = nil,
-    },
-    format_notify = false,
     inlay_hints = {
-      enabled = false,
+      enabled = true,
     },
     servers = {
       bashls = { filetypes = { 'sh', 'zsh', 'bash' } },
@@ -62,12 +61,32 @@ return {
       cssls = { filetypes = 'rasi' },
       html = { filetypes = { 'html', 'twig', 'hbs' } },
       jsonls = {},
+      lua_ls = {
+        Lua = {
+          codeLens = {
+            enable = true,
+          },
+          completion = {
+            callSnippet = 'Replace',
+          },
+          doc = {
+            privateName = { '^_' },
+          },
+          hint = {
+            enable = true,
+            setType = false,
+            paramType = true,
+            paramName = 'Disable',
+            semicolon = 'Disable',
+            arrayIndex = 'Disable',
+          },
+        },
+      },
       pylsp = {
         plugins = {
           rope_autoimport = { enabled = true },
         },
       },
-      vimls = {},
     },
   },
   config = function(_, opts)
@@ -81,7 +100,7 @@ return {
     if opts.inlay_hints.enabled and inlay_hint then
       vim.lua.fn.on_attach(function(client, buffer)
         if client.supports_method 'textDocument/inlayHint' then
-          inlay_hint(buffer, true)
+          inlay_hint.enable(true, { bufnr = buffer })
         end
       end)
     end
@@ -117,7 +136,6 @@ return {
 
     vim.api.nvim_create_autocmd('LspAttach', {
       callback = function(client, bufnr)
-        vim.lua.fn.load_keymap 'lsp'
         vim.api.nvim_create_autocmd('BufWritePre', {
           buffer = bufnr,
           callback = function(args)

@@ -7,7 +7,7 @@ rocks_trees = {
    { name = "user", root = home .. "/.local" },
 }
 rocks_subdir = "/usr/lib/luarocks/rocks-5.1"
-lua_interpreter = "lua5.1";
+lua_interpreter = "luajit";
 variables = {
    LUA_DIR = "/usr",
    LUA_INCDIR = "/usr/include/lua5.1",
