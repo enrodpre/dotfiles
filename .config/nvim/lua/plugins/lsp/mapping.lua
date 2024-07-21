@@ -1,69 +1,71 @@
 #!/usr/bin/lua
 
-local tb = lazyreq 'telescope.builtin'
+local tb = lazyreq("telescope.builtin")
 
 return {
   {
-    'gdd',
-    '<cmd>Trouble diagnostics toggle<cr>',
-    desc = '[G]o [D]ocument [D]iagnostics',
+    "gdd",
+    "<cmd>Trouble diagnostics toggle<cr>",
+    desc = "[G]o [D]ocument [D]iagnostics",
   },
   {
-    '<leader>ac',
-    vim.lsp.buf.code_action,
-    desc = '[A]pply [C]ode Action',
+    "<leader>ac",
+    function()
+      vim.lsp.buf.code_action({ apply = true })
+    end,
+    desc = "[A]pply [C]ode Action",
   },
   {
-    'gds',
+    "gds",
     tb.lsp_document_symbols,
-    desc = '[G]o [D]ocument [S]ymbols',
+    desc = "[G]o [D]ocument [S]ymbols",
   },
   {
-    '<leader>rr',
+    "<leader>rr",
     vim.lsp.buf.rename,
-    desc = '[R]ename',
+    desc = "[R]ename",
   },
   {
-    '<leader>re',
+    "<leader>re",
     function()
-      require('telescope').extensions.refactoring.refactors()
+      require("telescope").extensions.refactoring.refactors()
     end,
-    desc = '[R]efactor',
-    mode = { 'n', 'x' },
+    desc = "[R]efactor",
+    mode = { "n", "x" },
   },
   {
-    '<leader>rpp',
+    "<leader>rpp",
     function()
-      require('refactoring').debug.printf { below = false }
+      require("refactoring").debug.printf({ below = false })
     end,
-    desc = '[P]rintf',
+    desc = "[P]rintf",
   },
   {
-    '<leader>rpb',
+    "<leader>rpb",
     function()
-      require('refactoring').debug.printf { below = true }
+      require("refactoring").debug.printf({ below = true })
     end,
-    desc = '[P]rintf [Below]',
+    desc = "[P]rintf [Below]",
   },
   {
-    '<leader>rv',
+    "<leader>rv",
     function(...)
-      lazyreq('refactoring').debug.print_var(...)
+      lazyreq("refactoring").debug.print_var(...)
     end,
-    desc = 'Print [V]ar',
-    mode = { 'x', 'n' },
+    desc = "Print [V]ar",
+    mode = { "x", "n" },
   },
   {
-    '<leader>rc',
+    "<leader>rc",
     function(...)
-      require('refactoring').debug.cleanup(...)
+      require("refactoring").debug.cleanup(...)
     end,
-    desc = '[C]leanup',
+    desc = "[C]leanup",
   },
   {
-    '<leader>od',
+    "<leader>od",
     vim.diagnostic.open_float,
-    desc = '[O]pen Dianostic',
+    desc = "[O]pen Dianostic",
   },
   -- {
   --   '<leader>oi',
@@ -76,55 +78,55 @@ return {
   --   desc = '[O]pen outcoming calls',
   -- },
   {
-    '<leader>os',
+    "<leader>os",
     vim.lsp.buf.signature_help,
-    desc = '[O]pen [S]ignature',
+    desc = "[O]pen [S]ignature",
   },
   {
-    '<leader>wd',
-    'lsp',
-    desc = '[W]orkspace [D]iagnostics',
+    "<leader>wd",
+    "lsp",
+    desc = "[W]orkspace [D]iagnostics",
   },
   {
-    '<leader>wa',
+    "<leader>wa",
     vim.lsp.buf.add_workspace_folder,
-    desc = '[W]orkspace [A]dd Folder',
+    desc = "[W]orkspace [A]dd Folder",
   },
   {
-    '<leader>wr',
+    "<leader>wr",
     vim.lsp.buf.remove_workspace_folder,
-    desc = '[W]orkspace [R]emove Folder',
+    desc = "[W]orkspace [R]emove Folder",
   },
   {
-    '<leader>wl',
+    "<leader>wl",
     function()
       vim.print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end,
-    desc = '[W]orkspace [L]ist Folders',
+    desc = "[W]orkspace [L]ist Folders",
   },
   {
-    '<leader>ws',
+    "<leader>ws",
     tb.lsp_dynamic_workspace_symbols,
-    desc = '[W]orkspace [S]ymbols',
+    desc = "[W]orkspace [S]ymbols",
   },
   {
-    'glD',
+    "glD",
     vim.lsp.buf.declaration,
-    desc = '[G]oto [D]eclaration',
+    desc = "[G]oto [D]eclaration",
   },
   {
-    'gld',
+    "gld",
     tb.lsp_definitions,
-    desc = '[G]oto [D]efinition',
+    desc = "[G]oto [D]efinition",
   },
   {
-    'glr',
+    "glr",
     tb.lsp_references,
-    desc = '[G]oto [R]eferences',
+    desc = "[G]oto [R]eferences",
   },
   {
-    'gli',
+    "gli",
     tb.lsp_implementations,
-    desc = '[G]oto [I]mplementation',
+    desc = "[G]oto [I]mplementation",
   },
 }

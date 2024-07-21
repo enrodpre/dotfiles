@@ -3,16 +3,19 @@
 local icons = require('config.defaults').icons.git
 
 return {
-  -- {
-  --   'tpope/vim-fugitive',
-  -- },
+  {
+    'tpope/vim-fugitive',
+    lazy = false,
+  },
   {
     'lewis6991/gitsigns.nvim',
     event = 'LazyFile',
     opts = {
       worktrees = {
-        toplevel = vim.fn.getenv 'HOME',
-        gitdir = vim.fn.getenv 'HOME' .. '/.dotfiles.git',
+        {
+          toplevel = vim.fn.getenv 'HOME',
+          gitdir = vim.fn.getenv 'HOME' .. '/.dotfiles.git',
+        },
       },
       signs = {
         add = { text = icons.added },

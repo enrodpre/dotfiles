@@ -1,52 +1,52 @@
 return {
   {
-    'RRethy/vim-illuminate',
-    event = 'LazyFile',
+    "RRethy/vim-illuminate",
+    event = "LazyFile",
     opts = {
       delay = 200,
       filetypes_denylist = {
-        'lazy',
-        'lazy_backdrop',
+        "lazy",
+        "lazy_backdrop",
       },
       large_file_cutoff = 2000,
       large_file_overrides = {
-        providers = { 'lsp' },
+        providers = { "lsp" },
       },
     },
     config = function(_, opts)
-      require('illuminate').configure(opts)
+      require("illuminate").configure(opts)
 
       local function map(key, dir, buffer)
-        vim.keymap.set('n', key, function()
-          require('illuminate')['goto_' .. dir .. '_reference'](false)
-        end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. ' Reference', buffer = buffer })
+        vim.keymap.set("n", key, function()
+          require("illuminate")["goto_" .. dir .. "_reference"](false)
+        end, { desc = dir:sub(1, 1):upper() .. dir:sub(2) .. " Reference", buffer = buffer })
       end
 
-      map(']]', 'next')
-      map('[[', 'prev')
+      map("]]", "next")
+      map("[[", "prev")
 
-      vim.api.nvim_create_autocmd('FileType', {
+      vim.api.nvim_create_autocmd("FileType", {
         callback = function()
           local buffer = vim.api.nvim_get_current_buf()
-          map(']]', 'next', buffer)
-          map('[[', 'prev', buffer)
+          map("]]", "next", buffer)
+          map("[[", "prev", buffer)
         end,
       })
     end,
     keys = {
-      { ']]', desc = 'Next Reference' },
-      { '[[', desc = 'Prev Reference' },
+      { "]]", desc = "Next Reference" },
+      { "[[", desc = "Prev Reference" },
     },
   },
   {
-    'norcalli/nvim-colorizer.lua',
-    event = 'UiEnter',
+    "norcalli/nvim-colorizer.lua",
+    event = "UiEnter",
     opts = {
-      '*',
+      "*",
     },
   },
   {
-    'rcarriga/nvim-notify',
+    "rcarriga/nvim-notify",
     opts = {
       timeout = 3000,
       max_height = function()
@@ -63,55 +63,55 @@ return {
     },
   },
   {
-    'hedyhli/outline.nvim',
+    "hedyhli/outline.nvim",
     keys = {
       {
-        '<leader>oo',
-        '<cmd>Outline<cr>',
-        desc = '[O]pen [O]utline',
+        "<leader>oo",
+        "<cmd>Outline<cr>",
+        desc = "[O]pen [O]utline",
       },
     },
-    cmd = 'Outline',
+    cmd = "Outline",
   },
   {
-    'lukas-reineke/indent-blankline.nvim',
-    event = 'LazyFile',
-    main = 'ibl',
+    "lukas-reineke/indent-blankline.nvim",
+    event = "LazyFile",
+    main = "ibl",
     opts = {
-      indent = { char = '│', tab_char = '│' },
+      indent = { char = "│", tab_char = "│" },
       scope = { enabled = false },
       exclude = {
         filetypes = {
-          'help',
-          'Trouble',
-          'trouble',
-          'lazy',
-          'mason',
-          'notify',
-          'toggleterm',
-          'lazyterm',
+          "help",
+          "Trouble",
+          "trouble",
+          "lazy",
+          "mason",
+          "notify",
+          "toggleterm",
+          "lazyterm",
         },
       },
     },
   },
   {
-    'echasnovski/mini.indentscope',
-    event = 'LazyFile',
+    "echasnovski/mini.indentscope",
+    event = "LazyFile",
     opts = {
-      symbol = '│',
+      symbol = "│",
       options = { try_as_border = true },
     },
     init = function()
-      vim.api.nvim_create_autocmd('FileType', {
+      vim.api.nvim_create_autocmd("FileType", {
         pattern = {
-          'help',
-          'Trouble',
-          'trouble',
-          'lazy',
-          'mason',
-          'notify',
-          'toggleterm',
-          'lazyterm',
+          "help",
+          "Trouble",
+          "trouble",
+          "lazy",
+          "mason",
+          "notify",
+          "toggleterm",
+          "lazyterm",
         },
         callback = function()
           vim.b.miniindentscope_disable = true
@@ -126,14 +126,15 @@ return {
   --   enabled = false,
   -- },
   {
-    'catppuccin/nvim',
+    "catppuccin/nvim",
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     config = function()
-      vim.cmd [[colorscheme catppuccin]]
+      vim.cmd([[colorscheme catppuccin]])
     end,
-    name = 'catppuccin',
+    name = "catppuccin",
     opts = {
-      flavour = 'mocha',
+      flavour = "mocha",
+      transparent_background = true,
       integrations = {
         cmp = true,
         dap = true,
@@ -147,10 +148,10 @@ return {
         native_lsp = {
           enabled = true,
           underlines = {
-            errors = { 'undercurl' },
-            hints = { 'undercurl' },
-            warnings = { 'undercurl' },
-            information = { 'undercurl' },
+            errors = { "undercurl" },
+            hints = { "undercurl" },
+            warnings = { "undercurl" },
+            information = { "undercurl" },
           },
         },
         neotest = true,

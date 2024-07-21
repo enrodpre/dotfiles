@@ -1,36 +1,36 @@
-local lazycmp = vim.lua.lazyreq.on_exported_call 'cmp'
-local lazydap = vim.lua.lazyreq.on_exported_call 'dap'
-local lazydapui = vim.lua.lazyreq.on_exported_call 'dapui'
+local lazycmp = vim.lua.lazyreq.on_exported_call("cmp")
+local lazydap = vim.lua.lazyreq.on_exported_call("dap")
+local lazydapui = vim.lua.lazyreq.on_exported_call("dapui")
 
 return {
   {
-    'jay-babu/mason-nvim-dap.nvim',
-    dependencies = 'mason.nvim',
-    cmd = { 'DapInstall', 'DapUninstall' },
+    "jay-babu/mason-nvim-dap.nvim",
+    dependencies = "mason.nvim",
+    cmd = { "DapInstall", "DapUninstall" },
     opts = {
       automatic_installation = true,
       handlers = {},
       ensure_installed = {
-        'python',
-        'bash',
-        'lua',
+        "python",
+        "bash",
+        "lua",
       },
     },
     -- mason-nvim-dap is loaded when nvim-dap loads
     config = function() end,
   },
   {
-    'mfussenegger/nvim-dap',
+    "mfussenegger/nvim-dap",
     dependencies = {
-      'rcarriga/nvim-dap-ui',
+      "rcarriga/nvim-dap-ui",
       {
-        'theHamsta/nvim-dap-virtual-text',
+        "theHamsta/nvim-dap-virtual-text",
         opts = {},
       },
     },
     -- stylua: ignore
     keys = {
-      { '<leader>d', group = '[D]ap' },
+       {'<leader>d'},
       {
         '<leader>dB',
         function()
@@ -152,46 +152,46 @@ return {
       },
     },
     config = function()
-      vim.api.nvim_set_hl(0, 'DapStoppedLine', { default = true, link = 'Visual' })
+      vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
-      for name, sign in pairs(require('config.defaults').icons.dap) do
-        sign = type(sign) == 'table' and sign or { sign }
-        vim.fn.sign_define('Dap' .. name, { text = sign[1], texthl = sign[2] or 'DiagnosticInfo', linehl = sign[3], numhl = sign[3] })
+      for name, sign in pairs(require("config.defaults").icons.dap) do
+        sign = type(sign) == "table" and sign or { sign }
+        vim.fn.sign_define("Dap" .. name, { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] })
       end
     end,
   },
   {
-    'rcarriga/nvim-dap-ui',
-    dependencies = { 'nvim-neotest/nvim-nio' },
+    "rcarriga/nvim-dap-ui",
+    dependencies = { "nvim-neotest/nvim-nio" },
     keys = {
       {
-        '<leader>du',
+        "<leader>du",
         function()
-          require('dapui').toggle {}
+          require("dapui").toggle({})
         end,
-        desc = 'Dap UI',
+        desc = "Dap UI",
       },
       {
-        '<leader>de',
+        "<leader>de",
         function()
-          require('dapui').eval()
+          require("dapui").eval()
         end,
-        desc = 'Eval',
-        mode = { 'n', 'v' },
+        desc = "Eval",
+        mode = { "n", "v" },
       },
     },
     config = function(_, opts)
-      local dap = require 'dap'
-      local dapui = require 'dapui'
+      local dap = require("dap")
+      local dapui = require("dapui")
       dapui.setup(opts)
-      dap.listeners.after.event_initialized['dapui_config'] = function()
-        dapui.open {}
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open({})
       end
-      dap.listeners.before.event_terminated['dapui_config'] = function()
-        dapui.close {}
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close({})
       end
-      dap.listeners.before.event_exited['dapui_config'] = function()
-        dapui.close {}
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close({})
       end
     end,
   },

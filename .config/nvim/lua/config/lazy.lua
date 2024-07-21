@@ -3,23 +3,23 @@
 -- Make sure to setup `mapleader` and `maplocalleader` before
 -- loading lazy.nvim so that mappings are correct.
 -- This is also a good place to setup other settings (vim.opt)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = '\\'
+vim.g.mapleader = " "
+vim.g.maplocalleader = "\\"
 
-require 'config.builtins'
+require("config.builtins")
 
-require 'config.options'
+require("config.options")
 
 -- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
-  local out = vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
+  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
+  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
   if vim.v.shell_error ~= 0 then
     vim.api.nvim_echo({
-      { 'Failed to clone lazy.nvim:\n', 'ErrorMsg' },
-      { out, 'WarningMsg' },
-      { '\nPress any key to exit...' },
+      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
+      { out, "WarningMsg" },
+      { "\nPress any key to exit..." },
     }, true, {})
     vim.fn.getchar()
     os.exit(1)
@@ -33,18 +33,18 @@ vim.opt.rtp:prepend(lazypath)
 -- https://github.com/folke/lazy.nvim/issues/1182
 local function setup_lazy_file_event()
   local use_lazy_file = vim.fn.argc(-1) > 0
-  local lazy_file_events = { 'BufReadPost', 'BufNewFile', 'BufWritePre' }
+  local lazy_file_events = { "BufReadPost", "BufNewFile", "BufWritePre" }
   -- Add support for the LazyFile event
-  local Event = require 'lazy.core.handler.event'
+  local Event = require("lazy.core.handler.event")
 
   if use_lazy_file then
     -- We'll handle delayed execution of events ourselves
-    Event.mappings.LazyFile = { id = 'LazyFile', event = 'User', pattern = 'LazyFile' }
-    Event.mappings['User LazyFile'] = Event.mappings.LazyFile
+    Event.mappings.LazyFile = { id = "LazyFile", event = "User", pattern = "LazyFile" }
+    Event.mappings["User LazyFile"] = Event.mappings.LazyFile
   else
     -- Don't delay execution of LazyFile events, but let lazy know about the mapping
-    Event.mappings.LazyFile = { id = 'LazyFile', event = lazy_file_events }
-    Event.mappings['User LazyFile'] = Event.mappings.LazyFile
+    Event.mappings.LazyFile = { id = "LazyFile", event = lazy_file_events }
+    Event.mappings["User LazyFile"] = Event.mappings.LazyFile
     return
   end
 
@@ -56,7 +56,7 @@ local function setup_lazy_file_event()
       return
     end
     done = true
-    vim.api.nvim_del_augroup_by_name 'lazy_file'
+    vim.api.nvim_del_augroup_by_name("lazy_file")
 
     ---@type table<string,string[]>
     local skips = {}
@@ -64,24 +64,24 @@ local function setup_lazy_file_event()
       skips[event.event] = skips[event.event] or Event.get_augroups(event.event)
     end
 
-    vim.api.nvim_exec_autocmds('User', { pattern = 'LazyFile', modeline = false })
+    vim.api.nvim_exec_autocmds("User", { pattern = "LazyFile", modeline = false })
     for _, event in ipairs(events) do
       if vim.api.nvim_buf_is_valid(event.buf) then
-        Event.trigger {
+        Event.trigger({
           event = event.event,
           exclude = skips[event.event],
           data = event.data,
           buf = event.buf,
-        }
+        })
         if vim.bo[event.buf].filetype then
-          Event.trigger {
-            event = 'FileType',
+          Event.trigger({
+            event = "FileType",
             buf = event.buf,
-          }
+          })
         end
       end
     end
-    vim.api.nvim_exec_autocmds('CursorMoved', { modeline = false })
+    vim.api.nvim_exec_autocmds("CursorMoved", { modeline = false })
     events = {}
   end
 
@@ -90,7 +90,7 @@ local function setup_lazy_file_event()
   load = vim.schedule_wrap(load)
 
   vim.api.nvim_create_autocmd(lazy_file_events, {
-    group = vim.api.nvim_create_augroup('lazy_file', { clear = true }),
+    group = vim.api.nvim_create_augroup("lazy_file", { clear = true }),
     callback = function(event)
       table.insert(events, event)
       load()
@@ -101,27 +101,27 @@ end
 setup_lazy_file_event()
 
 -- Setup lazy.nvim
-require('lazy').setup {
+require("lazy").setup({
   spec = {
-    { import = 'plugins' },
+    { import = "plugins" },
   },
-  install = { colorscheme = { 'catppuccin' } },
+  install = { colorscheme = { "catppuccin" } },
   checker = { enabled = false },
   change_detection = { notify = false },
   dev = {
-    path = vim.fn.getenv 'HOME' .. '/coding/nvim/plugins',
+    path = vim.fn.getenv("HOME") .. "/coding/nvim/plugins",
   },
   defaults = { lazy = true },
   performance = {
     rtp = {
       disabled_plugins = {
-        'gzip',
-        'netrwPlugin',
-        'rpmPlugin',
-        'tarPlugin',
-        'tohtml',
-        'tutor',
-        'zipPlugin',
+        "gzip",
+        "netrwPlugin",
+        "rpmPlugin",
+        "tarPlugin",
+        "tohtml",
+        "tutor",
+        "zipPlugin",
       },
     },
   },
@@ -132,24 +132,24 @@ require('lazy').setup {
     -- Track each new require in the Lazy profiling tab
     require = false,
   },
-}
+})
 
-require 'config.autocmds'
+require("config.autocmds")
 
-require 'config.commands'
+require("config.commands")
 
 local function add_plugin(spec)
   -- return require('lazy.core.loader').load '/home/kike/.config/nvim/lua/config/leap.lua'
-  return require('lazy.core.loader').load(spec)
+  return require("lazy.core.loader").load(spec, {})
 end
 
 local leap = {
-  'ggandor/leap.nvim',
+  "ggandor/leap.nvim",
   lazy = false,
   config = function()
-    require('leap').create_default_mappings()
-    require('leap').setup()
+    require("leap").create_default_mappings()
+    require("leap").setup()
   end,
 }
 
--- add_plugin(leap)
+--add_plugin(leap)

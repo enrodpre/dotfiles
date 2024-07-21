@@ -1,177 +1,176 @@
 #!/usr/bin/lua
 
 local mapdelay = vim.lua.metatables.default()
-local disablemap = vim.lua.metatables.default()
 
 local lazy_call = vim.lua.lazyreq.on_module_call
 
 local global_mapping = {
   {
-    '<leader>a',
-    group = '[A]pply',
+    "<leader>a",
+    group = "[A]pply",
   },
   {
-    '<C-o>',
-    'a<CR><Esc>',
-    desc = 'Put next line in next character',
+    "<C-o>",
+    "a<CR><Esc>",
+    desc = "Put next line in next character",
   },
   {
-    '<leader>d',
-    group = '[D]ap',
+    "<leader>d",
+    group = "[D]ap",
   },
   {
-    'oo',
-    'o<Esc>k',
-    desc = 'Newline forward',
+    "oo",
+    "o<Esc>k",
+    desc = "Newline forward",
     hidden = true,
   },
   {
-    'OO',
-    '0i<CR><Esc>',
-    desc = 'Newline backwards',
+    "OO",
+    "0i<CR><Esc>",
+    desc = "Newline backwards",
     hidden = true,
   },
   {
-    '<C-Q>',
-    ':q <CR>',
-    desc = 'Quit neovim',
+    "<C-Q>",
+    ":q <CR>",
+    desc = "Quit neovim",
     noremap = false,
   },
   {
-    '<leader>s',
-    group = '[S]et',
+    "<leader>s",
+    group = "[S]et",
   },
   {
-    'gl',
-    group = '[G]o [L]sp',
+    "gl",
+    group = "[G]o [L]sp",
   },
   {
-    '<leader>w',
-    group = '[W]orkspace',
+    "<leader>w",
+    group = "[W]orkspace",
   },
   {
-    '<leader>x',
-    group = '[X] Trouble',
+    "<leader>x",
+    group = "[X] Trouble",
   },
   {
-    '<leader>rp',
-    group = '[P]rintf',
+    "<leader>rp",
+    group = "[P]rintf",
   },
   {
-    '<leader>r',
-    group = '[R]efactoring',
+    "<leader>r",
+    group = "[R]efactoring",
   },
   {
-    '<leader>c',
-    group = '[C]omment',
+    "<leader>c",
+    group = "[C]omment",
   },
   {
-    'gd',
-    group = '[G]o [D]ocument',
+    "gd",
+    group = "[G]o [D]ocument",
   },
   {
-    '<C-Q><C-Q>',
-    ':q! <CR>',
-    desc = 'Force quit',
+    "<C-Q><C-Q>",
+    ":q! <CR>",
+    desc = "Force quit",
   },
   {
-    '<leader>f',
-    group = '[F]ind',
+    "<leader>f",
+    group = "[F]ind",
   },
   {
-    '<leader>fg',
-    group = '[G]rep',
+    "<leader>fg",
+    group = "[G]rep",
   },
   {
-    '<C-s>',
-    '<cmd>w<CR>',
-    desc = 'Save',
+    "<C-s>",
+    "<cmd>w<CR>",
+    desc = "Save",
   },
   {
-    'g',
-    group = '[G]o',
+    "g",
+    group = "[G]o",
   },
   {
-    '<leader>t',
-    group = '[T]elescope',
+    "<leader>t",
+    group = "[T]elescope",
   },
   {
-    '<leader>l',
-    group = '[L]azy',
+    "<leader>l",
+    group = "[L]azy",
   },
   {
-    '<S-CR>',
+    "<S-CR>",
     function()
-      require('noice').redirect(vim.fn.getcmdline())
+      require("noice").redirect(vim.fn.getcmdline())
     end,
-    desc = 'Redirect output of command line',
-    mode = 'c',
+    desc = "Redirect output of command line",
+    mode = "c",
   },
   {
-    '<Esc>',
+    "<Esc>",
     "<Esc>:let @/ = ''<CR>",
-    desc = 'Escape will clear search pattern',
+    desc = "Escape will clear search pattern",
   },
-  { '<leader>e', group = '[E]xecute' },
+  { "<leader>e", group = "[E]xecute" },
   {
-    '<leader>aa',
+    "<leader>aa",
     function()
       local ft = vim.bo.filetype
-      if ft == 'python' then
-        os.execute('autoimport ' .. vim.fn.expand '%:S')
-        vim.cmd 'e'
+      if ft == "python" then
+        os.execute("autoimport " .. vim.fn.expand("%:S"))
+        vim.cmd("e")
       end
     end,
-    desc = '[A]pply [A]utoimport',
+    desc = "[A]pply [A]utoimport",
   },
   {
-    '<leader>at',
-    '<Plug>PlenaryTestFile',
-    desc = '[A]pply [T]est current file',
+    "<leader>at",
+    "<Plug>PlenaryTestFile",
+    desc = "[A]pply [T]est current file",
   },
   {
-    '<leader>n',
-    group = '[N]eogen',
+    "<leader>n",
+    group = "[N]eogen",
   },
   {
-    '<leader>nc',
+    "<leader>nc",
     function()
-      require('neogen').generate {}
+      require("neogen").generate({})
     end,
-    desc = '[C]lass',
+    desc = "[C]lass",
   },
   {
-    '<leader>om',
-    ':messages<CR>',
-    desc = '[O]pen [M]essages',
+    "<leader>om",
+    ":messages<CR>",
+    desc = "[O]pen [M]essages",
   },
   {
-    '<leader>o',
-    group = '[O]pen',
+    "<leader>o",
+    group = "[O]pen",
   },
   {
-    '<leader>ol',
+    "<leader>ol",
     function()
-      require('lazy').show()
+      require("lazy").show()
     end,
-    desc = '[O]pen [L]azy',
+    desc = "[O]pen [L]azy",
   },
   {
-    '<leader>u',
-    group = '[U]i',
+    "<leader>u",
+    group = "[U]i",
   },
   {
-    '<leader>uc',
-    lazy_call('notify').dismiss,
-    desc = 'Notify [C]lose',
+    "<leader>uc",
+    lazy_call("notify").dismiss,
+    desc = "Notify [C]lose",
   },
   {
-    '<leader>g',
-    group = '[G]it',
+    "<leader>g",
+    group = "[G]it",
   },
 }
 
-local unmap = { 'gc', 'gcc' }
+local unmap = { "gc", "gcc" }
 for _, rhs in ipairs(unmap) do
   table.insert(global_mapping, { rhs, cond = false, hidden = true })
 end
@@ -185,30 +184,22 @@ table.insert(mapdelay, {
   },
 })
 
-table.insert(disablemap, {
-  n = {
-    o = true,
-    O = true,
-    oo = true,
-    OO = true,
-  },
-})
-
 return {
-  'folke/which-key.nvim',
+  "folke/which-key.nvim",
   dependencies = {
-    { 'echasnovski/mini.icons' },
+    { "echasnovski/mini.icons" },
   },
-  event = 'VeryLazy',
+  event = "VeryLazy",
   opts = {
     delay = function(ctx)
       return mapdelay[ctx.mode][ctx.keys] or ctx.plugin and 0 or 200
     end,
-    preset = 'modern',
+    preset = "modern",
     spec = global_mapping,
     notify = false,
-    trigger = function(ctx)
-      return disablemap[ctx.mode][ctx.keys] or false
-    end,
+    triggers = {
+      { "<auto>", mode = "nixsotc" },
+      { "s", mode = "n" },
+    },
   },
 }
