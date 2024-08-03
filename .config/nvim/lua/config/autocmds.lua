@@ -16,6 +16,18 @@ vim.api.nvim_create_autocmd({ "BufAdd", "BufEnter", }, {
    end,
 })
 
+-- vim.api.nvim_create_autocmd({"CursorHold", "CursorHoldI"}, {
+--   group = vim.api.nvim_create_augroup("code_action_sign", { clear = true }),
+--   callback = function()
+--      local context = { diagnostics = vim.lsp.diagnostic.get_line_diagnostics() }
+--      local params = lsp_util.make_range_params()
+--      params.context = context
+--      vim.lsp.buf_request(0, 'textDocument/codeAction', params, function(err, result, ctx, config)
+--        -- do something with result - e.g. check if empty and show some indication such as a sign
+--      end)
+--   end,
+-- })
+
 vim.api.nvim_create_autocmd("BufDelete", {
    pattern = "*",
    callback = function(args)

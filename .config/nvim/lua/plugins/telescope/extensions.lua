@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 
-local lazy_load_extension = vim.lua.fn.lazy_load_extension
+local lazy_load_extension = vim.lua.lazy_load_extension
 
 M = {}
 

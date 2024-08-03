@@ -4,29 +4,27 @@ return {
   "neovim/nvim-lspconfig",
   -- event = 'VeryLazy',
   dependencies = {
-    { "williamboman/mason-lspconfig.nvim", config = function() end },
+     {"williamboman/mason.nvim",},
+     { "williamboman/mason-lspconfig.nvim",
+    -- config = function() end
+     },
   },
   event = "LazyFile",
   keys = require("plugins.lsp.mapping"),
   opts = {
-    -- capabilities = {
-    --   workspace = {
-    --     fileOperations = {
-    --       didRename = true,
-    --       willRename = true,
-    --     },
-    --   },
-    -- },
+    capabilities = {
+      workspace = {
+        fileOperations = {
+          didRename = true,
+          willRename = true,
+        },
+      },
+    },
     diagnostic = {
+      icons = vim.config.icons.diagnostic,
       underline = true,
       update_in_insert = true,
       severity_sort = true,
-      icons = {
-        Error = " ",
-        Warn = " ",
-        Hint = " ",
-        Info = " ",
-      },
       virtual_text = {
         spacing = 4,
         source = "if_many",
@@ -39,19 +37,18 @@ return {
     },
     servers = {
       bashls = { filetypes = { "sh", "zsh", "bash" } },
+      cmakelang = {},
       clangd = {
-        keys = {
-          { "gs", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm",
+          "--offset-encoding=utf-16",
         },
-        -- cmd = {
-        --   'clangd',
-        --   '--background-index',
-        --   '--clang-tidy',
-        --   '--header-insertion=iwyu',
-        --   '--completion-style=detailed',
-        --   '--function-arg-placeholders',
-        --   '--fallback-style=llvm',
-        -- },
         init_options = {
           usePlaceholders = true,
           completeUnimported = true,
@@ -59,8 +56,8 @@ return {
         },
       },
       cssls = { filetypes = "rasi" },
-      html = { filetypes = { "html", "twig", "hbs" } },
-      jsonls = {},
+      -- html = { filetypes = { "html", "twig", "hbs" } },
+      -- jsonls = {},
       lua_ls = {
         Lua = {
           codeLens = {
@@ -80,6 +77,10 @@ return {
             semicolon = "Disable",
             arrayIndex = "Disable",
           },
+          diagnostics = {
+            globals = { "safereq", "lazyreq" },
+          },
+          semantoc = { enable = false },
         },
       },
       pylsp = {
@@ -96,15 +97,15 @@ return {
       vim.fn.sign_define(name, { text = icon, texthl = name, numhl = "" })
     end
 
-    local inlay_hint = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
-
-    if opts.inlay_hints.enabled and inlay_hint then
-      vim.lua.fn.on_attach(function(client, buffer)
-        if client.supports_method("textDocument/inlayHint") then
-          inlay_hint.enable(true, { bufnr = buffer })
-        end
-      end)
-    end
+    -- local inlay_hint = vim.lsp.buf.inlay_hint or vim.lsp.inlay_hint
+    --
+    -- if opts.inlay_hints.enabled and inlay_hint then
+    --   vim.lua.on_attach(function(client, buffer)
+    --     if client.supports_method("textDocument/inlayHint") then
+    --       inlay_hint.enable(true, { bufnr = buffer })
+    --     end
+    --   end)
+    -- end
 
     if type(opts.diagnostic.virtual_text) == "table" and opts.diagnostic.virtual_text.prefix == "icons" then
       opts.diagnostic.virtual_text.prefix = function(diagnostic)
@@ -118,21 +119,19 @@ return {
     end
 
     vim.diagnostic.config(vim.deepcopy(opts.diagnostic))
-
+    --
     local servers = opts.servers or {}
     local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-    local capabilities = vim.tbl_deep_extend(
-      "force",
-      {},
-      vim.lsp.protocol.make_client_capabilities(),
-      has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-      opts.capabilities or {}
-    )
-
+    local capabilities =
+      vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), has_cmp and cmp_nvim_lsp.default_capabilities() or {}, opts.capabilities or {})
     capabilities.textDocument.foldingRange = {
       dynamicRegistration = false,
       lineFoldingOnly = true,
     }
+    -- capabilities.textDocument.semanticTokens = false
+    -- capabilities.textDocument.inlayHint = false
+    -- capabilities.workspace.inlayHint.refreshSupport = false
+    -- capabilities.workspace.inlayHint.refreshSupport = false
 
     vim.api.nvim_create_autocmd("LspAttach", {
       callback = function(client, bufnr)
@@ -148,7 +147,7 @@ return {
 
     local mason_lspconfig = require("mason-lspconfig")
     mason_lspconfig.setup({
-      -- ensure_installed = vim.tbl_keys(servers),
+      ensure_installed = vim.tbl_keys(servers),
       handlers = {
         function(server_name)
           require("lspconfig")[server_name].setup({
@@ -159,7 +158,33 @@ return {
         end,
       },
     })
-
     vim.lsp.set_log_level("warn")
   end,
+  {
+    "p00f/clangd_extensions.nvim",
+    opts = {
+      inlay_hints = {
+        inline = false,
+      },
+      ast = {
+        role_icons = {
+          type = "",
+          declaration = "",
+          expression = "",
+          specifier = "",
+          statement = "",
+          ["template argument"] = "",
+        },
+        kind_icons = {
+          Compound = "",
+          Recovery = "",
+          TranslationUnit = "",
+          PackExpansion = "",
+          TemplateTypeParm = "",
+          TemplateTemplateParm = "",
+          TemplateParamObject = "",
+        },
+      },
+    },
+  },
 }

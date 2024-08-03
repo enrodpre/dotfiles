@@ -1,4 +1,4 @@
-local dial_map = vim.lua.lazyreq.on_exported_call("dial.map")
+local dial_map = lazyreq("dial.map")
 
 local dial_keys = function()
   local keys = {}
@@ -51,10 +51,13 @@ return {
   },
   {
     "gaborvecsei/usage-tracker.nvim",
+    enabled = false,
+    lazy = false,
     opts = {},
   },
   {
     "ecthelionvi/NeoComposer.nvim",
+    enabled = false,
     dependencies = { "kkharji/sqlite.lua" },
     keys = "q",
     opts = { notify = false },
@@ -62,17 +65,7 @@ return {
   {
     "tpope/vim-sleuth",
     event = "LazyFile",
-  },
-  {
-    "max397574/better-escape.nvim",
-    event = "InsertEnter",
-    opts = {
-      timeoutlen = vim.o.timeoutlen,
-      default_mappings = false,
-      mappings = {
-        i = { k = { j = "<Esc>" } },
-      },
-    },
+    enabled = false,
   },
   {
     "monaqa/dial.nvim",

@@ -1,12 +1,12 @@
 return {
-  'nvim-lualine/lualine.nvim',
-  dependencies = { 'nvim-tree/nvim-web-devicons' },
-  event = 'UiEnter',
+  "nvim-lualine/lualine.nvim",
+  dependencies = "nvim-tree/nvim-web-devicons",
+  event = "UiEnter",
   init = function()
     vim.g.lualine_laststatus = vim.o.laststatus
     if vim.fn.argc(-1) > 0 then
       -- set an empty statusline till lualine loads
-      vim.o.statusline = ' '
+      vim.o.statusline = " "
     else
       -- hide the statusline on the starter page
       vim.o.laststatus = 0
@@ -14,7 +14,7 @@ return {
   end,
   opts = function()
     -- PERF: we don't need this lualine require madness 🤷
-    local lualine_require = require 'lualine_require'
+    local lualine_require = require("lualine_require")
     lualine_require.require = require
 
     vim.o.laststatus = vim.g.lualine_laststatus
@@ -22,46 +22,46 @@ return {
     local opts = {
       options = {
         icons_enabled = true,
-        theme = 'auto',
+        theme = "catppuccin",
         globalstatus = vim.o.laststatus == 3,
-        component_separators = '|',
+        component_separators = "|",
         -- section_separators = "",
       },
-      extensions = { 'mason', 'lazy', 'quickfix' },
+      extensions = { "mason", "lazy", "quickfix" },
       sections = {
-        lualine_a = { 'mode' },
-        lualine_b = { 'diagnostics' },
+        lualine_a = { "mode" },
+        lualine_b = { "diagnostics" },
         lualine_c = {
-          'filename',
+          "filename",
           {
             function()
-              return require('NeoComposer.ui').status_recording()
+              return require("NeoComposer.ui").status_recording()
             end,
             cond = function()
-              return package.loaded['NeoComposer'] and true or false
+              return package.loaded["NeoComposer"] and true or false
             end,
           },
         },
         lualine_x = {
-          'encoding',
-          'filetype',
+          "encoding",
+          "filetype",
           -- stylua: ignore
           {
             function() return "  " .. require("dap").status() end,
             cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-            color = function() return vim.lua.fn.fg("Debug") end,
+            color = function() return vim.lua.fg("Debug") end,
           },
           -- stylua: ignore
           {
             require("lazy.status").updates,
             cond = require("lazy.status").has_updates,
-            color = function() return vim.lua.fn.fg("Special") end,
+            color = function() return vim.lua.fg("Special") end,
           },
         },
         lualine_y = {
           "vim.fn.line('$')",
         },
-        lualine_z = { 'location' },
+        lualine_z = { "location" },
       },
     }
 

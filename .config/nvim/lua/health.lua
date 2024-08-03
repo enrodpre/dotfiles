@@ -11,8 +11,8 @@ function M.check()
    if not vim.lua then
       warn("vim.lua does not exist")
    else
-      if not vim.lua.fn then
-         warn("vim.lua.fn does not exist")
+      if not vim.lua then
+         warn("vim.lua does not exist")
       end
       if not vim.lua.metatables then
          warn("vim.lua.metatables does not exist")

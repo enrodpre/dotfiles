@@ -1,26 +1,20 @@
 #!/usr/bin/lua
 
 return {
+  { "nvim-treesitter/playground", enabled = false },
   {
-    -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
-      "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "nvim-treesitter/nvim-treesitter-context",
+      -- "nvim-treesitter/nvim-treesitter-context",
       "RRethy/nvim-treesitter-endwise",
     },
-    event = "VeryLazy",
+    event = { "LazyFile", "VeryLazy" },
     build = ":TSUpdate",
     lazy = vim.fn.argc(-1) == 0,
     init = function(plugin)
-      -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-      -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-      -- Luckily, the only things that those plugins need are the custom queries, which we make available
-      -- during startup.
       require("lazy.core.loader").add_to_rtp(plugin)
-      require("nvim-treesitter.query_predicates")
+      -- require("nvim-treesitter.query_predicates")
     end,
     opts = {
       ensure_installed = {
@@ -29,12 +23,9 @@ return {
         "lua",
         "python",
         "rasi",
-        "tsx",
         "vimdoc",
-        "vim",
         "bash",
         "regex",
-        "ninja",
         "rst",
         "toml",
         "cmake",
@@ -52,7 +43,7 @@ return {
       textobjects = {
         select = {
           enable = true,
-          lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
+          lookahead = true,
           keymaps = {
             ["aa"] = "@parameter.outer",
             ["ia"] = "@parameter.inner",

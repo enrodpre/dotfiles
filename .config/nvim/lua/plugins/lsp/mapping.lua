@@ -67,11 +67,11 @@ return {
     vim.diagnostic.open_float,
     desc = "[O]pen Dianostic",
   },
-  -- {
-  --   '<leader>oi',
-  --   vim.lsp.buf.incoming_calls,
-  --   desc = '[O]pen incoming calls',
-  -- },
+  {
+    "<leader>oi",
+    vim.lsp.buf.incoming_calls,
+    desc = "[O]pen incoming calls",
+  },
   -- {
   --   '<leader>oo',
   --   vim.lsp.buf.outgoing_calls,
@@ -128,5 +128,10 @@ return {
     "gli",
     tb.lsp_implementations,
     desc = "[G]oto [I]mplementation",
+  },
+  {
+    "gdh",
+    "<Cmd>ClangdSwitchSourceHeader<CR>",
+    desc = "[G]oto [H]eader/source",
   },
 }

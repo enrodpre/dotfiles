@@ -1,7 +1,3 @@
-local lazycmp = vim.lua.lazyreq.on_exported_call("cmp")
-local lazydap = vim.lua.lazyreq.on_exported_call("dap")
-local lazydapui = vim.lua.lazyreq.on_exported_call("dapui")
-
 return {
   {
     "jay-babu/mason-nvim-dap.nvim",
@@ -152,9 +148,26 @@ return {
       },
     },
     config = function()
+      local configurations = {
+        lua = {
+          {
+            type = "nlua",
+            request = "attach",
+            name = "Run this file",
+            start_neovim = {},
+          },
+          {
+            type = "nlua",
+            request = "attach",
+            name = "Attach to running Neovim instance (port = 8086)",
+            port = 8086,
+          },
+        },
+      }
+      require("dap").configurations = configurations
       vim.api.nvim_set_hl(0, "DapStoppedLine", { default = true, link = "Visual" })
 
-      for name, sign in pairs(require("config.defaults").icons.dap) do
+      for name, sign in pairs(vim.config.list_icons("dap")) do
         sign = type(sign) == "table" and sign or { sign }
         vim.fn.sign_define("Dap" .. name, { text = sign[1], texthl = sign[2] or "DiagnosticInfo", linehl = sign[3], numhl = sign[3] })
       end

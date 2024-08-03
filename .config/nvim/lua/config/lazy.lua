@@ -1,15 +1,5 @@
 #!/usr/bin/lua
 
--- Make sure to setup `mapleader` and `maplocalleader` before
--- loading lazy.nvim so that mappings are correct.
--- This is also a good place to setup other settings (vim.opt)
-vim.g.mapleader = " "
-vim.g.maplocalleader = "\\"
-
-require("config.builtins")
-
-require("config.options")
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not (vim.uv or vim.loop).fs_stat(lazypath) then
@@ -101,55 +91,4 @@ end
 setup_lazy_file_event()
 
 -- Setup lazy.nvim
-require("lazy").setup({
-  spec = {
-    { import = "plugins" },
-  },
-  install = { colorscheme = { "catppuccin" } },
-  checker = { enabled = false },
-  change_detection = { notify = false },
-  dev = {
-    path = vim.fn.getenv("HOME") .. "/coding/nvim/plugins",
-  },
-  defaults = { lazy = true },
-  performance = {
-    rtp = {
-      disabled_plugins = {
-        "gzip",
-        "netrwPlugin",
-        "rpmPlugin",
-        "tarPlugin",
-        "tohtml",
-        "tutor",
-        "zipPlugin",
-      },
-    },
-  },
-  profiling = {
-    -- Enables extra stats on the debug tab related to the loader cache.
-    -- Additionally gathers stats about all package.loaders
-    loader = false,
-    -- Track each new require in the Lazy profiling tab
-    require = false,
-  },
-})
-
-require("config.autocmds")
-
-require("config.commands")
-
-local function add_plugin(spec)
-  -- return require('lazy.core.loader').load '/home/kike/.config/nvim/lua/config/leap.lua'
-  return require("lazy.core.loader").load(spec, {})
-end
-
-local leap = {
-  "ggandor/leap.nvim",
-  lazy = false,
-  config = function()
-    require("leap").create_default_mappings()
-    require("leap").setup()
-  end,
-}
-
---add_plugin(leap)
+require("lazy").setup(vim.config.lazy)

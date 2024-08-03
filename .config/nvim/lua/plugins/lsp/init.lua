@@ -20,6 +20,18 @@ local M = {
   require("plugins.lsp.lspconfig"),
   require("plugins.lsp.nonels"),
   require("plugins.lsp.format"),
+  {
+    "dense-analysis/ale",
+    config = function()
+      -- Configuration goes here.
+      local g = vim.g
+
+      g.ale_linters = {
+        lua = { "lua_language_server" },
+        cpp = { "gcc" },
+      }
+    end,
+  },
 }
 
 return M

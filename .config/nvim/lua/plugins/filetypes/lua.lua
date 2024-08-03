@@ -6,20 +6,11 @@ return {
     "folke/lazydev.nvim",
     dependencies = { "Bilal2453/luvit-meta" },
     ft = "lua",
-    opts = function(_, opts)
-      opts.library = opts.library or {}
-      table.insert(opts.library, {
-        "luvit-meta",
-        "lazy.nvim",
-        "neodev.nvim/types/stable",
-      })
-      return opts
-    end,
-  },
-  {
-    "danymat/neogen",
-    config = true,
-    keys = { "<leader>n" },
+    opts = {
+      -- path = "luvit-meta/library",
+      { "lazy.nvim" },
+      -- words = { "vim%.uv" },
+    },
   },
   {
     "jbyuki/one-small-step-for-vimkind",
@@ -44,21 +35,6 @@ return {
         end
         callback(adapter)
       end
-
-      dap.configurations.lua = {
-        {
-          type = "nlua",
-          request = "attach",
-          name = "Run this file",
-          start_neovim = {},
-        },
-        {
-          type = "nlua",
-          request = "attach",
-          name = "Attach to running Neovim instance (port = 8086)",
-          port = 8086,
-        },
-      }
     end,
   },
 }

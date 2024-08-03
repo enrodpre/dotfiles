@@ -76,7 +76,7 @@ return {
         },
         formatting = {
           format = function(entry, item)
-            local icon = require("mini.icons").get("lsp", item.kind)
+            local icon = vim.config.get_icon("lsp", item.kind)
             if entry.source.name == "cmdline" then
               item.kind = "󰘳 Cmdline"
             elseif icon then

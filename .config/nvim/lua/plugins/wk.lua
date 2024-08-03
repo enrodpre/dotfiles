@@ -1,10 +1,7 @@
 #!/usr/bin/lua
 
-local mapdelay = vim.lua.metatables.default()
-
-local lazy_call = vim.lua.lazyreq.on_module_call
-
 local global_mapping = {
+  { "kj", "<Esc>", mode = { "i" } },
   {
     "<leader>a",
     group = "[A]pply",
@@ -161,7 +158,9 @@ local global_mapping = {
   },
   {
     "<leader>uc",
-    lazy_call("notify").dismiss,
+    function()
+      require("notify").dismiss({ pending = false, silent = false })
+    end,
     desc = "Notify [C]lose",
   },
   {
@@ -175,15 +174,6 @@ for _, rhs in ipairs(unmap) do
   table.insert(global_mapping, { rhs, cond = false, hidden = true })
 end
 
-table.insert(mapdelay, {
-  n = {
-    o = 25,
-    O = 25,
-    oo = 0,
-    OO = 0,
-  },
-})
-
 return {
   "folke/which-key.nvim",
   dependencies = {
@@ -191,9 +181,6 @@ return {
   },
   event = "VeryLazy",
   opts = {
-    delay = function(ctx)
-      return mapdelay[ctx.mode][ctx.keys] or ctx.plugin and 0 or 200
-    end,
     preset = "modern",
     spec = global_mapping,
     notify = false,

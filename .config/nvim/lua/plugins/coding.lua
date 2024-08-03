@@ -1,5 +1,10 @@
 local M = {
   {
+    "danymat/neogen",
+    config = true,
+    keys = { "<leader>n" },
+  },
+  {
     "folke/trouble.nvim",
     cmd = "Trouble",
     keys = {
@@ -62,20 +67,16 @@ local M = {
     },
     opts = {
       adapters = {
-        vim.lua.lazyreq.on_index("neotest-plenary"),
+        lazyreq("neotest-plenary"),
       },
     },
   },
   {
     "ThePrimeagen/refactoring.nvim",
-    event = "LspAttach",
     dependencies = {
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
     },
-    init = function()
-      vim.lua.fn.lazy_load_extension("refactoring")
-    end,
     opts = {
       prompt_func_return_type = {
         cpp = true,
@@ -92,28 +93,5 @@ local M = {
     },
   },
 }
-
--- for filetype, _ in vim.lua.fn.list_submodules("plugins.coding") do
---    vim.api.nvim_create_autocmd("FileType", {
---       pattern = filetype,
---       callback = function()
---          vim.print("installing " .. filetype)
---          local plugins = require("plugins.coding." .. filetype)
---          require("lazy").install(plugins)
---          for _, ftplugin in plugins do
---             require("lazy").load(ftplugin)
---          end
---       end,
---       once = true,
---    })
--- end
-
-local function add_plugins(specs, _module)
-  for _, plugin in ipairs(require(_module)) do
-    table.insert(specs, plugin)
-  end
-end
-
-add_plugins(M, "plugins.coding.lua")
 
 return M

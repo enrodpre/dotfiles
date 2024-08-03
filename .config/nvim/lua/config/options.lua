@@ -7,15 +7,16 @@
 -- wrapmargin = 300
 local opt = vim.opt
 
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
 vim.b.autoformat = true
-opt.grepformat = '%f:%l:%c:%m'
-opt.grepprg = 'rg --vimgrep'
+opt.grepformat = "%f:%l:%c:%m"
+opt.grepprg = "rg --vimgrep"
 -- Close hidden buffers
 opt.cursorline = true -- Enable highlighting of the current line
 opt.hidden = false
-opt.bufhidden = 'delete'
+opt.bufhidden = "delete"
 
 -- Set highlight on search
 opt.hlsearch = true
@@ -24,22 +25,22 @@ opt.hlsearch = true
 opt.number = true
 
 -- Enable mouse mode
-opt.mouse = 'a'
+opt.mouse = "a"
 
 -- Sync clipboard between OS and Neovim.
-opt.clipboard = 'unnamedplus'
+opt.clipboard = "unnamedplus"
 
 -- Indentation
 opt.breakindent = true
 opt.expandtab = true
 opt.smartindent = true
 opt.tabstop = 4
-opt.shiftwidth = 4
+opt.shiftwidth = 2
 
 -- Folding
-opt.foldmethod = 'indent'
+opt.foldmethod = "indent"
 -- opt.foldenable = false
-opt.foldcolumn = '0'
+opt.foldcolumn = "0"
 opt.foldlevel = 99 -- Using ufdddo provider need a large value, feel free to decrease the value
 opt.foldlevelstart = 99
 
@@ -51,7 +52,7 @@ opt.undofile = true
 opt.smartcase = true
 
 -- Keep signcolumn on by default
-opt.signcolumn = 'yes'
+opt.signcolumn = "yes"
 
 -- Decrease update time
 opt.updatetime = 250
