@@ -1,3 +1,7 @@
+-- Options are automatically loaded before lazy.nvim startup
+-- Default options that are always set: https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/options.lua
+-- Add any additional options here
+
 -- sidescroll = 5,
 -- cmdheight = 1,
 -- ruler = false,
@@ -58,13 +62,13 @@ opt.signcolumn = "yes"
 opt.updatetime = 250
 opt.timeoutlen = 300
 
--- Set completeopt to have a better completion experience
--- opt.completeopt = "menuone,noselect"
+opt.virtualedit = "none"
 
 -- NOTE: You should make sure your terminal supports this
 opt.termguicolors = true
 
 -- Relative numbers
 opt.relativenumber = false
-
+opt.wrap = true
+opt.textwidth = 90
 -- vim.o.python3_host_prog = "/home/kike/.local/share/virtualenvs/neovim/bin/python"

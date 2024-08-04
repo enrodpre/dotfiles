@@ -1,9 +1,13 @@
 /*
 
+!.editorconfig
 !.gitignore
 !gamemode.ini
+!catppuccin-mocha.yml
 
 !bat/
+!clangd/
+!git/
 !i3/
 !kitty/
 !luarocks/
@@ -15,4 +19,5 @@
 !wal/
 !wallpaper/
 !zsh/
+!X11
 !Xmodmap

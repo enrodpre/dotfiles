@@ -1,6 +1,8 @@
-lazy-lock.json
-.venv
-filetypes.txt
-.mypy_cache/
-luac.out
-usage_data.json
+tt.*
+.tests
+doc/tags
+debug
+.repro
+foo.*
+*.log
+data
