@@ -1,0 +1,29 @@
+
+
+--- Options ---
+  autowrite         nohidden              scroll=16           splitright
+  scrolloff=4        
+  cmdheight=0         jumpoptions=view    shiftround
+            laststatus=3        shiftwidth=2
+  conceallevel=2      linebreak         noshowmode=300
+  confirm             lines=33            showtabline=0
+  list                sidescrolloff=8     undolevels=10000
+  noloadplugins         signcolumn=yes      
+  
+  
+  winminwidth=5
+  foldtext=           pumblend=10         splitbelow
+  helplang=en         pumheight=10        splitkeep=screen
+  
+  fillchars=diff:╱,eob: ,fold: ,foldclose:,foldopen:,foldsep: 
+ 
+ 
+  formatoptions=jcroqlnt
+  
+  grepprg=rg --vimgrep
+  shortmess=tolcFTWCOI
+  spelloptions=noplainbuffer
+  statuscolumn=%!v:lua.require'lazyvim.util'.ui.statuscolumn()
+  statusline=%#lualine_a_command# COMMAND %#lualine_transitional_lualine_a_command_to_lualine_b_command#%#lualine_b_command#  master %#lualine_transitional_lualine_b_command_to_lualine_c_normal#%<%#lualine_c_normal#%=%#lualine_x_8_command# : %#lualine_transitional_lualine_b_command_to_lualine_x_8_command#%#lualine_b_command# Top %#lualine_b_command#  1:1  %#lualine_transitional_lualine_a_command_to_lualine_b_command#%#lualine_a_command#  22:13 
+  tabline=%!v:lua.nvim_bufferline()
+  wildmode=longest:full,full
