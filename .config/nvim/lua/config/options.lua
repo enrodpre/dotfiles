@@ -1,47 +1,48 @@
--- sidescroll = 5,
--- cmdheight = 1,
--- ruler = false,
--- ignorecase = true,
--- numberwidth = 2,
--- showcmd = true,
--- wrapmargin = 300
 local opt = vim.opt
 
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-vim.b.autoformat = true
-opt.grepformat = '%f:%l:%c:%m'
-opt.grepprg = 'rg --vimgrep'
--- Close hidden buffers
-opt.cursorline = true -- Enable highlighting of the current line
-opt.hidden = false
-opt.bufhidden = 'delete'
+opt.grepformat = "%f:%l:%c:%m"
+opt.grepprg = "rg --vimgrep"
 
+-- Close hidden buffers
+opt.hidden = false
+opt.bufhidden = "delete"
+
+opt.virtualedit = "none"
 -- Set highlight on search
 opt.hlsearch = true
 
+-- Dimensions
+opt.textwidth = 90
+opt.columns = 87
+
 -- Make line numbers default
 opt.number = true
+opt.cursorline = true -- Enable highlighting of the current line
 
 -- Enable mouse mode
-opt.mouse = 'a'
+opt.mouse = "a"
 
 -- Sync clipboard between OS and Neovim.
-opt.clipboard = 'unnamedplus'
+opt.clipboard = "unnamedplus"
 
 -- Indentation
 opt.breakindent = true
 opt.expandtab = true
 opt.smartindent = true
-opt.tabstop = 4
-opt.shiftwidth = 4
+opt.smartcase = true
+opt.tabstop = 2
+opt.shiftwidth = 2
 
+opt.completeopt = menu, menuone, noselect
+
+opt.sessionoptions = buffers, curdir, tabpages, winsize, help, globals, skiprtp, folds
 -- Folding
-opt.foldmethod = 'indent'
+opt.foldmethod = "indent"
 -- opt.foldenable = false
-opt.foldcolumn = '0'
+opt.foldcolumn = "0"
 opt.foldlevel = 99 -- Using ufdddo provider need a large value, feel free to decrease the value
 opt.foldlevelstart = 99
+opt.smoothscroll = true
 
 -- Save undo history
 opt.undofile = true
@@ -51,19 +52,13 @@ opt.undofile = true
 opt.smartcase = true
 
 -- Keep signcolumn on by default
-opt.signcolumn = 'yes'
+opt.signcolumn = "yes"
 
 -- Decrease update time
 opt.updatetime = 250
 opt.timeoutlen = 300
 
--- Set completeopt to have a better completion experience
--- opt.completeopt = "menuone,noselect"
-
--- NOTE: You should make sure your terminal supports this
-opt.termguicolors = true
-
 -- Relative numbers
-opt.relativenumber = false
+opt.relativenumber = true
 
--- vim.o.python3_host_prog = "/home/kike/.local/share/virtualenvs/neovim/bin/python"
+vim.o.termguicolors = true

@@ -5,6 +5,7 @@ local mapdelay = vim.lua.metatables.default()
 local lazy_call = vim.lua.lazyreq.on_module_call
 
 local global_mapping = {
+  { "kj", "<Esc>", desc = "Better escape", mode = { "i", "c" } },
   {
     "<leader>a",
     group = "[A]pply",

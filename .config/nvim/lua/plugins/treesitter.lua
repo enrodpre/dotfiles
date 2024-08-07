@@ -2,6 +2,35 @@
 
 return {
   {
+    "p00f/clangd_extensions.nvim",
+    ft = "cpp",
+    keys = { "gdh", ":ClangdSwitchSourceHeader", "Hop between Header and Source File" },
+    opts = {
+      inlay_hints = {
+        inline = true,
+      },
+      ast = {
+        role_icons = {
+          type = "",
+          declaration = "",
+          expression = "",
+          specifier = "",
+          statement = "",
+          ["template argument"] = "",
+        },
+        kind_icons = {
+          Compound = "",
+          Recovery = "",
+          TranslationUnit = "",
+          PackExpansion = "",
+          TemplateTypeParm = "",
+          TemplateTemplateParm = "",
+          TemplateParamObject = "",
+        },
+      },
+    },
+  },
+  {
     -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
     dependencies = {
@@ -14,11 +43,6 @@ return {
     build = ":TSUpdate",
     lazy = vim.fn.argc(-1) == 0,
     init = function(plugin)
-      -- PERF: add nvim-treesitter queries to the rtp and it's custom query predicates early
-      -- This is needed because a bunch of plugins no longer `require("nvim-treesitter")`, which
-      -- no longer trigger the **nvim-treesitter** module to be loaded in time.
-      -- Luckily, the only things that those plugins need are the custom queries, which we make available
-      -- during startup.
       require("lazy.core.loader").add_to_rtp(plugin)
       require("nvim-treesitter.query_predicates")
     end,
@@ -29,13 +53,16 @@ return {
         "lua",
         "python",
         "rasi",
-        "tsx",
         "vimdoc",
         "vim",
         "bash",
+        "luadoc",
+        "luap",
+        "markdown",
+        "markdown_inline",
+        "printf",
+        "yaml",
         "regex",
-        "ninja",
-        "rst",
         "toml",
         "cmake",
         "git_config",

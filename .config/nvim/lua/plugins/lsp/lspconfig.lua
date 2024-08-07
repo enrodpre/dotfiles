@@ -2,21 +2,12 @@
 
 return {
   "neovim/nvim-lspconfig",
-  -- event = 'VeryLazy',
+  event = "VeryLazy",
   dependencies = {
     { "williamboman/mason-lspconfig.nvim", config = function() end },
   },
-  event = "LazyFile",
   keys = require("plugins.lsp.mapping"),
   opts = {
-    -- capabilities = {
-    --   workspace = {
-    --     fileOperations = {
-    --       didRename = true,
-    --       willRename = true,
-    --     },
-    --   },
-    -- },
     diagnostic = {
       underline = true,
       update_in_insert = true,
@@ -41,17 +32,33 @@ return {
       bashls = { filetypes = { "sh", "zsh", "bash" } },
       clangd = {
         keys = {
-          { "gs", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
+          { "gdh", "<cmd>ClangdSwitchSourceHeader<cr>", desc = "Switch Source/Header (C/C++)" },
         },
-        -- cmd = {
-        --   'clangd',
-        --   '--background-index',
-        --   '--clang-tidy',
-        --   '--header-insertion=iwyu',
-        --   '--completion-style=detailed',
-        --   '--function-arg-placeholders',
-        --   '--fallback-style=llvm',
-        -- },
+        root_dir = function(fname)
+          return require("lspconfig.util").root_pattern(
+            "Makefile",
+            "configure.ac",
+            "configure.in",
+            "config.h.in",
+            "meson.build",
+            "meson_options.txt",
+            "build.ninja"
+          )(fname) or require("lspconfig.util").root_pattern("compile_commands.json", "compile_flags.txt")(fname) or require("lspconfig.util").find_git_ancestor(
+            fname
+          )
+        end,
+        capabilities = {
+          offsetEncoding = { "utf-16" },
+        },
+        cmd = {
+          "clangd",
+          "--background-index",
+          "--clang-tidy",
+          "--header-insertion=iwyu",
+          "--completion-style=detailed",
+          "--function-arg-placeholders",
+          "--fallback-style=llvm",
+        },
         init_options = {
           usePlaceholders = true,
           completeUnimported = true,
@@ -106,7 +113,7 @@ return {
       end)
     end
 
-    if type(opts.diagnostic.virtual_text) == "table" and opts.diagnostic.virtual_text.prefix == "icons" then
+    if type(opts.diagnostic.virtual_text) == "table" and opts.diagnost then
       opts.diagnostic.virtual_text.prefix = function(diagnostic)
         local icons = opts.diagnostic.icons
         for d, icon in pairs(icons) do
@@ -149,6 +156,7 @@ return {
     local mason_lspconfig = require("mason-lspconfig")
     mason_lspconfig.setup({
       -- ensure_installed = vim.tbl_keys(servers),
+      automatic_installation = true,
       handlers = {
         function(server_name)
           require("lspconfig")[server_name].setup({

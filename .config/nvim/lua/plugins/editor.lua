@@ -34,6 +34,13 @@ end
 
 return {
   {
+    "folke/persistence.nvim",
+    event = "BufReadPre", -- this will only start session saving when an actual file was opened
+    opts = {
+      -- add any custom options here
+    },
+  },
+  {
     "echasnovski/mini.pairs",
     enabled = true,
     event = { "InsertEnter", "CmdlineEnter" },
@@ -50,29 +57,8 @@ return {
     },
   },
   {
-    "gaborvecsei/usage-tracker.nvim",
-    opts = {},
-  },
-  {
-    "ecthelionvi/NeoComposer.nvim",
-    dependencies = { "kkharji/sqlite.lua" },
-    keys = "q",
-    opts = { notify = false },
-  },
-  {
     "tpope/vim-sleuth",
     event = "LazyFile",
-  },
-  {
-    "max397574/better-escape.nvim",
-    event = "InsertEnter",
-    opts = {
-      timeoutlen = vim.o.timeoutlen,
-      default_mappings = false,
-      mappings = {
-        i = { k = { j = "<Esc>" } },
-      },
-    },
   },
   {
     "monaqa/dial.nvim",
@@ -129,13 +115,146 @@ return {
     end,
   },
   {
+    "karb94/neoscroll.nvim",
+    keys = {
+      {
+        "<C-u>",
+        function()
+          require("neoscroll").ctrl_u({ duration = 250, easing = "sine" })
+        end,
+      },
+      {
+        "<C-d>",
+        function()
+          require("neoscroll").ctrl_d({ duration = 250, easing = "sine" })
+        end,
+      },
+      -- Use the "circular" easing functio
+      {
+        "<C-b>",
+        function()
+          require("neoscroll").ctrl_b({ duration = 250, easing = "circular" })
+        end,
+      },
+      {
+        "<C-f>",
+        function()
+          require("neoscroll").ctrl_f({ duration = 250, easing = "circular" })
+        end,
+      },
+      -- When no value is passed the `easing` option supplied in `setup()` is used
+      {
+        "<C-y>",
+        function()
+          require("neoscroll").scroll(-0.1, { move_cursor = false, duration = 100 })
+        end,
+      },
+      {
+        "<C-e>",
+        function()
+          require("neoscroll").scroll(0.1, { move_cursor = false, duration = 100 })
+        end,
+      },
+    },
+
+    config = function()
+      require("neoscroll").setup({ easing = "quadratic" })
+    end,
+  },
+  {
     "echasnovski/mini.surround",
     event = "LazyFile",
     opts = {},
   },
   {
+    "echasnovski/mini.move",
+    event = "VeryLazy",
+    opts = {
+      {
+        -- Module mappings. Use `''` (empty string) to disable one.
+        mappings = {
+          -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
+          left = "<M-h>",
+          right = "<M-l>",
+          down = "<M-j>",
+          up = "<M-k>",
+
+          -- Move current line in Normal mode
+          line_left = "<M-h>",
+          line_right = "<M-l>",
+          line_down = "<M-j>",
+          line_up = "<M-k>",
+        },
+      },
+    },
+  },
+  {
     "folke/ts-comments.nvim",
     event = "LazyFile",
     opts = {},
+  },
+  {
+    "MagicDuck/grug-far.nvim",
+    opts = { headerMaxWidth = 80 },
+    cmd = "GrugFar",
+    keys = {
+      {
+        "<leader>sr",
+        function()
+          local grug = require("grug-far")
+          local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+          grug.grug_far({
+            transient = true,
+            prefills = {
+              filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+            },
+          })
+        end,
+        mode = { "n", "v" },
+        desc = "Search and Replace",
+      },
+    },
+  },
+  {
+    "ThePrimeagen/harpoon",
+    branch = "harpoon2",
+    opts = {
+      menu = {
+        width = vim.api.nvim_win_get_width(0) - 4,
+      },
+      settings = {
+        save_on_toggle = true,
+      },
+    },
+    keys = function()
+      local keys = {
+        {
+          "<leader>H",
+          function()
+            require("harpoon"):list():add()
+          end,
+          desc = "Harpoon File",
+        },
+        {
+          "<leader>h",
+          function()
+            local harpoon = require("harpoon")
+            harpoon.ui:toggle_quick_menu(harpoon:list())
+          end,
+          desc = "Harpoon Quick Menu",
+        },
+      }
+
+      for i = 1, 5 do
+        table.insert(keys, {
+          "<leader>" .. i,
+          function()
+            require("harpoon"):list():select(i)
+          end,
+          desc = "Harpoon to File " .. i,
+        })
+      end
+      return keys
+    end,
   },
 }

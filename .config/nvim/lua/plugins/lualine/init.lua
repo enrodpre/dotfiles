@@ -31,17 +31,7 @@ return {
       sections = {
         lualine_a = { "mode" },
         lualine_b = { "diagnostics" },
-        lualine_c = {
-          "filename",
-          {
-            function()
-              return require("NeoComposer.ui").status_recording()
-            end,
-            cond = function()
-              return package.loaded["NeoComposer"] and true or false
-            end,
-          },
-        },
+        lualine_c = {},
         lualine_x = {
           "encoding",
           "filetype",
@@ -52,11 +42,6 @@ return {
             color = function() return vim.lua.fn.fg("Debug") end,
           },
           -- stylua: ignore
-          {
-            pcall(require,"lazy.status")[2].updates,
-            cond = require("lazy.status").has_updates,
-            color = function() return vim.lua.fn.fg("Special") end,
-          },
         },
         lualine_y = {
           "vim.fn.line('$')",

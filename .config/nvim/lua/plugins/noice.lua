@@ -3,12 +3,12 @@
 local config = function(_, opts)
   local focused = true
 
-  vim.api.nvim_create_autocmd('FocusGained', {
+  vim.api.nvim_create_autocmd("FocusGained", {
     callback = function()
       focused = true
     end,
   })
-  vim.api.nvim_create_autocmd('FocusLost', {
+  vim.api.nvim_create_autocmd("FocusLost", {
     callback = function()
       focused = false
     end,
@@ -16,46 +16,47 @@ local config = function(_, opts)
 
   table.insert(opts.routes, 1, {
     filter = {
-      ['not'] = {
-        event = 'lsp',
-        kind = 'progress',
+      ["not"] = {
+        event = "lsp",
+        kind = "progress",
       },
       cond = function()
         return not focused
       end,
     },
-    view = 'notify_send',
+    view = "notify_send",
     opts = { stop = false },
   })
-  require('noice').setup(opts)
+  require("noice").setup(opts)
 end
 
 return {
-  'folke/noice.nvim',
-  event = 'UiEnter',
+  "folke/noice.nvim",
+  tag = "v4.4.7",
+  event = "UiEnter",
   dependencies = {
-    'MunifTanjim/nui.nvim',
-    'rcarriga/nvim-notify',
+    "MunifTanjim/nui.nvim",
+    "rcarriga/nvim-notify",
   },
   -- config = config,
   opts = {
-    cmdline = { view = 'cmdline_popup' },
+    cmdline = { view = "cmdline_popup" },
     commands = {
       history = {
-        view = 'popupmenu',
+        view = "popupmenu",
       },
     },
     lsp = {
       override = {
-        ['vim.lsp.util.convert_input_to_markdown_lines'] = true,
-        ['vim.lsp.util.stylize_markdown'] = true,
-        ['cmp.entry.get_documentation'] = true,
+        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        ["vim.lsp.util.stylize_markdown"] = true,
+        ["cmp.entry.get_documentation"] = true,
       },
     },
     messages = {
       view_search = false,
     },
-    popupmenu = { backend = 'cmp' },
+    popupmenu = { backend = "cmp" },
     presets = {
       command_palette = false, -- position the cmdline and popupmenu together
       long_message_to_split = true, -- long messages will be sent to a split
@@ -64,70 +65,70 @@ return {
     routes = {
       {
         filter = {
-          event = 'msg_show',
-          kind = 'search_count',
+          event = "msg_show",
+          kind = "search_count",
         },
         opts = { skip = true },
       },
       {
         filter = {
-          event = 'notify',
-          find = 'No code actions available',
+          event = "notify",
+          find = "No code actions available",
         },
         opts = { skip = false },
       },
       {
         filter = {
-          event = 'notify',
-          find = 'Tag not found',
+          event = "notify",
+          find = "Tag not found",
         },
         opts = { skip = false },
       },
       {
         filter = {
-          event = 'notify',
-          find = 'No tags file',
+          event = "notify",
+          find = "No tags file",
         },
         opts = { skip = false },
       },
       {
         filter = {
-          event = 'msg_show',
+          event = "msg_show",
           any = {
-            { find = '%d+L, %d+B' },
-            { find = '; after #%d+' },
-            { find = '; before #%d+' },
+            { find = "%d+L, %d+B" },
+            { find = "; after #%d+" },
+            { find = "; before #%d+" },
           },
         },
-        view = 'mini',
+        view = "mini",
       },
     },
     views = {
       cmdline_popup = {
         position = {
-          col = '50%',
+          col = "50%",
         },
         size = {
           width = 60,
-          height = 'auto',
+          height = "auto",
         },
       },
       popupmenu = {
-        relative = 'editor',
+        relative = "editor",
         position = {
           row = 8,
-          col = '50%',
+          col = "50%",
         },
         size = {
           width = 60,
           height = 10,
         },
         border = {
-          style = 'rounded',
+          style = "rounded",
           padding = { 0, 1 },
         },
         win_options = {
-          winhighlight = { Normal = 'Normal', FloatBorder = 'DiagnosticInfo' },
+          winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
         },
       },
     },

@@ -1,5 +1,25 @@
 return {
   {
+    "nvimdev/dashboard-nvim",
+    event = "VimEnter",
+    config = function()
+      require("dashboard").setup({
+        -- config
+      })
+    end,
+    dependencies = { { "nvim-tree/nvim-web-devicons" } },
+  },
+  {
+    "nvim-neo-tree/neo-tree.nvim",
+    branch = "v3.x",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+      "MunifTanjim/nui.nvim",
+      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    },
+  },
+  {
     "RRethy/vim-illuminate",
     event = "LazyFile",
     opts = {
@@ -128,8 +148,8 @@ return {
   {
     "catppuccin/nvim",
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
-    config = function()
-      vim.cmd([[colorscheme catppuccin]])
+    config = function(_, opts)
+      require("catppuccin").setup(opts)
     end,
     name = "catppuccin",
     opts = {

@@ -1,4 +1,63 @@
 local M = {
+  { "folke/neodev.nvim", config = function() end },
+  {
+    "folke/lazydev.nvim",
+    dependencies = { "Bilal2453/luvit-meta" },
+    ft = "lua",
+    opts = function(_, opts)
+      opts.library = opts.library or {}
+      table.insert(opts.library, {
+        "lazy.nvim",
+        "neodev.nvim/types/stable",
+      })
+      return opts
+    end,
+  },
+  {
+    "danymat/neogen",
+    config = true,
+    keys = { "<leader>n" },
+  },
+  {
+    "jbyuki/one-small-step-for-vimkind",
+    keys = { "<leader>d" },
+    config = function(_, opts)
+      local dap = require("dap")
+
+      dap.adapters.nlua = function(callback, conf)
+        local adapter = {
+          type = "server",
+          host = conf.host or "127.0.0.1",
+          port = conf.port or 8086,
+        }
+        if conf.start_neovim then
+          local dap_run = dap.run
+          dap.run = function(c)
+            adapter.port = c.port
+            adapter.host = c.host
+          end
+          require("osv").run_this()
+          dap.run = dap_run
+        end
+        callback(adapter)
+      end
+
+      dap.configurations.lua = {
+        {
+          type = "nlua",
+          request = "attach",
+          name = "Run this file",
+          start_neovim = {},
+        },
+        {
+          type = "nlua",
+          request = "attach",
+          name = "Attach to running Neovim instance (port = 8086)",
+          port = 8086,
+        },
+      }
+    end,
+  },
   {
     "folke/trouble.nvim",
     cmd = "Trouble",
@@ -92,28 +151,5 @@ local M = {
     },
   },
 }
-
--- for filetype, _ in vim.lua.fn.list_submodules("plugins.coding") do
---    vim.api.nvim_create_autocmd("FileType", {
---       pattern = filetype,
---       callback = function()
---          vim.print("installing " .. filetype)
---          local plugins = require("plugins.coding." .. filetype)
---          require("lazy").install(plugins)
---          for _, ftplugin in plugins do
---             require("lazy").load(ftplugin)
---          end
---       end,
---       once = true,
---    })
--- end
-
-local function add_plugins(specs, _module)
-  for _, plugin in ipairs(require(_module)) do
-    table.insert(specs, plugin)
-  end
-end
-
-add_plugins(M, "plugins.coding.lua")
 
 return M
