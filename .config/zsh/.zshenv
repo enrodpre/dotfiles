@@ -7,13 +7,26 @@ export XDG_CACHE_HOME=$HOME/.cache
 
 CONFIG=$XDG_CONFIG_HOME
 
+# Config location overrides
 export ZDOTDIR=$CONFIG/zsh
-export ZDOTCACHE=$XDG_CACHE_HOME/zsh
-export ZSH_COMPDUMP=$ZDOTCACHE/zcompdump
+export GITIGNORE_DIR=$XDG_DATA_HOME/gitignore
 export KITTY_ORIG_ZDOTDIR=$ZDOTDIR
 export BAT_CONFIG_PATH="$CONFIG/bat/config"
 export NPM_CONFIG_USERCONFIG=$CONFIG/npmrc
-export GITIGNORE_DIR=$XDG_DATA_HOME/gitignore
+export CONAN_HOME="$XDG_CONFIG_HOME/conan2"
+export SANE_CONFIG_DIR="$XDG_CONFIG_HOME/sane"
+export CARGO_HOME="$XDG_DATA_HOME"/cargo
+export GNUPGHOME="$XDG_DATA_HOME"/gnupg
+export ANDROID_USER_HOME="$XDG_DATA_HOME"/android
+export PYTHONSTARTUP="$HOME"/python/pythonrc
+export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
+export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+
+alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
+
+export ZSH_COMPDUMP=$ZDOTCACHE/zcompdump
+export ZDOTCACHE=$XDG_CACHE_HOME/zsh
+export HISTFILE=$ZDOTCACHE/.zsh_history
 export EDITOR='nvim'
 export SUDO_EDITOR='nvim'
 export VISUAL='nvim'
@@ -27,11 +40,11 @@ export PYTHONPATH=$XDG_DATA_HOME/python/functions:$HOME/.local/bin
 
 export WORDLISTS=$XDG_DATA_HOME/seclists/
 
-export HISTFILE=$ZDOTCACHE/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-export ZSH_ASK_API_KEY="(cat $ZDOTDIR/.chatgpt.key)"
+path+=("$HOME/.local/bin" "$XDG_DATA_HOME"/cargo/bin)
+export PATH
 
 #Add custom functions
 source $ZDOTDIR/functions.zsh

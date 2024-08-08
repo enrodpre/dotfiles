@@ -1,0 +1,31 @@
+---
+BasedOnStyle: GNU
+IndentWidth:      2
+AlignAfterOpenBracket: AlwaysBreak
+SpaceBeforeParens: ControlStatements
+BinPackParameters: false
+BinPackArguments: false
+AllowAllParametersOfDeclarationOnNextLine: true
+NamespaceIndentation: None
+BreakBeforeBraces: Linux
+ColumnLimit: 120
+PenaltyReturnTypeOnItsOwnLine: 200
+PenaltyIndentedWhitespace: 1
+PointerAlignment: Left
+AlwaysBreakTemplateDeclarations: Yes
+AlignConsecutiveAssignments: AcrossEmptyLines
+AlignArrayOfStructures: Left
+AlignConsecutiveMacros: None
+AlignEscapedNewlines: DontAlign
+AllowShortFunctionsOnASingleLine: Empty
+BraceWrapping:
+  SplitEmptyFunction: false
+IndentCaseBlocks: true
+IndentCaseLabels: true
+RawStringFormats:
+  - Language: Cpp
+    Delimiters:
+      - ~
+      - cpp
+    BasedOnStyle: google
+...

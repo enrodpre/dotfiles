@@ -15,6 +15,7 @@ alias ll='eza -lbaa --color=auto'
 alias llg='eza -lB@aa --git'
 alias top='btop'
 alias mv='mv -i'
+alias ds='dots status'
 alias rg='rg -p'
 alias rgh='rg -p --hidden'
 # alias du="du -h"
