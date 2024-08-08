@@ -1,95 +1,95 @@
 #!/usr/bin/lua
 
-local tb = vim.lua.lazyreq.on_exported_call 'telescope.builtin'
+local tb = vim.lua.lazyreq.on_exported_call("telescope.builtin")
 return {
   {
-    'gf?',
+    "gf?",
     tb.oldfiles,
-    desc = '[?] Go recently opened files',
+    desc = "[?] Go recently opened files",
   },
   {
-    'g<leader>',
+    "g<leader>",
     tb.buffers,
-    desc = '[ ] Find existing buffers',
+    desc = "[ ] Find existing buffers",
   },
   {
-    '<leader>fb',
+    "<leader>fb",
     function()
-      tb.current_buffer_fuzzy_find(require('telescope.themes').get_dropdown {
+      tb.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown({
         winblend = 10,
         previewer = false,
-      })
+      }))
     end,
-    desc = '[F]uzzily search in current [B]uffer',
+    desc = "[F]uzzily search in current [B]uffer",
   },
   {
-    'gff',
+    "gff",
     tb.find_files,
-    desc = '[G]o [F]ind [F]iles',
+    desc = "[G]o [F]ind [F]iles",
   },
   {
-    '<leader>fg',
+    "<leader>fg",
     tb.live_grep,
-    desc = '[G]o [G]rep',
+    desc = "[G]o [G]rep",
   },
   {
-    'gh',
+    "gh",
     tb.help_tags,
-    desc = '[G]o [H]elp',
+    desc = "[G]o [H]elp",
   },
   {
-    '<leader>fgw',
+    "<leader>fgw",
     tb.grep_string,
-    desc = '[F]ind by [G]rep current [W]ord',
+    desc = "[F]ind by [G]rep current [W]ord",
   },
   {
-    '<leader>gf',
+    "<leader>gf",
     tb.git_files,
-    desc = '[G]it [F]iles',
+    desc = "[G]it [F]iles",
   },
   {
-    '<leader>fgg',
-    ':LiveGrepGitRoot<cr>',
-    desc = '[F]ind by [G]rep on [G]it root',
+    "<leader>fgg",
+    ":LiveGrepGitRoot<cr>",
+    desc = "[F]ind by [G]rep on [G]it root",
   },
   {
-    '<leader>ll',
-    ':Telescope lazy<CR>',
-    desc = '[L]azy',
+    "<leader>ll",
+    ":Telescope lazy<CR>",
+    desc = "[L]azy",
   },
   {
-    '<leader>lp',
-    ':Telescope lazy_plugins<CR>',
-    desc = '[P]lugins',
+    "<leader>lp",
+    ":Telescope lazy_plugins<CR>",
+    desc = "[P]lugins",
   },
   {
-    '<leader>lc',
+    "<leader>lc",
     -- ":Telescope content<CR>",
     function()
-      require('telescope._extensions.content').exports.content()
+      require("telescope._extensions.content").exports.content()
     end,
-    desc = '[C]ontent',
+    desc = "[C]ontent",
   },
   {
-    '<leader>tb',
+    "<leader>tb",
     tb.builtin,
-    desc = '[T]elescope [B]uiltins',
+    desc = "[T]elescope [B]uiltins",
   },
   {
-    '<leader>tr',
+    "<leader>tr",
     tb.resume,
-    desc = '[T]elescope [R]esume',
+    desc = "[T]elescope [R]esume",
   },
   {
-    '<leader>tc',
-    ':Cheatsheet<CR>:',
-    desc = '[T]elescope [C]heatsheet',
+    "<leader>tc",
+    ":Cheatsheet<CR>:",
+    desc = "[T]elescope [C]heatsheet",
   },
   {
-    '<leader>nn',
+    "<leader>nn",
     function()
-      vim.lua.lazyreq.on_module_call('plugins.telescope.pickers').choose_neogen()
+      vim.lua.lazyreq.on_module_call("plugins.telescope.pickers").choose_neogen()
     end,
-    desc = '[N]eogen',
+    desc = "[N]eogen",
   },
 }
