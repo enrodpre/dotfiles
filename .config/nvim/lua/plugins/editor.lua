@@ -34,6 +34,28 @@ end
 
 return {
   {
+    "smoka7/multicursors.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "nvimtools/hydra.nvim",
+    },
+    opts = {
+      float_opts = {
+        border = "none",
+      },
+      position = "right",
+    },
+    cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor" },
+    keys = {
+      {
+        mode = { "v", "n" },
+        "<Leader>m",
+        "<cmd>MCstart<cr>",
+        desc = "Create a selection for selected text or word under the cursor",
+      },
+    },
+  },
+  {
     "folke/persistence.nvim",
     event = "BufReadPre", -- this will only start session saving when an actual file was opened
     opts = {
@@ -53,6 +75,9 @@ return {
           neigh_pattern = "\r.",
           register = { cr = false },
         },
+        -- ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\][^%)]" },
+        -- ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\][^%]]" },
+        -- ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\][^%}]" },
       },
     },
   },
@@ -116,6 +141,7 @@ return {
   },
   {
     "karb94/neoscroll.nvim",
+    enabled = false,
     keys = {
       {
         "<C-u>",
@@ -217,6 +243,7 @@ return {
   },
   {
     "ThePrimeagen/harpoon",
+    enabled = false,
     branch = "harpoon2",
     opts = {
       menu = {

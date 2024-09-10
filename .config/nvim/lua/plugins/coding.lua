@@ -103,6 +103,7 @@ local M = {
   {
     "echasnovski/mini.comment",
     event = "LspAttach",
+    keys = { "<leader>c" },
     opts = {
       mappings = {
         comment = "<leader>c",

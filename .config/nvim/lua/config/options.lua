@@ -22,6 +22,9 @@ opt.cursorline = true -- Enable highlighting of the current line
 -- Enable mouse mode
 opt.mouse = "a"
 
+-- vim.g.lualine_laststatus
+opt.laststatus = 2
+
 -- Sync clipboard between OS and Neovim.
 opt.clipboard = "unnamedplus"
 
@@ -33,10 +36,6 @@ opt.smartcase = true
 opt.tabstop = 2
 opt.shiftwidth = 2
 
-opt.completeopt = menu, menuone, noselect
-
-opt.sessionoptions = buffers, curdir, tabpages, winsize, help, globals, skiprtp, folds
--- Folding
 opt.foldmethod = "indent"
 -- opt.foldenable = false
 opt.foldcolumn = "0"

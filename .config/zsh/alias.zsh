@@ -1,5 +1,6 @@
 #!/bin/zsh
 
+alias 2hex="printf '%x\n'"
 alias -g dots='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
 alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias icat="kitty +kitten icat"
@@ -22,6 +23,7 @@ alias rgh='rg -p --hidden'
 # alias df="df -h"
 alias luarocks='luarocks --lua-version 5.1'
 
+alias gdbdebug="./run -g && coredumpctl dump -o core && gdb built/standalone/CmmLang core"
 # HELP
 unalias run-help
 autoload run-help
@@ -32,3 +34,9 @@ alias help=run-help
 alias d='dirs -v'
 for i in $(seq 9); do alias "$i"="cd +${i}"; done
 unset i
+
+
+# Project specific alias
+CMMDIR="/home/kike/src/cmm"
+alias -g currentcmm="$CMMDIR/build/standalone/current.cmm"
+alias -g asmgen="$CMMDIR/build/"

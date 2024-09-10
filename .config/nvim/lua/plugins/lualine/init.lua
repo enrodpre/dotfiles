@@ -27,20 +27,30 @@ return {
         component_separators = "|",
         -- section_separators = "",
       },
-      extensions = { "mason", "lazy", "quickfix" },
+      -- extensions = { "mason", "lazy", "quickfix" },
       sections = {
-        lualine_a = { "mode" },
+        lualine_a = {
+          "mode",
+          {
+            function()
+              return vim.fn.reg_recording() ~= "" and "Recording Macro" or ""
+            end,
+            cond = function()
+              return vim.fn.reg_recording() ~= ""
+            end,
+          },
+        },
         lualine_b = { "diagnostics" },
-        lualine_c = {},
+        lualine_c = { "filename" },
         lualine_x = {
           "encoding",
           "filetype",
           -- stylua: ignore
-          {
-            function() return "  " .. require("dap").status() end,
-            cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-            color = function() return vim.lua.fn.fg("Debug") end,
-          },
+          -- {
+          --   function() return "  " .. require("dap").status() end,
+          --   cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
+          --   color = function() return vim.lua.fn.fg("Debug") end,
+          -- },
           -- stylua: ignore
         },
         lualine_y = {

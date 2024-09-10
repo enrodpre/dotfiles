@@ -96,3 +96,5 @@ mkcd() {
 trim() {
     cat | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'
 }
+
+

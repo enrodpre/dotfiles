@@ -20,12 +20,14 @@ export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export ANDROID_USER_HOME="$XDG_DATA_HOME"/android
 export PYTHONSTARTUP="$HOME"/python/pythonrc
 export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
-export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+#export XAUTHORITY="$XDG_RUNTIME_DIR"/Xauthority
+export XAUTHORITY="$XDG_CONFIG_HOME"/Xauthority
 
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 
 export ZSH_COMPDUMP=$ZDOTCACHE/zcompdump
 export ZDOTCACHE=$XDG_CACHE_HOME/zsh
+#export CPM_SOURCE_CACHE="$HOME/.cache/CPM"
 export HISTFILE=$ZDOTCACHE/.zsh_history
 export EDITOR='nvim'
 export SUDO_EDITOR='nvim'
@@ -50,3 +52,5 @@ export PATH
 source $ZDOTDIR/functions.zsh
 
 source "$ZDOTDIR/alias.zsh"
+
+export CMMCURR="while"

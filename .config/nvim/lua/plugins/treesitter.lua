@@ -1,39 +1,12 @@
 #!/usr/bin/lua
 
+local treesitter_enabled = true
+
 return {
-  {
-    "p00f/clangd_extensions.nvim",
-    ft = "cpp",
-    keys = { "gdh", "<Cmd>ClangdSwitchSourceHeader<CR>", "Hop between Header and Source File" },
-    opts = {
-      inlay_hints = {
-        inline = true,
-      },
-      ast = {
-        role_icons = {
-          type = "",
-          declaration = "",
-          expression = "",
-          specifier = "",
-          statement = "",
-          ["template argument"] = "",
-        },
-        kind_icons = {
-          Compound = "",
-          Recovery = "",
-          TranslationUnit = "",
-          PackExpansion = "",
-          TemplateTypeParm = "",
-          TemplateTemplateParm = "",
-          TemplateParamObject = "",
-        },
-      },
-    },
-  },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
-    enabled = true,
+    enabled = treesitter_enabled,
     config = function()
       -- When in diff mode, we want to use the default
       -- vim text objects c & C instead of the treesitter ones.
@@ -60,11 +33,18 @@ return {
   {
     -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
+    enabled = treesitter_enabled,
     dependencies = {
       "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      "nvim-treesitter/nvim-treesitter-context",
-      "RRethy/nvim-treesitter-endwise",
+      {
+        "RRethy/nvim-treesitter-endwise",
+        opts = {
+          endwise = {
+            enable = true,
+          },
+        },
+      },
     },
     event = { "LazyFile", "VeryLazy" },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
@@ -79,6 +59,7 @@ return {
         "c",
         "cpp",
         "lua",
+        "nasm",
         "python",
         "rasi",
         "vimdoc",
@@ -105,6 +86,15 @@ return {
       incremental_selection = { enable = false },
       endwise = { enable = true },
       textobjects = {
+        lsp_interop = {
+          enable = true,
+          border = "none",
+          floating_preview_opts = {},
+          peek_definition_code = {
+            ["<leader>df"] = "@function.outer",
+            ["<leader>dF"] = "@class.outer",
+          },
+        },
         select = {
           enable = true,
           lookahead = true, -- Automatically jump forward to textobj, similar to targets.vim
@@ -140,10 +130,10 @@ return {
         swap = {
           enable = true,
           swap_next = {
-            ["<leader>p"] = "@parameter.inner",
+            ["gp"] = "@parameter.inner",
           },
           swap_previous = {
-            ["<leader>P"] = "@parameter.inner",
+            ["gP"] = "@parameter.inner",
           },
         },
       },

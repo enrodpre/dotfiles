@@ -1,11 +1,11 @@
 #!/usr/bin/lua
 
-vim.filetype.add {
+vim.filetype.add({
   extension = {
-    rasi = 'rasi',
+    rasi = "rasi",
   },
   pattern = {
-    ['${HOME}/.config/i3/.*'] = 'i3config',
-    ['${HOME}/.config/kitty/*.conf'] = 'kitty',
+    ["${HOME}/.config/i3/.*"] = "i3config",
+    ["${HOME}/.config/kitty/*.conf"] = "kitty",
   },
-}
+})

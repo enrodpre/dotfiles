@@ -2,6 +2,117 @@
 
 local tb = lazyreq("telescope.builtin")
 
+local erase_word = function(find)
+  local current_line = vim.api.nvim_get_current_line()
+  local new_line = current_line:gsub(find, "")
+  vim.api.nvim_set_current_line(new_line)
+end
+
+local surround_word = function(surr)
+  local left = surr.left or ""
+  local right = surr.right or ""
+
+  local current_word = vim.fn.expand("<cWORD>")
+  local new_word = left .. current_word .. right
+  local current_line = vim.api.nvim_get_current_line()
+  local new_line = current_line:gsub(current_word, new_word)
+
+  vim.api.nvim_set_current_line(new_line)
+end
+
+vim.api.nvim_create_augroup("FtCustomMapping", { clear = true })
+
+local ft_mapping = function(c)
+  vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+    group = "FtCustomMapping",
+    desc = c.desc,
+    pattern = c.pattern,
+    callback = function()
+      local wk = require("which-key")
+      for _, binding in ipairs(c.keys) do
+        if not binding.group then
+          binding.silent = true
+          binding.noremap = true
+        end
+      end
+
+      wk.add(c.keys)
+    end,
+  })
+end
+
+local C = {
+  desc = "Some keybindings to ease cpp",
+  pattern = "*.?pp",
+  keys = {
+    { "<leader>s", group = "[M]odify" },
+    { "<leader>sa", group = "[A]dd" },
+    { "<leader>sr", group = "[R]emove" },
+    {
+      "<leader>sao",
+      function()
+        surround_word({ left = "std::optional<", right = ">" })
+      end,
+      desc = "Add optional to cword",
+    },
+    {
+      "<leader>sac",
+      function()
+        surround_word({ left = "const " })
+      end,
+      desc = "Add const to variable",
+    },
+    {
+      "<leader>sar",
+      function()
+        surround_word({ right = "&" })
+      end,
+      desc = "Add reference to variable",
+    },
+    {
+      "<leader>sab",
+      function()
+        surround_word({ left = "const ", right = "&" })
+      end,
+      desc = "Add const and reference to variable",
+    },
+    {
+      "<leader>src",
+      function()
+        erase_word("const ")
+      end,
+      desc = "Remove const from variable",
+    },
+    {
+      "<leader>srr",
+      function()
+        erase_word("&")
+      end,
+      desc = "Remove ref from variable",
+    },
+    {
+      "<leader>srb",
+      function()
+        erase_word("const ")
+        erase_word("&")
+      end,
+      desc = "Remove both ref and const",
+    },
+
+    {
+      "<leader>scc",
+      function()
+        vim.lua.fn.cpp.constructor()
+      end,
+      desc = "Create a cpp constructor efortless",
+      noremap = true,
+      silent = true,
+    },
+  },
+}
+
+ft_mapping(C)
+
 return {
   {
     "gdd",
@@ -67,11 +178,11 @@ return {
     vim.diagnostic.open_float,
     desc = "[O]pen Dianostic",
   },
-  -- {
-  --   '<leader>oi',
-  --   vim.lsp.buf.incoming_calls,
-  --   desc = '[O]pen incoming calls',
-  -- },
+  {
+    "<leader>oi",
+    vim.lsp.buf.incoming_calls,
+    desc = "[O]pen incoming calls",
+  },
   -- {
   --   '<leader>oo',
   --   vim.lsp.buf.outgoing_calls,
@@ -128,5 +239,10 @@ return {
     "gli",
     tb.lsp_implementations,
     desc = "[G]oto [I]mplementation",
+  },
+  {
+    "gdh",
+    "<Cmd>ClangdSwitchSourceHeader<CR>",
+    desc = "[G]oto [H]eader/source",
   },
 }

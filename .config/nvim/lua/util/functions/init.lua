@@ -2,51 +2,47 @@ local F = {}
 
 function F.put_text(...)
   local objects = {}
-  for i = 1, select('#', ...) do
+  for i = 1, select("#", ...) do
     local v = select(i, ...)
     table.insert(objects, vim.inspect(v))
   end
 
-  local lines = vim.split(table.concat(objects, '\n'), '\n')
+  local lines = vim.split(table.concat(objects, "\n"), "\n")
   local lnum = vim.api.nvim_win_get_cursor(0)[1]
   vim.fn.append(lnum, lines)
   return ...
 end
 
-function F.trim(s)
-  return s:gsub('[\n]', '')
-end
-
 function F.get_selected_text()
-  local visual = vim.fn.mode() == 'v'
+  local visual = vim.fn.mode() == "v"
 
   if visual == true then
-    local saved_reg = vim.fn.getreg 'v'
-    vim.cmd [[noautocmd sil norm! "vy]]
-    local sele = vim.fn.getreg 'v'
-    vim.fn.setreg('v', saved_reg)
+    local saved_reg = vim.fn.getreg("v")
+    vim.cmd([[noautocmd sil norm! "vy]])
+    local sele = vim.fn.getreg("v")
+    vim.fn.setreg("v", saved_reg)
     return sele
   else
-    return vim.fn.expand '<cWORD>'
+    return vim.fn.expand("<cWORD>")
   end
 end
 
 function F.get_selected(opts)
-  local as = opts.as or 'obj'
+  local as = opts.as or "obj"
   local selected_text = F.get_selected_text()
 
-  if as == 'text' then
+  if as == "text" then
     return selected_text
-  elseif as == 'obj' then
-    local loader, err = load('return ' .. F.trim(selected_text))
+  elseif as == "obj" then
+    local loader, err = load("return " .. F.trim(selected_text))
     if loader then
       local obj = loader()
       return vim.inspect(obj)
     else
-      print('error calling to func ', err)
+      print("error calling to func ", err)
     end
   else
-    error 'Bad assss'
+    error("Bad assss")
   end
 end
 
@@ -58,14 +54,14 @@ function F.fg(name)
 end
 
 function F.currentdir()
-  return vim.fn.expand '%:p:h'
+  return vim.fn.expand("%:p:h")
 end
 
 function F.module_path(_module)
-  local config_path = vim.fn.stdpath 'config'
-  local module_rel_path = _module:gsub('[.]', '/')
+  local config_path = vim.fn.stdpath("config")
+  local module_rel_path = _module:gsub("[.]", "/")
 
-  return config_path .. '/lua/' .. module_rel_path
+  return config_path .. "/lua/" .. module_rel_path
 end
 
 function F.ls(path, opts)
@@ -73,13 +69,13 @@ function F.ls(path, opts)
   local ext = opts.ext or false
   local init = opts.init or false
 
-  local command = string.format('ls -1 %s', path)
+  local command = string.format("ls -1 %s", path)
   if not ext then
-    command = command .. string.format(' | sed -e %s', 's/.lua$//')
+    command = command .. string.format(" | sed -e %s", "s/.lua$//")
   end
 
   if not init then
-    command = command .. ' | grep -v init'
+    command = command .. " | grep -v init"
   end
 
   local handle = io.popen(command)
@@ -98,9 +94,9 @@ end
 function F.load_submodules(_module)
   local submodules = {}
   for submodule_name in F.list_submodules(_module) do
-    local ok, submodule = pcall(require, _module .. '.' .. submodule_name)
+    local ok, submodule = pcall(require, _module .. "." .. submodule_name)
     if not ok then
-      vim.print('Error loading ' .. submodule_name)
+      vim.print("Error loading " .. submodule_name)
     end
 
     submodules[submodule_name] = submodule
@@ -112,13 +108,13 @@ end
 function F.get_icons(group) end
 
 function F.ensure_execution(plugin_name, func)
-  local lazy_cfg = require('lazy.core.config').plugins
+  local lazy_cfg = require("lazy.core.config").plugins
   local plugin = lazy_cfg[plugin_name]
   if plugin and plugin._.loaded then
     func()
   else
-    vim.api.nvim_create_autocmd('User', {
-      pattern = 'LazyLoad',
+    vim.api.nvim_create_autocmd("User", {
+      pattern = "LazyLoad",
       callback = function(event)
         if event.data == plugin_name then
           func()
@@ -132,16 +128,16 @@ end
 function F.lazy_load_extension(ext)
   return function()
     local load = function()
-      require('telescope').load_extension(ext)
+      require("telescope").load_extension(ext)
     end
 
-    F.ensure_execution('telescope.nvim', load)
+    F.ensure_execution("telescope.nvim", load)
   end
 end
 
 ---@param fn fun(client, buffer)
 function F.on_attach(fn)
-  vim.api.nvim_create_autocmd('LspAttach', {
+  vim.api.nvim_create_autocmd("LspAttach", {
     callback = function(args)
       local buffer = args.buf
       local client = vim.lsp.get_client_by_id(args.data.client_id)
@@ -152,13 +148,13 @@ end
 
 ---@param name string
 function F.opts(name)
-  local plugin = require('lazy.core.config').plugins[name]
+  local plugin = require("lazy.core.config").plugins[name]
   if not plugin then
     return {}
   end
-  local Plugin = require 'lazy.core.plugin'
-  return Plugin.values(plugin, 'opts', false)
+  local Plugin = require("lazy.core.plugin")
+  return Plugin.values(plugin, "opts", false)
 end
 
-local submodules = F.load_submodules 'util.functions'
-return vim.tbl_extend('force', F, submodules)
+local submodules = F.load_submodules("util.functions")
+return vim.tbl_extend("force", F, submodules)

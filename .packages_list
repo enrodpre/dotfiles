@@ -68,6 +68,7 @@ inetutils
 inotify-tools
 john
 jq
+kcachegrind
 kitty
 lib32-gamemode
 lib32-libva-mesa-driver
@@ -75,6 +76,7 @@ lib32-mangohud
 lib32-vulkan-mesa-layers
 lib32-vulkan-radeon
 libappindicator-gtk3
+libbacktrace-git
 libcamera
 libcamera-ipa
 libinstpatch
@@ -82,6 +84,7 @@ libmm-glib
 libmtp
 libpipewire
 libreoffice-fresh
+libstdc++5
 libtool
 libva-mesa-driver
 libzip
@@ -100,16 +103,17 @@ man-db
 mangohud
 mariadb
 mesa-utils
-mongodb-bin
 nasm
 ncdu
 neofetch
 neovim
+ninja
 nmap
 npm
 ntfs-3g
 nvidia-utils
 nvtop
+objconv
 openvpn
 pacman
 pacman-contrib
@@ -191,7 +195,7 @@ urlencode
 usbutils
 usleep
 v4l2loopback-dkms
-vbam-wx
+valgrind
 vulkan-mesa-layers
 vulkan-radeon
 wget
