@@ -1,43 +1,19 @@
 return {
   {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-      "MunifTanjim/nui.nvim",
-      -- "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
-    },
-  },
-  {
-    "stevearc/dressing.nvim",
-    lazy = true,
-    init = function()
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.ui.select = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim" } })
-        return vim.ui.select(...)
-      end
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.ui.input = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim" } })
-        return vim.ui.input(...)
-      end
-    end,
-  },
-  {
     "RRethy/vim-illuminate",
     event = "LazyFile",
     opts = {
-      delay = 200,
+      delay = 100,
       filetypes_denylist = {
         "lazy",
         "lazy_backdrop",
       },
       large_file_cutoff = 2000,
-      -- large_file_overrides = {
-      --   providers = { "lsp" },
-      -- },
+      providers = {
+        "lsp",
+        "treesitter",
+        "regex",
+      },
     },
     config = function(_, opts)
       require("illuminate").configure(opts)
@@ -65,6 +41,22 @@ return {
     },
   },
   {
+    "stevearc/dressing.nvim",
+    lazy = true,
+    init = function()
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.ui.select = function(...)
+        require("lazy").load({ plugins = { "dressing.nvim" } })
+        return vim.ui.select(...)
+      end
+      ---@diagnostic disable-next-line: duplicate-set-field
+      vim.ui.input = function(...)
+        require("lazy").load({ plugins = { "dressing.nvim" } })
+        return vim.ui.input(...)
+      end
+    end,
+  },
+  {
     "norcalli/nvim-colorizer.lua",
     event = "UiEnter",
     opts = {
@@ -87,17 +79,6 @@ return {
         })
       end,
     },
-  },
-  {
-    "hedyhli/outline.nvim",
-    keys = {
-      {
-        "<leader>oo",
-        "<cmd>Outline<cr>",
-        desc = "[O]pen [O]utline",
-      },
-    },
-    cmd = "Outline",
   },
   {
     "lukas-reineke/indent-blankline.nvim",
@@ -156,6 +137,7 @@ return {
     lazy = false, -- make sure we load this during startup if it is your main colorscheme
     config = function(_, opts)
       require("catppuccin").setup(opts)
+      vim.cmd.colorscheme("catppuccin")
     end,
     name = "catppuccin",
     opts = {

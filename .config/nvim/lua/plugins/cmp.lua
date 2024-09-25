@@ -16,63 +16,70 @@ return {
         opts = {
           friendly_snippets = true,
         },
-        dependencies = { "rafamadriz/friendly-snippets" },
+        dependencies = { "rafamadriz/friendly-snippets", },
       },
     },
-    event = "InsertEnter",
+    event = { "CmdlineEnter", "InsertEnter", },
     config = function(_, opts)
       local cmp = require("cmp")
       local auto_select = false
 
       local mapping = {
         ["<C-n>"] = cmp.mapping(function()
-          if not cmp.visible() then
-            cmp.complete()
-          else
-            cmp.select_next_item({ behavior = cmp.SelectBehavior.Select })
-          end
-        end, { "i", "c" }),
+                                  if not cmp.visible() then
+                                    cmp.complete()
+                                  else
+                                    cmp.select_next_item({
+                                      behavior = cmp
+                                        .SelectBehavior.Select,
+                                    })
+                                  end
+                                end, { "i", "c", }),
         ["<C-p>"] = cmp.mapping(function()
-          if not cmp.visible() then
-            cmp.complete()
-          else
-            cmp.select_prev_item({ behavior = cmp.SelectBehavior.Select })
-          end
-        end, { "i", "c" }),
+                                  if not cmp.visible() then
+                                    cmp.complete()
+                                  else
+                                    cmp.select_prev_item({
+                                      behavior = cmp
+                                        .SelectBehavior.Select,
+                                    })
+                                  end
+                                end, { "i", "c", }),
         ["<C-b>"] = cmp.mapping(function()
-          cmp.scroll_docs(-4)
-        end, { "i", "c" }),
+                                  cmp.scroll_docs(-4)
+                                end, { "i", "c", }),
         ["<C-f>"] = cmp.mapping(function()
-          cmp.scroll_docs(4)
-        end, { "i", "c" }),
+                                  cmp.scroll_docs(4)
+                                end, { "i", "c", }),
         ["<CR>"] = cmp.mapping(function(fallback)
-          if cmp.visible() and cmp.get_active_entry() then
-            cmp.confirm()
-          else
-            fallback()
-          end
-        end, { "i", "c" }),
+                                 if cmp.visible() and cmp.get_active_entry() then
+                                   cmp.confirm()
+                                 else
+                                   fallback()
+                                 end
+                               end, { "i", "c", }),
         ["<C-CR>"] = cmp.mapping(function(fallback)
-          if cmp.visible() and cmp.get_active_entry() then
-            cmp.confirm()
-          else
-            fallback()
-          end
-        end, { "i", "c" }),
+                                   if cmp.visible() and cmp.get_active_entry() then
+                                     cmp.confirm()
+                                   else
+                                     fallback()
+                                   end
+                                 end, { "i", "c", }),
         ["<C-y>"] = cmp.mapping(function()
-          cmp.confirm({ select = true })
-        end, { "i", "c" }),
+                                  cmp.confirm({ select = true, })
+                                end, { "i", "c", }),
         ["<C-e>"] = cmp.mapping(function()
-          cmp.abort()
-        end, { "i", "c" }),
+                                  cmp.abort()
+                                end, { "i", "c", }),
         ["<Tab>"] = cmp.mapping(function(failback)
-          return failback
-        end, { "c" }),
+                                  return failback
+                                end, { "c", }),
       }
 
       local cmp_opts = {
         completion = {
-          completeopt = "menu,menuone,noinsert" .. (auto_select and "" or ",noselect"),
+          completeopt = "menu,menuone,noinsert" ..
+            (auto_select and "" or ",noselect"),
         },
         formatting = {
           format = function(entry, item)
@@ -89,8 +96,8 @@ return {
             }
 
             for key, width in pairs(widths) do
-              if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
-                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
+              if item [key] and vim.fn.strdisplaywidth(item [key]) > width then
+                item [key] = vim.fn.strcharpart(item [key], 0, width - 1) .. "…"
               end
             end
 
@@ -100,10 +107,10 @@ return {
         mapping = mapping,
         preselect = true,
         sources = cmp.config.sources({
-          { name = "snippets" },
-          { name = "lazydev" },
-          { name = "nvim_lua" },
-          { name = "nvim_lsp" },
+          { name = "snippets", },
+          { name = "lazydev", },
+          { name = "nvim_lua", },
+          { name = "nvim_lsp", },
         }),
         -- view = {
         --   entries = {
@@ -121,10 +128,10 @@ return {
       cmp.setup(opts)
 
       -- `/` cmdline setup.
-      cmp.setup.cmdline({ "/", "?" }, {
+      cmp.setup.cmdline({ "/", "?", }, {
         mapping = cmp.mapping.preset.cmdline(),
         sources = {
-          { name = "buffer" },
+          { name = "buffer", },
         },
       })
 
@@ -132,11 +139,12 @@ return {
       cmp.setup.cmdline(":", {
         mapping = mapping,
         sources = cmp.config.sources({
-          { name = "path" },
-          { name = "dotenv" },
-        }, {
-          { name = "cmdline" },
-        }),
+                                       { name = "path", },
+                                       { name = "dotenv", },
+                                     }, {
+                                       { name = "cmdline", },
+                                     }),
+        matching = { disallow_symbol_nonprefix_matching = false, },
       })
     end,
   },

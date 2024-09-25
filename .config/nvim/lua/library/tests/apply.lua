@@ -1,4 +1,4 @@
-local apply = require("util.functions.apply")
+local apply = require("library.functions.apply")
 
 print("Run tests for `apply`")
 

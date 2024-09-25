@@ -1,16 +1,33 @@
 #!/usr/bin/lua
 
 local tb = vim.lua.lazyreq.on_exported_call("telescope.builtin")
+local nolazy = require("telescope.builtin")
+
 return {
   {
-    "gf?",
-    tb.oldfiles,
-    desc = "[?] Go recently opened files",
+    "<leader>t",
+    group = "[T]elescope",
   },
   {
-    "g<leader>",
+    "<leader>f",
+    group = "[F]ind",
+  },
+  {
+    "<leader>fg",
+    group = "[G]rep",
+  },
+  {
+    "<S-CR>",
+    function()
+      require("noice").redirect(vim.fn.getcmdline())
+    end,
+    desc = "Redirect output of command line",
+    mode = "c",
+  },
+  {
+    "<leader>fe",
     tb.buffers,
-    desc = "[ ] Find existing buffers",
+    desc = "[ ] [F]ind [E]xisting buffers",
   },
   {
     "<leader>fb",
@@ -23,9 +40,9 @@ return {
     desc = "[F]uzzily search in current [B]uffer",
   },
   {
-    "gff",
+    "<leader>ff",
     tb.find_files,
-    desc = "[G]o [F]ind [F]iles",
+    desc = "[F]ind [F]iles",
   },
   {
     "<leader>fg",
@@ -49,26 +66,8 @@ return {
   },
   {
     "<leader>fgg",
-    ":LiveGrepGitRoot<cr>",
+    "<cmd>LiveGrepGitRoot<cr>",
     desc = "[F]ind by [G]rep on [G]it root",
-  },
-  {
-    "<leader>ll",
-    ":Telescope lazy<CR>",
-    desc = "[L]azy",
-  },
-  {
-    "<leader>lp",
-    ":Telescope lazy_plugins<CR>",
-    desc = "[P]lugins",
-  },
-  {
-    "<leader>lc",
-    -- ":Telescope content<CR>",
-    function()
-      require("telescope._extensions.content").exports.content()
-    end,
-    desc = "[C]ontent",
   },
   {
     "<leader>tb",
@@ -76,20 +75,15 @@ return {
     desc = "[T]elescope [B]uiltins",
   },
   {
+    "<leader>tk",
+    function()
+      nolazy.keymaps()
+    end,
+    desc = "[T]elescope [K]eymaps",
+  },
+  {
     "<leader>tr",
     tb.resume,
     desc = "[T]elescope [R]esume",
-  },
-  {
-    "<leader>tc",
-    ":Cheatsheet<CR>:",
-    desc = "[T]elescope [C]heatsheet",
-  },
-  {
-    "<leader>nn",
-    function()
-      vim.lua.lazyreq.on_module_call("plugins.telescope.pickers").choose_neogen()
-    end,
-    desc = "[N]eogen",
   },
 }

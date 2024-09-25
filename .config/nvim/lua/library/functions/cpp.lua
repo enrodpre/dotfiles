@@ -19,7 +19,7 @@ M.constructor = function()
       end
     end
 
-    if not classname or not strings.check_first_uppercase(classname) then
+    if classname ~= "" or not strings.check_first_uppercase(classname) then
       vim.print("Go over the class name and try again")
       return
     end
@@ -90,6 +90,51 @@ M.constructor = function()
 
   editor.put_line(target_line - 1, "")
   editor.put_line(target_line, result)
+end
+
+M.add_trailling_qualifier = function(opts)
+  local nio = require("nio")
+  local strings = vim.lua.fn.strings
+  local editor = vim.lua.fn.editor
+  local os = vim.lua.fn.os
+
+  local qualifier = opts.qualifier or ""
+  if not qualifier then vim.print("Empty qualifier") return end
+
+  local function get_context(first_line)
+    for i = first_line +1, 1, -1 do
+      local curr_line = vim.fn.getline(i)
+      break
+    end
+  end
+
+  local file_target_template = "src/{}.cpp"
+  if string.match(vim.fn.getline(1), ".template" ) then 
+    file_target_template = "include/{}.tpp"
+  end
+
+  local current_line = vim.fn.line(".")
+  local scope = opts.scope or get_context(current_line)
+  local funcname = opts.funcname or vim.fn.expand("<cword>")
+
+  if not scope then
+    scope = get_context() 
+  end
+ 
+
+
+
+  local function add_qualifier(filename, func, qual) 
+     local err, ok = pcall(nio.file.open, filename, "sr")
+    if err then vim.print("Something went wrong. " .. err) end
+
+
+  end
+
+  if vim.list_contains(header_extensions, os.file_ext(".")) then
+    local func = get_function()
+  end
+
 end
 
 return M

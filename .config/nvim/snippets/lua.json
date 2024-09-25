@@ -83,5 +83,14 @@
   "Table Keys": {
     "prefix": "keys",
     "body": "vim.tbl_keys(${1:table})"
+  },
+  "Notify": {
+    "prefix": "noti",
+    "body": "vim.notify('')"
+  },
+  "Table plugin":{
+    "prefix":"tab",
+    "body":[ "local M = {}", "return M"]
   }
+
 }

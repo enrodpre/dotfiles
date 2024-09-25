@@ -23,15 +23,15 @@ local lazy = {}
 --- Will only require the module after the first index of a module.
 --- Only works for modules that export a table.
 lazy.on_index = function(path)
-   return setmetatable({}, {
-      __index = function(_, key)
-         return require(path) [key]
-      end,
+  return setmetatable({}, {
+    __index = function(_, key)
+      return require(path)[key]
+    end,
 
-      __newindex = function(_, key, value)
-         require(path) [key] = value
-      end,
-   })
+    __newindex = function(_, key, value)
+      require(path)[key] = value
+    end,
+  })
 end
 
 --- Requires only when you call the _module_ itself.
@@ -39,11 +39,11 @@ end
 --- If you want to require an exported value from the module,
 --- see instead |lazy.on_exported_call()|
 lazy.on_module_call = function(path)
-   return setmetatable({}, {
-      __call = function(_, ...)
-         return require(path)(...)
-      end,
-   })
+  return setmetatable({}, {
+    __call = function(_, ...)
+      return require(path)(...)
+    end,
+  })
 end
 
 --- Require when an exported method is called.
@@ -62,13 +62,25 @@ end
 ---
 --- </pre>
 lazy.on_exported_call = function(path)
-   return setmetatable({}, {
-      __index = function(_, k)
-         return function(...)
-            return require(path) [k](...)
-         end
-      end,
-   })
+  return setmetatable({}, {
+    __index = function(_, k)
+      return function(...)
+        return require(path)[k](...)
+      end
+    end,
+  })
+end
+
+lazy.callback = function(fn, params)
+  return function()
+    fn(unpack(params))
+  end
+end
+
+lazy.on_exported_callback = function()
+  return function(path)
+    return lazy.on_exported_call(path)
+  end
 end
 
 return lazy

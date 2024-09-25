@@ -20,11 +20,11 @@ local surround_word = function(surr)
   vim.api.nvim_set_current_line(new_line)
 end
 
-vim.api.nvim_create_augroup("FtCustomMapping", { clear = true })
+vim.api.nvim_create_augroup("ft_mapping", { clear = true })
 
-local ft_mapping = function(c)
+local create_au_ft_mapping = function(c)
   vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
-    group = "FtCustomMapping",
+    group = "ft_mapping",
     desc = c.desc,
     pattern = c.pattern,
     callback = function()
@@ -48,6 +48,11 @@ local C = {
     { "<leader>s", group = "[M]odify" },
     { "<leader>sa", group = "[A]dd" },
     { "<leader>sr", group = "[R]emove" },
+    {
+      "gdh",
+      "<Cmd>ClangdSwitchSourceHeader<CR>",
+      desc = "[G]oto [H]eader/source",
+    },
     {
       "<leader>sao",
       function()
@@ -104,16 +109,32 @@ local C = {
       function()
         vim.lua.fn.cpp.constructor()
       end,
-      desc = "Create a cpp constructor efortless",
+      desc = "Create a cpp constructor effortless",
       noremap = true,
       silent = true,
     },
   },
 }
 
-ft_mapping(C)
+create_au_ft_mapping(C)
 
 return {
+  {
+    "gl",
+    group = "[G]o [L]sp",
+  },
+  {
+    "<leader>w",
+    group = "[W]orkspace",
+  },
+  {
+    "<leader>x",
+    group = "[X] Trouble",
+  },
+  {
+    "gd",
+    group = "[G]o [D]ocument",
+  },
   {
     "gdd",
     "<cmd>Trouble diagnostics toggle<cr>",
@@ -132,48 +153,6 @@ return {
     desc = "[G]o [D]ocument [S]ymbols",
   },
   {
-    "<leader>rr",
-    vim.lsp.buf.rename,
-    desc = "[R]ename",
-  },
-  {
-    "<leader>re",
-    function()
-      require("telescope").extensions.refactoring.refactors()
-    end,
-    desc = "[R]efactor",
-    mode = { "n", "x" },
-  },
-  {
-    "<leader>rpp",
-    function()
-      require("refactoring").debug.printf({ below = false })
-    end,
-    desc = "[P]rintf",
-  },
-  {
-    "<leader>rpb",
-    function()
-      require("refactoring").debug.printf({ below = true })
-    end,
-    desc = "[P]rintf [Below]",
-  },
-  {
-    "<leader>rv",
-    function(...)
-      lazyreq("refactoring").debug.print_var(...)
-    end,
-    desc = "Print [V]ar",
-    mode = { "x", "n" },
-  },
-  {
-    "<leader>rc",
-    function(...)
-      require("refactoring").debug.cleanup(...)
-    end,
-    desc = "[C]leanup",
-  },
-  {
     "<leader>od",
     vim.diagnostic.open_float,
     desc = "[O]pen Dianostic",
@@ -183,11 +162,6 @@ return {
     vim.lsp.buf.incoming_calls,
     desc = "[O]pen incoming calls",
   },
-  -- {
-  --   '<leader>oo',
-  --   vim.lsp.buf.outgoing_calls,
-  --   desc = '[O]pen outcoming calls',
-  -- },
   {
     "<leader>os",
     vim.lsp.buf.signature_help,
@@ -226,6 +200,13 @@ return {
     desc = "[G]oto [D]eclaration",
   },
   {
+    "<leader>nc",
+    function()
+      require("neogen").generate({})
+    end,
+    desc = "[C]lass",
+  },
+  {
     "gld",
     tb.lsp_definitions,
     desc = "[G]oto [D]efinition",
@@ -239,10 +220,5 @@ return {
     "gli",
     tb.lsp_implementations,
     desc = "[G]oto [I]mplementation",
-  },
-  {
-    "gdh",
-    "<Cmd>ClangdSwitchSourceHeader<CR>",
-    desc = "[G]oto [H]eader/source",
   },
 }

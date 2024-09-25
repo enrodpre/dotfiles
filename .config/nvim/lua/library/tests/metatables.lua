@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 
-local metatables = require("util.metatables")
+local metatables = require("library.metatables")
 
 
 describe("Testing metatables", function()

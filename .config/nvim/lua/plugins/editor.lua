@@ -1,38 +1,34 @@
 local dial_map = vim.lua.lazyreq.on_exported_call("dial.map")
-
-local dial_keys = function()
-  local keys = {}
-
-  local manipulate = dial_map.manipulate
-  local data = {
-    { "n", "<C-a>", "increment", "normal", "Increment <cword>" },
-    { "n", "<C-x>", "decrement", "normal", "Decrement <cword>" },
-    { "n", "g<C-a>", "increment", "gnormal", "Additive increment <cword>" },
-    { "n", "g<C-x>", "decrement", "gnormal", "Additive decrement <cword>" },
-    { "v", "<C-a>", "increment", "visual", "Increment <cword>" },
-    { "v", "<C-x>", "decrement", "visual", "Decrement <cword>" },
-    { "v", "g<C-a>", "increment", "gvisual", "Additive increment <cword>" },
-    { "v", "g<C-x>", "decrement", "gvisual", "Additive decrement <cword>" },
-  }
-
-  for _, row in ipairs(data) do
-    local mode, lhs, dir, rhs, desc = unpack(row)
-    local key = {
-      lhs,
-      function()
-        manipulate(dir, rhs)
-      end,
-      desc = desc,
-      mode = mode,
-    }
-
-    table.insert(keys, key)
-  end
-
-  return keys
-end
+local lazyreq = vim.lua.lazyreq.on_exported_call
 
 return {
+  {
+    "chrishrb/gx.nvim",
+    keys = { { "gx", "<cmd>Browse<cr>", mode = { "n", "x" } } },
+    cmd = { "Browse" },
+    init = function()
+      vim.g.netrw_nogx = 1
+    end,
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("gx").setup({
+        open_browser_app = "xdg-open",
+        open_browser_args = {},
+        handlers = {
+          plugin = true,
+          github = true,
+          package_json = true, -- open dependencies from package.json
+          search = true,
+        },
+        handler_options = {
+          search_engine = "duckduckgo",
+          select_for_search = false, -- if your cursor is e.g. on a link, the pattern for the link AND for the word will always match. This disables this behaviour for default so that the link is opened without the select option for the word AND link
+          git_remotes = { "upstream", "origin" },
+          git_remote_push = false,
+        },
+      })
+    end,
+  },
   {
     "smoka7/multicursors.nvim",
     event = "VeryLazy",
@@ -40,54 +36,171 @@ return {
       "nvimtools/hydra.nvim",
     },
     opts = {
+      DEBUG_MODE = false,
       float_opts = {
         border = "none",
       },
-      position = "right",
+      position = "top",
     },
-    cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern", "MCvisualPattern", "MCunderCursor" },
+    cmd = { "MCstart", "MCvisual", "MCclear", "MCpattern" },
     keys = {
       {
         mode = { "v", "n" },
-        "<Leader>m",
+        "<Leader>ms",
         "<cmd>MCstart<cr>",
+        desc = "Create a selection for selected text or word under the cursor",
+      },
+      {
+        mode = { "v", "n" },
+        "<Leader>mv",
+        "<cmd>MCvisual<cr>",
+        desc = "Create a selection for selected text or word under the cursor",
+      },
+      {
+        mode = { "v", "n" },
+        "<Leader>mp",
+        "<cmd>MCpattern<cr>",
+        desc = "Create a selection for selected text or word under the cursor",
+      },
+      {
+        mode = { "v", "n" },
+        "<Leader>mc",
+        "<cmd>MCclear<cr>",
         desc = "Create a selection for selected text or word under the cursor",
       },
     },
   },
   {
-    "folke/persistence.nvim",
-    event = "BufReadPre", -- this will only start session saving when an actual file was opened
+    "Vigemus/iron.nvim",
+    lazy = true,
+    config = function(_, opts)
+      local iron = require("iron.core")
+      iron.setup(opts)
+    end,
+    keys = {
+      {
+        "<leader>oc",
+        "<cmd>IronRepl<CR>",
+        desc = "[O]pen IronRepl [C]onsole",
+      },
+    },
     opts = {
-      -- add any custom options here
+      config = {
+        scratch_repl = true,
+        repl_definition = {
+          sh = {
+            command = { "zsh" },
+          },
+          python = {
+            command = { "python3" }, -- or { "ipython", "--no-autoindent" }
+            lazyreq("iron.fts.common").bracketed_paste_python,
+          },
+        },
+        repl_open_cmd = function()
+          return require("iron.view").top("10%")
+        end,
+      },
+      keymaps = {
+        send_motion = "<space>sc",
+        visual_send = "<space>sc",
+        send_file = "<space>sf",
+        send_line = "<space>sl",
+        send_paragraph = "<space>sp",
+        send_until_cursor = "<space>su",
+        send_mark = "<space>sm",
+        mark_motion = "<space>mc",
+        mark_visual = "<space>mc",
+        remove_mark = "<space>md",
+        cr = "<space>s<cr>",
+        interrupt = "<space>s<space>",
+        exit = "<space>sq",
+        clear = "<space>cl",
+      },
+      -- If the highlight is on, you can change how it looks
+      -- For the available options, check nvim_set_hl
+      highlight = {
+        italic = true,
+      },
+      ignore_blank_lines = true, -- ignore blank lines when sending visual select lines
     },
   },
   {
-    "echasnovski/mini.pairs",
-    enabled = true,
-    event = { "InsertEnter", "CmdlineEnter" },
+    "folke/persistence.nvim",
+    event = "BufReadPre",
     opts = {
-      modes = { command = true, insert = true },
-      mappings = {
-        ["<"] = {
-          action = "open",
-          pair = "<>",
-          neigh_pattern = "\r.",
-          register = { cr = false },
-        },
-        -- ["("] = { action = "open", pair = "()", neigh_pattern = "[^\\][^%)]" },
-        -- ["["] = { action = "open", pair = "[]", neigh_pattern = "[^\\][^%]]" },
-        -- ["{"] = { action = "open", pair = "{}", neigh_pattern = "[^\\][^%}]" },
+      fast_wrap = {
+        map = "",
       },
     },
   },
   {
-    "tpope/vim-sleuth",
-    event = "LazyFile",
+    "windwp/nvim-autopairs",
+    event = "InsertEnter",
+    opts = {
+      fast_wrap = {},
+      check_ts = true,
+      ts_config = {
+        lua = { "string" },
+        cpp = {},
+      },
+    },
+    config = function(_, opts)
+      --- Setup
+      opts = opts or {}
+      local npairs = require("nvim-autopairs")
+      npairs.setup(opts)
+      local regex_next_number = "\\s*[0-9]\\s*"
+
+      --- custom rules
+      local Rule = require("nvim-autopairs.rule")
+      local cond = require("nvim-autopairs.conds")
+      npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
+      npairs.add_rules({
+        Rule("<", ">", { "cpp", "c" })
+          :with_pair(cond.not_before_regex(regex_next_number))
+          :with_pair(cond.not_after_regex(regex_next_number)),
+      })
+
+      --- cmp integration
+      local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+      local cmp = require("cmp")
+      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+    end,
   },
   {
     "monaqa/dial.nvim",
-    keys = dial_keys(),
+    keys = function()
+      local keys = {}
+
+      local manipulate = dial_map.manipulate
+      local data = {
+        { "n", "<C-a>", "increment", "normal", "Increment <cword>" },
+        { "n", "<C-x>", "decrement", "normal", "Decrement <cword>" },
+        { "n", "g<C-a>", "increment", "gnormal", "Additive increment <cword>" },
+        { "n", "g<C-x>", "decrement", "gnormal", "Additive decrement <cword>" },
+        { "v", "<C-a>", "increment", "visual", "Increment <cword>" },
+        { "v", "<C-x>", "decrement", "visual", "Decrement <cword>" },
+        { "v", "g<C-a>", "increment", "gvisual", "Additive increment <cword>" },
+        { "v", "g<C-x>", "decrement", "gvisual", "Additive decrement <cword>" },
+      }
+
+      for _, row in ipairs(data) do
+        local mode, lhs, dir, rhs, desc = unpack(row)
+        local key = {
+          lhs,
+          function()
+            manipulate(dir, rhs)
+          end,
+          desc = desc,
+          mode = mode,
+        }
+
+        table.insert(keys, key)
+      end
+
+      return keys
+    end,
+
     config = function()
       local augend = require("dial.augend")
 
@@ -140,79 +253,27 @@ return {
     end,
   },
   {
-    "karb94/neoscroll.nvim",
-    enabled = false,
-    keys = {
-      {
-        "<C-u>",
-        function()
-          require("neoscroll").ctrl_u({ duration = 250, easing = "sine" })
-        end,
-      },
-      {
-        "<C-d>",
-        function()
-          require("neoscroll").ctrl_d({ duration = 250, easing = "sine" })
-        end,
-      },
-      -- Use the "circular" easing functio
-      {
-        "<C-b>",
-        function()
-          require("neoscroll").ctrl_b({ duration = 250, easing = "circular" })
-        end,
-      },
-      {
-        "<C-f>",
-        function()
-          require("neoscroll").ctrl_f({ duration = 250, easing = "circular" })
-        end,
-      },
-      -- When no value is passed the `easing` option supplied in `setup()` is used
-      {
-        "<C-y>",
-        function()
-          require("neoscroll").scroll(-0.1, { move_cursor = false, duration = 100 })
-        end,
-      },
-      {
-        "<C-e>",
-        function()
-          require("neoscroll").scroll(0.1, { move_cursor = false, duration = 100 })
-        end,
-      },
-    },
-
-    config = function()
-      require("neoscroll").setup({ easing = "quadratic" })
-    end,
-  },
-  {
     "echasnovski/mini.surround",
-    event = "LazyFile",
+    event = "InsertEnter",
     opts = {},
   },
   {
     "echasnovski/mini.move",
     event = "VeryLazy",
     opts = {
-      {
-        -- Module mappings. Use `''` (empty string) to disable one.
-        mappings = {
-          -- Move visual selection in Visual mode. Defaults are Alt (Meta) + hjkl.
-          left = "<M-h>",
-          right = "<M-l>",
-          down = "<M-j>",
-          up = "<M-k>",
+      mappings = {
+        left = "<C-h>",
+        right = "<C-l>",
+        down = "<C-j>",
+        up = "<C-k>",
 
-          -- Move current line in Normal mode
-          line_left = "<M-h>",
-          line_right = "<M-l>",
-          line_down = "<M-j>",
-          line_up = "<M-k>",
-        },
+        line_left = "<C-h>",
+        line_right = "<C-l>",
+        line_down = "<C-j>",
+        line_up = "<C-k>",
       },
     },
+    config = true,
   },
   {
     "folke/ts-comments.nvim",
@@ -221,15 +282,14 @@ return {
   },
   {
     "MagicDuck/grug-far.nvim",
-    opts = { headerMaxWidth = 80 },
-    cmd = "GrugFar",
+    opts = { headerMaxWidth = 160 },
     keys = {
       {
         "<leader>sr",
         function()
           local grug = require("grug-far")
           local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
-          grug.grug_far({
+          grug.open({
             transient = true,
             prefills = {
               filesFilter = ext and ext ~= "" and "*." .. ext or nil,
@@ -240,48 +300,5 @@ return {
         desc = "Search and Replace",
       },
     },
-  },
-  {
-    "ThePrimeagen/harpoon",
-    enabled = false,
-    branch = "harpoon2",
-    opts = {
-      menu = {
-        width = vim.api.nvim_win_get_width(0) - 4,
-      },
-      settings = {
-        save_on_toggle = true,
-      },
-    },
-    keys = function()
-      local keys = {
-        {
-          "<leader>H",
-          function()
-            require("harpoon"):list():add()
-          end,
-          desc = "Harpoon File",
-        },
-        {
-          "<leader>h",
-          function()
-            local harpoon = require("harpoon")
-            harpoon.ui:toggle_quick_menu(harpoon:list())
-          end,
-          desc = "Harpoon Quick Menu",
-        },
-      }
-
-      for i = 1, 5 do
-        table.insert(keys, {
-          "<leader>" .. i,
-          function()
-            require("harpoon"):list():select(i)
-          end,
-          desc = "Harpoon to File " .. i,
-        })
-      end
-      return keys
-    end,
   },
 }

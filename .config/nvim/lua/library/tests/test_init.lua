@@ -1,5 +1,5 @@
-local init = require("utils")
-local test_util = require("utils.test_util")
+local init = require("librarys")
+local test_util = require("librarys.test_util")
 local test_harness = require("plenary.test_harness")
 local assert = require("luassert")
 
@@ -48,7 +48,7 @@ describe("Tests of init module", function()
     local expected = {
       a = 1, b = 2, c = 4, d = 3, e = 12, z = 'a', x = 'b'
     }
-    local current = init.load_function_module("utils.tests.data.package")
+    local current = init.load_function_module("librarys.tests.data.package")
     test_util.assert_tbl_equals(expected, current)
 
     expected = {
@@ -59,7 +59,7 @@ describe("Tests of init module", function()
   end)
   it("module_abspath", function()
     local expected = "/home/kike/.config/nvim/lua/utils/tests/data/package"
-    local actual = init.module_abspath("utils.tests.data.package")
+    local actual = init.module_abspath("librarys.tests.data.package")
 
     assert.equals(expected, actual)
   end)

@@ -3,7 +3,7 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
 
-require("config.builtins")
+require("config.library")
 
 require("config.options")
 
@@ -106,7 +106,7 @@ require("lazy").setup({
   checker = { enabled = false },
   change_detection = { notify = false },
   dev = {
-    path = vim.fn.getenv("HOME") .. "/coding/nvim/plugins",
+    path = vim.fn.getenv("HOME") .. "/src",
   },
   defaults = { lazy = true },
   performance = {
@@ -122,6 +122,10 @@ require("lazy").setup({
       },
     },
   },
+  pkg = {
+    enabled = true,
+    sources = { "lazy", "rockspec" },
+  },
   profiling = {
     loader = false,
     require = false,
@@ -129,7 +133,7 @@ require("lazy").setup({
 })
 
 require("config.autocmds")
-
+require("config.keymap")
 require("config.commands")
 
-vim.cmd.colorscheme("catppuccin")
+-- vim.cmd.colorscheme("catppuccin")

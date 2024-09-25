@@ -20,13 +20,15 @@ vim.api.nvim_create_autocmd("BufDelete", {
   callback = function(args)
     for _, tab in ipairs(vim.api.nvim_list_tabpages()) do
       local bufs = vim.t[tab].bufks
-      if bufs then
-        for i, bufnr in ipairs(bufs) do
-          if bufnr == args.buf then
-            table.remove(bufs, i)
-            vim.t[tab].bufs = bufs
-            break
-          end
+      if not bufs then
+        return
+      end
+
+      for i, bufnr in ipairs(bufs) do
+        if bufnr == args.buf then
+          table.remove(bufs, i)
+          vim.t[tab].bufs = bufs
+          break
         end
       end
     end
@@ -35,53 +37,10 @@ vim.api.nvim_create_autocmd("BufDelete", {
 
 vim.api.nvim_create_autocmd("BufNewFile", {
   desc = "Sets shebang when creating a new file",
-  pattern = "*.*",
+  pattern = "*.sh",
   callback = function()
-    local ext_to_binary = {
-      awk = "awk",
-      hs = "runhaskell",
-      jl = "julia",
-      lua = "lua",
-      m = "octave",
-      mak = "make",
-      php = "php",
-      pl = "perl",
-      py = "python3",
-      r = "Rscript",
-      rb = "rubyoptions",
-      scala = "scala",
-      sh = "bash",
-      tcl = "tclsh",
-      tk = "wish",
-    }
-
-    local ext = vim.fn.expand("%:e")
-
-    if ext == nil or ext == "" then
-      return
-    end
-
-    local binary = ext_to_binary[ext]
-
-    if binary == nil then
-      return
-    end
-
-    local handle = io.popen("which " .. binary)
-    local shebang
-    if handle ~= nil then
-      shebang = handle:read()
-      handle:close()
-    else
-      shebang = "/usr/bin/env " .. binary
-    end
-
-    local parent_dir = vim.api.nvim_command("echo fnamemodify(getcwd(),':t')")
-
-    if parent_dir == "bin" then
-      vim.cmd([[ autocmd BufWritePost *.* :autocmd VimLeave * :!chmod u+x % ]])
-      vim.cmd([[ f expand("%:r") ]])
-    end
+    local program = "zsh"
+    local shebang = string.format("/usr/bin/env " .. program)
 
     vim.api.nvim_put({ "#!" .. shebang }, "", true, true)
     vim.fn.append(1, "")
@@ -119,18 +78,8 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   pattern = "*",
 })
 
--- Log every type of filetype opened
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function(event)
-    local logfile = "filetypes.txt"
-    local filepath = "/home/kike/.config/nvim/" .. logfile
-    local comm = "grep -q " .. event.match .. " " .. filepath .. "|| echo " .. event.match .. " >> " .. filepath
-
-    os.execute(comm)
-  end,
-})
-
 -- close some filetypes with <q>
+-- use :ls or bufname()
 vim.api.nvim_create_autocmd("FileType", {
   pattern = {
     "PlenaryTestPopup",
@@ -147,6 +96,8 @@ vim.api.nvim_create_autocmd("FileType", {
     "checkhealth",
     "neotest-summary",
     "neotest-output-panel",
+    "[No Name]",
+    "*.log",
   },
   callback = function(event)
     vim.bo[event.buf].buflisted = false
@@ -158,10 +109,11 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_augroup("filetype_cpp", { clear = true })
+
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+  group = "filetype_cpp",
   pattern = { "*.tpp", "*.ipp" },
   callback = function()
     vim.opt.filetype = "cpp"
   end,
-  group = "filetype_cpp",
 })

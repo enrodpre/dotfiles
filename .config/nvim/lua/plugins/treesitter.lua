@@ -35,21 +35,11 @@ return {
     "nvim-treesitter/nvim-treesitter",
     enabled = treesitter_enabled,
     dependencies = {
-      "nvim-treesitter/playground",
       "nvim-treesitter/nvim-treesitter-textobjects",
-      {
-        "RRethy/nvim-treesitter-endwise",
-        opts = {
-          endwise = {
-            enable = true,
-          },
-        },
-      },
     },
     event = { "LazyFile", "VeryLazy" },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
     build = ":TSUpdate",
-    lazy = vim.fn.argc(-1) == 0,
     init = function(plugin)
       require("lazy.core.loader").add_to_rtp(plugin)
       require("nvim-treesitter.query_predicates")
@@ -81,7 +71,7 @@ return {
         "gitattributes",
       },
       auto_install = true,
-      highlight = { enable = true },
+      highlight = { enable = true, additional_vim_regex_highlighting = true },
       indent = { enable = true },
       incremental_selection = { enable = false },
       endwise = { enable = true },
@@ -137,9 +127,9 @@ return {
           },
         },
       },
-      config = function(_, opts)
-        require("nvim-treesitter.configs").setup(opts)
-      end,
     },
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
+    end,
   },
 }

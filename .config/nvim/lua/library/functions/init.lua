@@ -13,39 +13,6 @@ function F.put_text(...)
   return ...
 end
 
-function F.get_selected_text()
-  local visual = vim.fn.mode() == "v"
-
-  if visual == true then
-    local saved_reg = vim.fn.getreg("v")
-    vim.cmd([[noautocmd sil norm! "vy]])
-    local sele = vim.fn.getreg("v")
-    vim.fn.setreg("v", saved_reg)
-    return sele
-  else
-    return vim.fn.expand("<cWORD>")
-  end
-end
-
-function F.get_selected(opts)
-  local as = opts.as or "obj"
-  local selected_text = F.get_selected_text()
-
-  if as == "text" then
-    return selected_text
-  elseif as == "obj" then
-    local loader, err = load("return " .. F.trim(selected_text))
-    if loader then
-      local obj = loader()
-      return vim.inspect(obj)
-    else
-      print("error calling to func ", err)
-    end
-  else
-    error("Bad assss")
-  end
-end
-
 function F.fg(name)
   local hlgrp = vim.api.nvim_get_hl(0, {
     name = name,
@@ -156,5 +123,5 @@ function F.opts(name)
   return Plugin.values(plugin, "opts", false)
 end
 
-local submodules = F.load_submodules("util.functions")
+local submodules = F.load_submodules("library.functions")
 return vim.tbl_extend("force", F, submodules)

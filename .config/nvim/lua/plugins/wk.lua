@@ -1,11 +1,11 @@
 #!/usr/bin/lua
 
-local mapdelay = vim.lua.metatables.default()
-
-local lazy_call = vim.lua.lazyreq.on_module_call
-
 local global_mapping = {
-  { "kj", "<Esc>", desc = "Better escape", mode = { "i", "c" } },
+  {
+    "<c-]",
+    proxy = "<c-o>",
+    desc = "Go back (<C-O>)",
+  },
   {
     "<leader>a",
     group = "[A]pply",
@@ -20,16 +20,11 @@ local global_mapping = {
     group = "[D]ap",
   },
   {
-    "oo",
-    "o<Esc>k",
-    desc = "Newline forward",
-    hidden = true,
-  },
-  {
-    "OO",
-    "0i<CR><Esc>",
-    desc = "Newline backwards",
-    hidden = true,
+    "<leader>ar",
+    function()
+      vim.print(vim.lua.fn.editor)
+    end,
+    desc = "[A]pply [R]eload",
   },
   {
     "<C-Q>",
@@ -42,37 +37,27 @@ local global_mapping = {
     group = "[S]et",
   },
   {
-    "gl",
-    group = "[G]o [L]sp",
-  },
-  {
-    "<leader>w",
-    group = "[W]orkspace",
-  },
-  {
-    "<leader>x",
-    group = "[X] Trouble",
-  },
-  {
-    "<leader>rp",
-    group = "[P]rintf",
-  },
-  {
-    "<leader>r",
-    group = "[R]efactoring",
-  },
-  {
     "<leader>c",
     group = "[C]omment",
-  },
-  {
-    "gd",
-    group = "[G]o [D]ocument",
   },
   {
     "<C-Q><C-Q>",
     ":q! <CR>",
     desc = "Force quit",
+  },
+  {
+    "<C-s>",
+    "<cmd>w<CR>",
+    desc = "Save",
+  },
+  { "kj", "<Esc>", desc = "Better escape", mode = { "i", "c" } },
+  {
+    "g",
+    group = "[G]o",
+  },
+  {
+    "<leader>t",
+    group = "[T]elescope",
   },
   {
     "<leader>f",
@@ -81,19 +66,6 @@ local global_mapping = {
   {
     "<leader>fg",
     group = "[G]rep",
-  },
-  {
-    "<C-s>",
-    "<cmd>w<CR>",
-    desc = "Save",
-  },
-  {
-    "g",
-    group = "[G]o",
-  },
-  {
-    "<leader>t",
-    group = "[T]elescope",
   },
   {
     "<leader>l",
@@ -111,38 +83,17 @@ local global_mapping = {
     "<Esc>",
     "<Esc>:let @/ = ''<CR>",
     desc = "Escape will clear search pattern",
+    silent = true,
   },
   { "<leader>e", group = "[E]xecute" },
-  {
-    "<leader>aa",
-    function()
-      local ft = vim.bo.filetype
-      if ft == "python" then
-        os.execute("autoimport " .. vim.fn.expand("%:S"))
-        vim.cmd("e")
-      end
-    end,
-    desc = "[A]pply [A]utoimport",
-  },
   {
     "<leader>at",
     "<Plug>PlenaryTestFile",
     desc = "[A]pply [T]est current file",
   },
   {
-    "<leader>n",
-    group = "[N]eogen",
-  },
-  {
-    "<leader>nc",
-    function()
-      require("neogen").generate({})
-    end,
-    desc = "[C]lass",
-  },
-  {
     "<leader>om",
-    ":messages<CR>",
+    "<cmd>messages<cr>",
     desc = "[O]pen [M]essages",
   },
   {
@@ -161,29 +112,13 @@ local global_mapping = {
     group = "[U]i",
   },
   {
-    "<leader>uc",
-    lazy_call("notify").dismiss,
-    desc = "Notify [C]lose",
-  },
-  {
-    "<leader>g",
-    group = "[G]it",
+    "<leader>ob",
+    group = "buffers",
+    expand = function()
+      return require("which-key.extras").expand.buf()
+    end,
   },
 }
-
-local unmap = { "gc", "gcc" }
-for _, rhs in ipairs(unmap) do
-  table.insert(global_mapping, { rhs, cond = false, hidden = true })
-end
-
-table.insert(mapdelay, {
-  n = {
-    o = 25,
-    O = 25,
-    oo = 0,
-    OO = 0,
-  },
-})
 
 return {
   "folke/which-key.nvim",
@@ -192,15 +127,13 @@ return {
   },
   event = "VeryLazy",
   opts = {
-    delay = function(ctx)
-      return mapdelay[ctx.mode][ctx.keys] or ctx.plugin and 0 or 200
-    end,
     preset = "modern",
     spec = global_mapping,
-    notify = false,
+    notify = true,
     triggers = {
       { "<auto>", mode = "nixsotc" },
       { "s", mode = "n" },
     },
+    debug = false,
   },
 }

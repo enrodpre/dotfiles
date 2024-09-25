@@ -4,17 +4,14 @@ local M = {
   {
     "williamboman/mason.nvim",
     event = "VeryLazy",
-    opts = { ui = { icons = {
-      package_installed = "✓",
-      package_pending = "➜",
-      package_uninstalled = "✗",
-    } } },
-  },
-  {
-    "jay-babu/mason-null-ls.nvim",
-    event = "VeryLazy",
-    dependencies = {
-      "williamboman/mason.nvim",
+    opts = {
+      ui = {
+        icons = {
+          package_installed = "✓",
+          package_pending = "➜",
+          package_uninstalled = "✗",
+        },
+      },
     },
   },
   require("plugins.lsp.lspconfig"),

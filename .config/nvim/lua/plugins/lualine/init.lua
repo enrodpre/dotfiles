@@ -1,3 +1,5 @@
+local components = require("plugins.lualine.components")
+
 return {
   "nvim-lualine/lualine.nvim",
   dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -22,58 +24,47 @@ return {
     local opts = {
       options = {
         icons_enabled = true,
-        theme = "auto",
+        theme = "catppuccin",
         globalstatus = vim.o.laststatus == 3,
         component_separators = "|",
         -- section_separators = "",
       },
-      -- extensions = { "mason", "lazy", "quickfix" },
+      extensions = { "mason", "lazy", "quickfix" },
       sections = {
         lualine_a = {
           "mode",
           {
             function()
-              return vim.fn.reg_recording() ~= "" and "Recording Macro" or ""
+              return "Recording Macro"
             end,
             cond = function()
               return vim.fn.reg_recording() ~= ""
             end,
           },
         },
-        lualine_b = { "diagnostics" },
-        lualine_c = { "filename" },
+        lualine_b = { components.colored_filename() },
+        lualine_c = {
+          components.trouble_status(),
+        },
         lualine_x = {
           "encoding",
           "filetype",
-          -- stylua: ignore
-          -- {
-          --   function() return "  " .. require("dap").status() end,
-          --   cond = function() return package.loaded["dap"] and require("dap").status() ~= "" end,
-          --   color = function() return vim.lua.fn.fg("Debug") end,
-          -- },
-          -- stylua: ignore
         },
         lualine_y = {
-          "vim.fn.line('$')",
+          "searchcount",
+          "selectioncount",
         },
-        lualine_z = { "location" },
+        lualine_z = {
+          {
+            "location",
+            fmt = function(str)
+              local template = "%s  | %s"
+              return template:format(str, vim.fn.line("$"))
+            end,
+          },
+        },
       },
     }
-
-    -- local trouble = require 'trouble'
-    -- local symbols = trouble.statusline
-    --   and trouble.statusline {
-    --     mode = 'lsp_document_symbols',
-    --     groups = {},
-    --     title = false,
-    --     filter = { range = true },
-    --     format = '{kind_icon}{symbol.name:Normal}',
-    --     hl_group = 'lualine_c_normal',
-    --   }
-    -- table.insert(opts.sections.lualine_x, {
-    --   symbols and symbols.get,
-    --   cond = symbols and symbols.has,
-    -- })
 
     return opts
   end,

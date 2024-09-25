@@ -15,9 +15,12 @@ opt.hlsearch = true
 opt.textwidth = 90
 opt.columns = 87
 
+opt.matchpairs = "(:),{:},[:],<:>"
+
 -- Make line numbers default
 opt.number = true
 opt.cursorline = true -- Enable highlighting of the current line
+opt.cursorlineopt = "both"
 
 -- Enable mouse mode
 opt.mouse = "a"
@@ -61,3 +64,12 @@ opt.timeoutlen = 300
 opt.relativenumber = true
 
 vim.o.termguicolors = true
+
+local enable = {
+  noice = true,
+  dap = false,
+  testing = false,
+  git = false,
+}
+
+vim.g.enable = enable

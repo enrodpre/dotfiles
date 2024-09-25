@@ -3,12 +3,10 @@
 local M = {
   {
     "neovim/nvim-lspconfig",
-    -- event = 'VeryLazy',
     dependencies = {
       { "williamboman/mason.nvim" },
       {
         "williamboman/mason-lspconfig.nvim",
-        config = function() end,
       },
     },
     event = "LazyFile",
@@ -33,32 +31,38 @@ local M = {
           prefix = "●",
         },
       },
-      document_highlight = { enabled = false },
+      document_highlight = { enabled = true },
       inlay_hints = {
         enabled = false,
       },
       servers = {
         bashls = { filetypes = { "sh", "zsh", "bash" } },
-        -- clangd = {
-        --   cmd = {
-        --     "clangd",
-        --     "--background-index",
-        --     "--clang-tidy",
-        --     "--header-insertion=iwyu",
-        --     "--completion-style=detailed",
-        --     "--function-arg-placeholders",
-        --     "--fallback-style=llvm",
-        --     "--offset-encoding=utf-16",
-        --   },
-        --   init_options = {
-        --     usePlaceholders = true,
-        --     completeUnimported = true,
-        --     clangdFileStatus = false,
-        --   },
-        -- },
-        cssls = { filetypes = "rasi" },
-        -- html = { filetypes = { "html", "twig", "hbs" } },
-        -- jsonls = {},
+        clangd = {
+          cmd = {
+            "clangd",
+            "--enable-config",
+            "--background-index",
+            "--clang-tidy",
+            "--header-insertion=iwyu",
+            "--completion-style=detailed",
+            "--function-arg-placeholders",
+            "--fallback-style=llvm",
+            "--offset-encoding=utf-16",
+          },
+          init_options = {
+            usePlaceholders = true,
+            completeUnimported = true,
+            clangdFileStatus = true,
+            semanticHighlighting = true,
+            -- Increase the timeout for semantic tokens
+            semanticTokens = {
+              -- Adjust the timeout value as needed
+              timeout = 5000, -- Example: 5000 ms
+            },
+          },
+          filetypes = { "hpp", "cpp" },
+        },
+        cssls = { filetypes = { "rasi" } },
         lua_ls = {
           Lua = {
             codeLens = {
@@ -78,10 +82,10 @@ local M = {
               semicolon = "Disable",
               arrayIndex = "Disable",
             },
-            diagnostics = {
-              globals = { "safereq", "lazyreq" },
-            },
-            semantoc = { enable = false },
+            -- diagnostics = {
+            --   globals = { "safereq", "lazyreq" },
+            -- },
+            -- semantoc = { enable = false },
           },
         },
         pylsp = {
@@ -120,7 +124,7 @@ local M = {
       end
 
       vim.diagnostic.config(vim.deepcopy(opts.diagnostic))
-      --
+
       local servers = opts.servers or {}
       local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
       local capabilities = vim.tbl_deep_extend(
@@ -129,17 +133,13 @@ local M = {
         has_cmp and cmp_nvim_lsp.default_capabilities() or {},
         opts.capabilities or {}
       )
-      capabilities.textDocument.foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true,
-      }
-      -- capabilities.textDocument.semanticTokens = false
-      -- capabilities.textDocument.inlayHint = false
-      -- capabilities.workspace.inlayHint.refreshSupport = false
-      -- capabilities.workspace.inlayHint.refreshSupport = false
+      -- capabilities.textDocument.foldingRange = {
+      --   dynamicRegistration = true,
+      --   lineFoldingOnly = true,
+      -- }
 
       vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(client, bufnr)
+        callback = function(_, bufnr)
           vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = bufnr,
             callback = function(args)
@@ -149,21 +149,50 @@ local M = {
         end,
         once = true,
       })
+      -- capabilities.textDocument.semanticTokens = false
+      -- capabilities.textDocument.inlayHint = false
+      -- capabilities.workspace.inlayHint.refreshSupport = false
+      -- capabilities.workspace.inlayHint.refreshSupport = false
+
+      require("mason").setup()
 
       local mason_lspconfig = require("mason-lspconfig")
       mason_lspconfig.setup({
         ensure_installed = vim.tbl_keys(servers),
-        handlers = {
-          function(server_name)
-            require("lspconfig")[server_name].setup({
-              capabilities = capabilities,
-              settings = servers[server_name],
-              filetypes = (servers[server_name] or {}).filetypes,
-            })
-          end,
-        },
       })
+
+      mason_lspconfig.setup_handlers({
+        function(server_name)
+          require("lspconfig")[server_name].setup({
+            capabilities = capabilities,
+            settings = servers[server_name],
+            filetypes = (servers[server_name] or {}).filetypes,
+          })
+        end,
+      })
+
       vim.lsp.set_log_level("warn")
+    end,
+  },
+  {
+    "dense-analysis/ale",
+    event = "VeryLazy",
+    enabled = false,
+    config = function()
+      -- Configuration goes here.
+      local g = vim.g
+
+      g.ale_linters = {
+        cpp = { "gcc", "clangcheck", "cppcheck" },
+        lua = { "lua_language_server" },
+      }
+
+      g.ale_fixers = { cpp = { "astyle", "clang-format", "clangtidy" } }
+
+      g.ale_cpp_cc_options = "-std=c++23"
+      g.ale_completion_enabled = 1
+      g.ale_echo_cursor = 0
+      g.ale_completion_autoimport = 0
     end,
   },
 }
