@@ -110,7 +110,8 @@ require("lazy").setup({
   },
   defaults = { lazy = true },
   performance = {
-    rtp = {
+     reset = true, 
+     rtp = {
       disabled_plugins = {
         "gzip",
         "netrwPlugin",

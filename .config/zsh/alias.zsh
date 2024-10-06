@@ -6,6 +6,7 @@ alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias icat="kitty +kitten icat"
 alias visudo='EDITOR=nvim visudo'
 
+alias firefox='icecat'
 #Replaces
 alias cat='bat'
 alias rm='rip'
@@ -34,9 +35,3 @@ alias help=run-help
 alias d='dirs -v'
 for i in $(seq 9); do alias "$i"="cd +${i}"; done
 unset i
-
-
-# Project specific alias
-CMMDIR="/home/kike/src/cmm"
-alias -g currentcmm="$CMMDIR/build/standalone/current.cmm"
-alias -g asmgen="$CMMDIR/build/"

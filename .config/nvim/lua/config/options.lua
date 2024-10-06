@@ -15,6 +15,7 @@ opt.hlsearch = true
 opt.textwidth = 90
 opt.columns = 87
 
+opt.wrap = false
 opt.matchpairs = "(:),{:},[:],<:>"
 
 -- Make line numbers default
@@ -73,3 +74,10 @@ local enable = {
 }
 
 vim.g.enable = enable
+
+vim.filetype.add({
+  extension = {
+    tpp = "cpp",
+    cmm = "cpp",
+  },
+})

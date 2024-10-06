@@ -1,0 +1,20 @@
+[
+{
+  "description": "rmlint json-dump of lint files",
+  "cwd": "/home/kike/.config/nvim/",
+  "args": "rmlint",
+  "version": "2.10.2",
+  "rev": "unknown",
+  "progress": 0,
+  "checksum_type": "blake2b",
+  "merge_directories": false
+}, {
+  "aborted": false,
+  "progress": 100,
+  "total_files": 63,
+  "ignored_files": 2,
+  "ignored_folders": 0,
+  "duplicates": 0,
+  "duplicate_sets": 0,
+  "total_lint_size": 0
+}]

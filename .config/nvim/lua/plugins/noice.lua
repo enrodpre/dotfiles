@@ -3,6 +3,7 @@
 return {
   "folke/noice.nvim",
   event = "UiEnter",
+  enabled=false,
   dependencies = {
     "MunifTanjim/nui.nvim",
     "rcarriga/nvim-notify",

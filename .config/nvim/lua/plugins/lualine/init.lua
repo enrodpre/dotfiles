@@ -44,7 +44,7 @@ return {
         },
         lualine_b = { components.colored_filename() },
         lualine_c = {
-          components.trouble_status(),
+          "diagnostics",
         },
         lualine_x = {
           "encoding",

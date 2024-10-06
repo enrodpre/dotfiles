@@ -50,7 +50,7 @@ local global_mapping = {
     "<cmd>w<CR>",
     desc = "Save",
   },
-  { "kj", "<Esc>", desc = "Better escape", mode = { "i", "c" } },
+  { "kj", "<Esc>", desc = "Better escape", mode = { "i" } },
   {
     "g",
     group = "[G]o",
@@ -101,7 +101,7 @@ local global_mapping = {
     group = "[O]pen",
   },
   {
-    "<leader>ol",
+    "<leader>oll",
     function()
       require("lazy").show()
     end,
@@ -123,7 +123,7 @@ local global_mapping = {
 return {
   "folke/which-key.nvim",
   dependencies = {
-    { "echasnovski/mini.icons" },
+    "echasnovski/mini.icons",
   },
   event = "VeryLazy",
   opts = {

@@ -14,14 +14,70 @@ local M = {
     end,
   },
   {
+    "madskjeldgaard/cppman.nvim",
+    depedencies = {
+      { "MunifTanjim/nui.nvim" },
+    },
+    keys = {
+      "<leader>ok",
+      "<leader>fk",
+    },
+    config = function()
+      local cppman = require("cppman")
+      cppman.setup()
+
+      -- Make a keymap to open the word under cursor in CPPman
+      vim.keymap.set("n", "<leader>ok", function()
+        cppman.open_cppman_for(vim.fn.expand("<cword>"))
+      end)
+
+      -- Open search box
+      vim.keymap.set("n", "<leader>fk", function()
+        cppman.input()
+      end)
+    end,
+  },
+  -- {
+  --   "Civitasv/cmake-tools.nvim",
+  --   lazy = true,
+  --   init = function()
+  --     local loaded = false
+  --     local function check()
+  --       local cwd = vim.uv.cwd()
+  --       if vim.fn.filereadable(cwd .. "/CMakeLists.txt") == 1 then
+  --         require("lazy").load({ plugins = { "cmake-tools.nvim" } })
+  --         loaded = true
+  --       end
+  --     end
+  --     check()
+  --     vim.api.nvim_create_autocmd("DirChanged", {
+  --       callback = function()
+  --         if not loaded then
+  --           check()
+  --         end
+  --       end,
+  --     })
+  --   end,
+  --   opts = {},
+  -- },
+  {
     "danymat/neogen",
+    keys = {
+      {
+        "<leader>ad",
+        function()
+          require("neogen").generate()
+        end,
+        desc = "[A]pply [D]oc Generation",
+      },
+    },
     config = true,
-    keys = { "<leader>n" },
   },
   {
     "folke/trouble.nvim",
     cmd = "Trouble",
     keys = {
+      ---group = "[X] Trouble",
       {
         "<leader>xx",
         "<cmd>Trouble diagnostics toggle<cr>",
@@ -54,6 +110,9 @@ local M = {
       },
     },
     opts = {
+      modes = {
+        diagnostics = { auto_open = true },
+      },
       keys = {
         ["<c-p>"] = "prev",
         ["<c-n>"] = "next",

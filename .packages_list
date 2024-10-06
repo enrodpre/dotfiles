@@ -14,21 +14,22 @@ betterlockscreen
 bind
 binutils
 bison
+boost
 boost-libs
 btop
 ca-certificates
 ca-certificates-mozilla
 calc
+ccls
 clamav
 cmake
-conan
 cppcheck
 cppdap
+cppman
 debugedit
 dhcpcd
 dict-freedict-eng-spa
 dictd
-doctest
 droidcam
 entr
 eslint
@@ -40,7 +41,6 @@ fastfetch
 fd
 file
 findutils
-firefox
 flex
 fluidsynth
 freepats-general-midi
@@ -64,6 +64,7 @@ grub
 gzip
 hdparm
 i3-wm
+icecat-bin
 inetutils
 inotify-tools
 john
@@ -84,7 +85,6 @@ libmm-glib
 libmtp
 libpipewire
 libreoffice-fresh
-libstdc++5
 libtool
 libva-mesa-driver
 libzip
@@ -93,7 +93,6 @@ linux-firmware
 linux-headers
 logrotate
 lua51
-luarocks
 luit
 m4
 magic_enum
@@ -107,6 +106,7 @@ nasm
 ncdu
 neofetch
 neovim
+netbeans
 ninja
 nmap
 npm
@@ -118,7 +118,8 @@ openvpn
 pacman
 pacman-contrib
 pacutils
-paru
+paru-git
+paru-git-debug
 patch
 pavucontrol
 perf
@@ -191,11 +192,13 @@ ttf-meslo-nerd-font-powerlevel10k
 ttf-weather-icons
 tuxguitar
 unrar
+unzip
 urlencode
 usbutils
 usleep
 v4l2loopback-dkms
 valgrind
+vi
 vulkan-mesa-layers
 vulkan-radeon
 wget
@@ -207,8 +210,6 @@ xautomation
 xbindkeys
 xbitmaps
 xclip
-xdg-desktop-portal
-xdg-desktop-portal-gtk
 xdg-ninja
 xf86-video-amdgpu
 xorg-server

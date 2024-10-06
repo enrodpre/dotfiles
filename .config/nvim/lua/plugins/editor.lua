@@ -126,6 +126,7 @@ return {
   },
   {
     "folke/persistence.nvim",
+    enabled=false,
     event = "BufReadPre",
     opts = {
       fast_wrap = {
@@ -138,6 +139,7 @@ return {
     event = "InsertEnter",
     opts = {
       fast_wrap = {},
+      enable_check_bracket_line = false,
       check_ts = true,
       ts_config = {
         lua = { "string" },
@@ -149,22 +151,34 @@ return {
       opts = opts or {}
       local npairs = require("nvim-autopairs")
       npairs.setup(opts)
-      local regex_next_number = "\\s*[0-9]\\s*"
 
       --- custom rules
       local Rule = require("nvim-autopairs.rule")
       local cond = require("nvim-autopairs.conds")
       npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
-      npairs.add_rules({
-        Rule("<", ">", { "cpp", "c" })
-          :with_pair(cond.not_before_regex(regex_next_number))
-          :with_pair(cond.not_after_regex(regex_next_number)),
-      })
+      npairs.add_rule(Rule("<", ">", {
+        "-html",
+        "-javascriptreact",
+        "-typescriptreact",
+      }):with_pair(
+        -- regex will make it so that it will auto-pair on
+        -- `a<` but not `a <`
+        -- The `:?:?` part makes it also
+        -- work on Rust generics like `some_func::<T>()`
+        cond.before_regex("%a+:?:?$", 3)
+      ):with_move(function(o)
+        return o.char == ">"
+      end))
 
       --- cmp integration
       local cmp_autopairs = require("nvim-autopairs.completion.cmp")
       local cmp = require("cmp")
-      cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+      cmp.event:on(
+        "confirm_done",
+        cmp_autopairs.on_confirm_done({
+          sh = false,
+        })
+      )
     end,
   },
   {
@@ -282,17 +296,28 @@ return {
   },
   {
     "MagicDuck/grug-far.nvim",
-    opts = { headerMaxWidth = 160 },
+    opts = {
+      headerMaxWidth = 160,
+    },
     keys = {
       {
-        "<leader>sr",
+        "<leader>or",
         function()
           local grug = require("grug-far")
-          local ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+          local ext
+          if vim.bo.filetype == "cpp" then
+            ext = "?pp"
+          else
+            ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+          end
           grug.open({
             transient = true,
-            prefills = {
+            startCursorRow = 4,
+            startInInsertMode = false,
+            preflls = {
               filesFilter = ext and ext ~= "" and "*." .. ext or nil,
+              replacement = vim.fn.expand("<cword>"),
+              search = vim.fn.expand("<cword>"),
             },
           })
         end,

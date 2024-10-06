@@ -2,12 +2,41 @@
 
 local M = {
   {
+    "ranjithshegde/ccls.nvim",
+    event = "LazyFile",
+    opts = {
+      lsp = {
+        init_options = {
+          compilationDatabaseDirectory = "build",
+        },
+        server = {
+          offset_encoding = "utf-8",
+          -- cmd = { "ccls", "--gcc-toolchain=/usr" },
+        },
+        disable_capabilities = {
+          completionProvider = true,
+          documentFormattingProvider = true,
+          documentRangeFormattingProvider = true,
+          documentHighlightProvider = true,
+          documentSymbolProvider = true,
+          workspaceSymbolProvider = true,
+          renameProvider = true,
+          hoverProvider = true,
+          codeActionProvider = true,
+        },
+        disable_diagnostics = true,
+        disable_signature = true,
+        codelens = { enable = true },
+      },
+    },
+  },
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       { "williamboman/mason.nvim" },
-      {
-        "williamboman/mason-lspconfig.nvim",
-      },
+      -- {
+      --   "williamboman/mason-lspconfig.nvim",
+      -- },
     },
     event = "LazyFile",
     keys = require("plugins.lsp.mapping"),
@@ -42,15 +71,16 @@ local M = {
             "clangd",
             "--enable-config",
             "--background-index",
-            "--clang-tidy",
+            "-j 4",
+            "--pretty",
             "--header-insertion=iwyu",
+            "--import-insertions",
+            "--clang-tidy",
+            "--limit-references=0",
             "--completion-style=detailed",
-            "--function-arg-placeholders",
-            "--fallback-style=llvm",
-            "--offset-encoding=utf-16",
           },
           init_options = {
-            usePlaceholders = true,
+            usePlaceholders = false,
             completeUnimported = true,
             clangdFileStatus = true,
             semanticHighlighting = true,
@@ -60,7 +90,6 @@ local M = {
               timeout = 5000, -- Example: 5000 ms
             },
           },
-          filetypes = { "hpp", "cpp" },
         },
         cssls = { filetypes = { "rasi" } },
         lua_ls = {
@@ -172,27 +201,6 @@ local M = {
       })
 
       vim.lsp.set_log_level("warn")
-    end,
-  },
-  {
-    "dense-analysis/ale",
-    event = "VeryLazy",
-    enabled = false,
-    config = function()
-      -- Configuration goes here.
-      local g = vim.g
-
-      g.ale_linters = {
-        cpp = { "gcc", "clangcheck", "cppcheck" },
-        lua = { "lua_language_server" },
-      }
-
-      g.ale_fixers = { cpp = { "astyle", "clang-format", "clangtidy" } }
-
-      g.ale_cpp_cc_options = "-std=c++23"
-      g.ale_completion_enabled = 1
-      g.ale_echo_cursor = 0
-      g.ale_completion_autoimport = 0
     end,
   },
 }

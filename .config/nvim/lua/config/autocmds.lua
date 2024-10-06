@@ -108,12 +108,13 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-vim.api.nvim_create_augroup("filetype_cpp", { clear = true })
-
-vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
-  group = "filetype_cpp",
-  pattern = { "*.tpp", "*.ipp" },
+vim.api.nvim_create_autocmd({ "BufWritePost" }, {
   callback = function()
-    vim.opt.filetype = "cpp"
+    -- try_lint without arguments runs the linters defined in `linters_by_ft`
+    -- for the current filetype
+    ok,err = pcall(require,"lint")
+    if ok then
+      require("lint").try_lint()
+    end
   end,
 })

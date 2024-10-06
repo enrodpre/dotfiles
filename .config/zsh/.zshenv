@@ -45,12 +45,13 @@ export WORDLISTS=$XDG_DATA_HOME/seclists/
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-path+=("$HOME/.local/bin" "$XDG_DATA_HOME"/cargo/bin)
-export PATH
+export LUA_PATH='/usr/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?.lua;/usr/local/share/lua/5.1/?/init.lua;/usr/share/lua/5.1/?/init.lua;/usr/local/lib/lua/5.1/?.lua;/usr/local/lib/lua/5.1/?/init.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua;./?.lua;./?/init.lua;/home/kike/.luarocks/share/lua/5.1/?.lua;/home/kike/.luarocks/share/lua/5.1/?/init.lua;/home/kike/.local/share/lua/5.1/?.lua;/home/kike/.local/share/lua/5.1/?/init.lua'
+export LUA_CPATH='/usr/local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;/usr/local/lib/lua/5.1/loadall.so;/usr/lib/lua/5.1/loadall.so;./?.so;/home/kike/.luarocks/lib/lua/5.1/?.so;/home/kike/.local/lib/lua/5.1/?.so'
+export PATH='/home/kike/.local/pythonz/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/home/kike/.local/bin:/home/kike/.local/share/cargo/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:/home/kike/.local/share/zsh/plugins/0-colors/bin:/home/kike/.cargo/bin'
 
 #Add custom functions
 source $ZDOTDIR/functions.zsh
 
 source "$ZDOTDIR/alias.zsh"
 
-export CMMCURR="while"
+export GTEST_COLOR=1

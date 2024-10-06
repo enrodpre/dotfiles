@@ -15,10 +15,10 @@ M.specs = {
     "tsakirist/telescope-lazy.nvim",
     cmd = "Telescope lazy",
   },
-  {
-    "polirritmico/telescope-lazy-plugins.nvim",
-    cmd = "Telescope plugins",
-  },
+  -- {
+  --   "polirritmico/telescope-lazy-plugins.nvim",
+  --   cmd = "Telescope plugins",
+  -- },
   { "nvim-telescope/telescope-vimspector.nvim", cmd = "Telescope inspector" },
   {
     "doctorfree/cheatsheet.nvim",
@@ -134,9 +134,9 @@ M.opts = {
     },
   },
   lazy = {},
-  lazy_plugins = {
-    lazy_config = vim.fn.stdpath("config") .. "/init.lua",
-  },
+  -- lazy_plugins = {
+  --   lazy_config = vim.fn.stdpath("config") .. "/init.lua",
+  -- },
   cheatsheet = {},
   lsp_handlers = {
     telescope = { require("telescope.themes").get_dropdown({}) },

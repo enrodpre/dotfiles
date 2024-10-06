@@ -1,0 +1,66 @@
+#!/usr/bin/lua
+
+local M = {
+  {
+    "williamboman/mason.nvim",
+    event = "VeryLazy",
+    opts = {
+      ui = {
+        icons = {
+          package_installed = "✓",
+          package_pending = "➜",
+          package_uninstalled = "✗",
+        },
+      },
+    },
+  },
+  {
+    "jay-babu/mason-null-ls.nvim",
+    event = "VeryLazy",
+    dependencies = {
+      "williamboman/mason.nvim",
+    },
+  },
+  require("plugins.lsp.lspconfig"),
+  require("plugins.lsp.nonels"),
+  require("plugins.lsp.format"),
+  {
+    "mfussenegger/nvim-lint",
+    event = "LspAttach",
+    opts = function(_, opts)
+      -- local lint = require("lint")
+      -- lint.linters_by_ft = {
+      --   cpp = { "cppcheck" },
+      -- }
+
+      -- lint.setup(opts)
+    end,
+    config = function() end,
+  },
+  {
+    "dense-analysis/ale",
+    enabled = false,
+    event = "LspAttach",
+    config = function()
+      -- Configuration goes here.
+      local g = vim.g
+
+      g.ale_linters = {
+        cpp = { "clangtidy" },
+        lua = { "lua_language_server" },
+      }
+
+      g.ale_fixers = { cpp = { "clangtidy" } }
+
+      g.ale_completion_enabled = 1
+      g.ale_completion_autoimport = 1
+      g.ale_fix_on_save = 0
+      g.ale_echo_cursor = 0
+      g.ale_set_quickfix = 1
+      g.ale_cpp_clangtidy_checks = { "bugprone-checks", "cppcoreguidelines-checks", "clang-analyzer-*" }
+      g.ale_cpp_clangtidy_use_global = 1
+    end,
+  },
+}
+
+return M

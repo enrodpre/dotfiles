@@ -41,6 +41,10 @@ local create_au_ft_mapping = function(c)
   })
 end
 
+local is_ft = function(filetype)
+  return vim.api.nvim_get_option_value("filetype", { buf = vim.api.nvim_get_current_buf() }) == filetype
+end
+
 local C = {
   desc = "Some keybindings to ease cpp",
   pattern = "*.?pp",
@@ -118,18 +122,38 @@ local C = {
 
 create_au_ft_mapping(C)
 
-return {
+M = {
   {
     "gl",
     group = "[G]o [L]sp",
   },
+
   {
-    "<leader>w",
-    group = "[W]orkspace",
+    "<leader>wd",
+    "<cmd>Trouble diagnostics toggle<cr>",
+    desc = "[W]orkspace [D]iagnostics",
   },
   {
-    "<leader>x",
-    group = "[X] Trouble",
+    "<leader>wa",
+    vim.lsp.buf.add_workspace_folder,
+    desc = "[W]orkspace [A]dd Folder",
+  },
+  {
+    "<leader>wr",
+    vim.lsp.buf.remove_workspace_folder,
+    desc = "[W]orkspace [R]emove Folder",
+  },
+  {
+    "<leader>wl",
+    function()
+      vim.print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end,
+    desc = "[W]orkspace [L]ist Folders",
+  },
+  {
+    "<leader>ws",
+    tb.lsp_dynamic_workspace_symbols,
+    desc = "[W]orkspace [S]ymbols",
   },
   {
     "gd",
@@ -168,43 +192,9 @@ return {
     desc = "[O]pen [S]ignature",
   },
   {
-    "<leader>wd",
-    "lsp",
-    desc = "[W]orkspace [D]iagnostics",
-  },
-  {
-    "<leader>wa",
-    vim.lsp.buf.add_workspace_folder,
-    desc = "[W]orkspace [A]dd Folder",
-  },
-  {
-    "<leader>wr",
-    vim.lsp.buf.remove_workspace_folder,
-    desc = "[W]orkspace [R]emove Folder",
-  },
-  {
-    "<leader>wl",
-    function()
-      vim.print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end,
-    desc = "[W]orkspace [L]ist Folders",
-  },
-  {
-    "<leader>ws",
-    tb.lsp_dynamic_workspace_symbols,
-    desc = "[W]orkspace [S]ymbols",
-  },
-  {
     "glD",
     vim.lsp.buf.declaration,
     desc = "[G]oto [D]eclaration",
-  },
-  {
-    "<leader>nc",
-    function()
-      require("neogen").generate({})
-    end,
-    desc = "[C]lass",
   },
   {
     "gld",
@@ -222,3 +212,5 @@ return {
     desc = "[G]oto [I]mplementation",
   },
 }
+
+return M
