@@ -8,6 +8,7 @@
 !bat/
 !clangd/
 !git/
+!fd/
 !i3/
 !kitty/
 !luarocks/
@@ -15,6 +16,7 @@
 !picom/
 !polybar/
 !redshift/
+ripgreprc
 !rofi/
 !wal/
 !wallpaper/

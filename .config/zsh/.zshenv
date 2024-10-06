@@ -7,7 +7,8 @@ export XDG_CACHE_HOME=$HOME/.cache
 
 CONFIG=$XDG_CONFIG_HOME
 
-# Config location overrides
+#Config location overrides
+export RIPGREP_CONFIG_PATH=$CONFIG/ripgreprc
 export ZDOTDIR=$CONFIG/zsh
 export GITIGNORE_DIR=$XDG_DATA_HOME/gitignore
 export KITTY_ORIG_ZDOTDIR=$ZDOTDIR
