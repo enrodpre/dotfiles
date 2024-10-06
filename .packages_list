@@ -175,6 +175,7 @@ sed
 smartmontools
 source-highlight
 steam
+stow
 strace
 sudo
 symlinks
