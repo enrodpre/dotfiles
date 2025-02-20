@@ -6,7 +6,7 @@ alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias icat="kitty +kitten icat"
 alias visudo='EDITOR=nvim visudo'
 
-alias firefox='icecat'
+alias xclip="xclip -selection clip"
 #Replaces
 alias cat='bat'
 alias rm='rip'
@@ -18,13 +18,13 @@ alias llg='eza -lB@aa --git'
 alias top='btop'
 alias mv='mv -i'
 alias ds='dots status'
+alias ripgrep='rg'
 alias rg='rg -p'
 alias rgh='rg -p --hidden'
 # alias du="du -h"
 # alias df="df -h"
 alias luarocks='luarocks --lua-version 5.1'
 
-alias gdbdebug="./run -g && coredumpctl dump -o core && gdb built/standalone/CmmLang core"
 # HELP
 unalias run-help
 autoload run-help

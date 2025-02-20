@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/zsh
 
 debug=false
 two_monitors=false
@@ -10,11 +10,7 @@ xrandr --output HDMI-A-0 --set TearFree on
 # xrandr --output HDMI-0 --primary --mode 2560x1440 --pos 0x0 --rotate normal --output DVI-D-0
 
 if [ -f "$usermodmap" ]; then
-	xmodmap "$usermodmap"
+  xmodmap "$usermodmap"
 fi
 
-if [[ "$debug" = true ]]; then
-	exec i3 -V -d all &>>"$HOME/logs/i3.log"
-else
-	exec i3
-fi
+exec i3

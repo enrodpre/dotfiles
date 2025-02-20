@@ -1,11 +1,11 @@
 function run-again {
-    zle up-history
-    zle accept-line
+  zle up-history
+  zle accept-line
 }
 
 function feed-suggestion {
-    zle autosuggest-accept
-    zle accept-line
+  zle autosuggest-accept
+  zle accept-line
 }
 
 zle -N run-again
@@ -19,7 +19,7 @@ bindkey -r "^L"
 
 bindkey '^R' history-incremental-search-backward
 
-bindkey '^[[121;9u' autosuggest-accept
+bindkey '' autosuggest-accept
 
 bindkey '^[[120;9u' run-again
 

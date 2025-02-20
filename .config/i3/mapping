@@ -12,6 +12,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
+bindsym $mod+u exec zsh -c "xmodmap $HOME/.config/Xmodmap"
 bindsym $mod+c exec --no-startup-id change_pulseaudio_sink
 bindsym $mod+Shift+t exec --no-startup-id zsh $HOME/.config/polybar/launch.sh
 # bindsym $mod+t exec --no-startup-id zsh $config/scripts/set_theme.sh -r 
@@ -40,7 +41,6 @@ bindsym $mod+Shift+$up move up
 bindsym $mod+Shift+$right move right
 
 bindsym $mod+b split h
-
 bindsym $mod+v split v
 
 bindsym $mod+f fullscreen toggle

@@ -1,12 +1,25 @@
-#!/usr/bin/lua
-
 return {
   "folke/noice.nvim",
   event = "UiEnter",
-  enabled=false,
   dependencies = {
     "MunifTanjim/nui.nvim",
-    "rcarriga/nvim-notify",
+    {
+      "rcarriga/nvim-notify",
+      opts = {
+        timeout = 3000,
+        max_height = function()
+          return math.floor(vim.o.lines * 0.75)
+        end,
+        max_width = function()
+          return math.floor(vim.o.columns * 0.75)
+        end,
+        on_open = function(win)
+          vim.api.nvim_win_set_config(win, {
+            zindex = 100,
+          })
+        end,
+      },
+    },
   },
   config = function(_, opts)
     local focused = true
@@ -33,15 +46,15 @@ return {
         end,
       },
       view = "notify_send",
-      opts = { stop = false },
+      opts = { stop = false, },
     })
     require("noice").setup(opts)
   end,
   opts = {
     cmdline = {
-      view = "cmdline_popup",
-      { "<C-d>", "<Down>", desc = "Go more recent on cmdline history", mode = "c", noremap = true },
-      { "<C-u>", "<Up>", desc = "Go more old on cmdline history", mode = "c", noremap = true },
+      view = "cmdline",
+      { "<C-d>", "<Down>", desc = "Go more recent on cmdline history", mode = "c", noremap = true, },
+      { "<C-u>", "<Up>",   desc = "Go more old on cmdline history",    mode = "c", noremap = true, },
     },
     commands = {
       history = {
@@ -67,7 +80,7 @@ return {
       -- override cmp documentation with Noice (needs the other options to work)
       ["cmp.entry.get_documentation"] = true,
     },
-    popupmenu = { backend = "cmp" },
+    popupmenu = { backend = "cmp", },
     presets = {
       bottom_search = true,
       command_palette = false,
@@ -80,36 +93,36 @@ return {
           event = "msg_show",
           kind = "search_count",
         },
-        opts = { skip = true },
+        opts = { skip = true, },
       },
       {
         filter = {
           event = "notify",
           find = "No code actions available",
         },
-        opts = { skip = true },
+        opts = { skip = true, },
       },
       {
         filter = {
           event = "notify",
           find = "Tag not found",
         },
-        opts = { skip = false },
+        opts = { skip = false, },
       },
       {
         filter = {
           event = "notify",
           find = "No tags file",
         },
-        opts = { skip = false },
+        opts = { skip = false, },
       },
       {
         filter = {
           event = "msg_show",
           any = {
-            { find = "%d+L, %d+B" },
-            { find = "; after #%d+" },
-            { find = "; before #%d+" },
+            { find = "%d+L, %d+B", },
+            { find = "; after #%d+", },
+            { find = "; before #%d+", },
           },
         },
         view = "mini",
@@ -140,10 +153,10 @@ return {
         },
         border = {
           style = "rounded",
-          padding = { 0, 1 },
+          padding = { 0, 1, },
         },
         win_options = {
-          winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo" },
+          winhighlight = { Normal = "Normal", FloatBorder = "DiagnosticInfo", },
         },
       },
     },

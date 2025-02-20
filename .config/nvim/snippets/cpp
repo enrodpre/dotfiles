@@ -1,0 +1,15 @@
+{
+  //"StmtVisitor": {
+ //   "prefix": "stmtvisitor",
+ //   "body": [
+ //     "semantics* control;",      
+ //     "void operator()(const declaration::variable* vardecl) const {}",
+ //     "void operator()(const declaration::function* func) const {}",
+ //     "void operator()(const iteration::while_* while_) const {}",
+ //     "void operator()(const selection::if_* if_) const {}",
+ //     "void operator()(const jump::break_*) const { cmm::messaging::not_implemented(); }",
+ //     "void operator()(const jump::continue_*) const { cmm::messaging::not_implemented(); }",
+ //     "void operator()(const jump::return_* ret) const {}",
+ //   ]
+ // }
+}

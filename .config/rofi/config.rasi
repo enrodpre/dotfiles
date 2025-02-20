@@ -55,7 +55,7 @@ configuration {
 
 	/*---------- Keybindings ----------*/
 	kb-accept-entry: "Control+j,Return,KP_Enter";
-	kb-cancel: "Escape,Control+c,Control+g,Control+bracketleft";
+	/*kb-cancel: "Escape,Control+c,Control+g,Control+bracketleft";*/
 /*
 	kb-primary-paste: "Control+V,Shift+Insert";
 	kb-secondary-paste: "Control+v,Insert";

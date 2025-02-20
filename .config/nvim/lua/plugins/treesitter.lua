@@ -6,7 +6,6 @@ return {
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
-    enabled = treesitter_enabled,
     config = function()
       -- When in diff mode, we want to use the default
       -- vim text objects c & C instead of the treesitter ones.
@@ -14,9 +13,10 @@ return {
       local configs = require("nvim-treesitter.configs")
       for name, fn in pairs(move) do
         if name:find("goto") == 1 then
-          move[name] = function(q, ...)
+          move [name] = function(q, ...)
             if vim.wo.diff then
-              local config = configs.get_module("textobjects.move")[name] ---@type table<string,string>
+              local config = configs.get_module("textobjects.move")
+                [name] ---@type table<string,string>
               for key, query in pairs(config or {}) do
                 if q == query and key:find("[%]%[][cC]") then
                   vim.cmd("normal! " .. key)
@@ -37,8 +37,8 @@ return {
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
     },
-    event = { "LazyFile", "VeryLazy" },
-    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall" },
+    event = { "VeryLazy", },
+    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall", },
     build = ":TSUpdate",
     init = function(plugin)
       require("lazy.core.loader").add_to_rtp(plugin)
@@ -69,12 +69,13 @@ return {
         "git_rebase",
         "gitignore",
         "gitattributes",
+        "java",
       },
       auto_install = true,
-      highlight = { enable = true, additional_vim_regex_highlighting = true },
-      indent = { enable = true },
-      incremental_selection = { enable = false },
-      endwise = { enable = true },
+      highlight = { enable = true, additional_vim_regex_highlighting = true, },
+      indent = { enable = true, },
+      incremental_selection = { enable = false, },
+      endwise = { enable = true, },
       textobjects = {
         lsp_interop = {
           enable = true,
@@ -120,10 +121,10 @@ return {
         swap = {
           enable = true,
           swap_next = {
-            ["gp"] = "@parameter.inner",
+            [",a"] = "@parameter.inner",
           },
           swap_previous = {
-            ["gP"] = "@parameter.inner",
+            [",A"] = "@parameter.inner",
           },
         },
       },

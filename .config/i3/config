@@ -4,4 +4,5 @@ for_window [title="Exclude"] floating enable
 
 include 'style'
 include 'mapping'
-include 'startup'
+
+exec zsh -c "$HOME/.config/i3/scripts/startup.sh"

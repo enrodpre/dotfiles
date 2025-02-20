@@ -1,9 +1,0 @@
-exec --no-startup-id picom -b
-
-exec_always --no-startup-id xautolock -time 10 -locker "sh /home/kike/.config/i3/scripts/autolock_suspend.sh" 
-
-exec_always --no-startup-id /home/kike/.config/polybar/launch.sh &
-
-exec --no-startup-id redshift
-# exec --no-startup-id set_theme -s dark-corridor -n
-exec --no-startup-id xwallpaper --output HDMI-A-0 --stretch $HOME/.local/share/wallpapers/dark-corridor.jpg

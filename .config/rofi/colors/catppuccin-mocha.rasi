@@ -12,7 +12,7 @@
     debug: #FFFFFFFF;
 
     // width: 600;
-    font: "JetBrainsMono Nerd Font 11";
+    font: "MesloLGS NF";
 
     normal-background:           var(background);
     normal-foreground:           var(foreground);
