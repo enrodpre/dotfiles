@@ -1,3 +1,5 @@
+# vim:ft=i3config:
+
 set $config $HOME/.config/i3
 
 for_window [title="Exclude"] floating enable
@@ -6,3 +8,5 @@ include 'style'
 include 'mapping'
 
 exec zsh -c "$HOME/.config/i3/scripts/startup.sh"
+
+for_window [title="Picture-in-Picture"] sticky enable

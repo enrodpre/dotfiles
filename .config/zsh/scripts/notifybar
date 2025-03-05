@@ -1,6 +1,0 @@
-#!/usr/bin/env zsh
-
-# Send to text to polybar
-# $1 text to send
-# $2 time to wait until send reset
-test -n "$1" && {polybar-msg action message send "$1" >/dev/null && sleep ${2-3} && polybar-msg action message reset >/dev/null} > /dev/null &

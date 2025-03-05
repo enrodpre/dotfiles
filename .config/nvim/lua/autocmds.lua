@@ -25,8 +25,8 @@ vim.api.nvim_create_autocmd("BufNewFile", {
     local shebang = string.format("/usr/bin/env " .. program)
 
     vim.api.nvim_put({ "#!" .. shebang, }, "", true, true)
-    vim.fn.append(1,         "")
-    vim.fn.append(1,         "")
+    vim.fn.append(1, "")
+    vim.fn.append(1, "")
     vim.fn.cursor({ 3, 0, })
   end,
 })
@@ -63,7 +63,7 @@ vim.api.nvim_create_autocmd("FileType", {
     "[No Name]",
   },
   callback = function(event)
-    vim.bo [event.buf].buflisted = false
+    vim.bo[event.buf].buflisted = false
     vim.keymap.set("n", "q", "<cmd>close<cr>", {
       buffer = event.buf,
       silent = true,
@@ -75,6 +75,8 @@ local grp = vim.api.nvim_create_augroup("write_pre", { clear = false, })
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = grp,
   callback = function(args)
-    vim.lsp.buf.format({ bufnr = args.buf, })
+    if #vim.lsp.get_clients() > 0 then
+      vim.lsp.buf.format({ bufnr = args.buf, })
+    end
   end,
 })
