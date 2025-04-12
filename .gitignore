@@ -3,11 +3,7 @@
 !.gitignore
 !.gitmodules
 !.gitconfig
-!LICENSE
-!.packages_list
 !.Xauthority
-!.xinitrc
-!.zshenv
 
 !.config/
 !.local/

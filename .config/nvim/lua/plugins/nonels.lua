@@ -22,7 +22,7 @@ return {
     require("mason").setup()
     require("mason-null-ls").setup({
       ensure_installed = {},
-      automatic_installation = true,
+      automatic_installation = false,
       handlers = {},
     })
 
@@ -36,7 +36,6 @@ return {
           extra_args = { "--cppcheck-build-dir=/tmp/cppcheck", "--project=compile_commands.json", },
         }),
         -- null_ls.builtins.diagnostics.gccdiag,
-        null_ls.builtins.diagnostics.mypy,
         null_ls.builtins.diagnostics.zsh,
         null_ls.builtins.hover.printenv,
         null_ls.builtins.formatting.shfmt.with({
@@ -44,6 +43,10 @@ return {
         }),
         null_ls.builtins.formatting.clang_format,
         null_ls.builtins.formatting.cmake_format,
+
+        null_ls.builtins.formatting.black,
+
+        -- null_ls.builtins.formatting.black,
 
       },
       update_in_insert = true,

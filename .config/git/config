@@ -2,3 +2,7 @@
 	name = Kike
 	email = enrodpre@gmail.com
 
+[alias]
+    tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
+[init]
+	defaultBranch = main

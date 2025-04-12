@@ -92,6 +92,7 @@ local mapping = {
   -- },
 }
 
+
 return {
   {
     "neovim/nvim-lspconfig",
@@ -206,11 +207,6 @@ return {
             -- semantoc = { enable = false },
           },
         },
-        pylsp = {
-          plugins = {
-            rope_autoimport = { enabled = true, },
-          },
-        },
         yamlls = {},
       },
     },
@@ -239,20 +235,60 @@ return {
         end,
       })
 
+      local venv_path = os.getenv('VIRTUAL_ENV')
+      local py_path = nil
+      -- decide which python executable to use for mypy
+      if venv_path ~= nil then
+        py_path = venv_path .. "/bin/python3"
+      else
+        py_path = vim.g.python3_host_prog
+      end
+
+      require("lspconfig").pylsp.setup {
+        settings = {
+          pylsp = {
+            plugins = {
+              -- formatter options
+              black = { enabled = true },
+              autopep8 = { enabled = false },
+              yapf = { enabled = false },
+              -- linter options
+              pyflakes = { enabled = false },
+              pycodestyle = { enabled = false },
+              -- type checker
+              pylsp_mypy = { enabled = true, },
+              -- auto-completion options
+              jedi_completion = { fuzzy = false },
+              -- import sorting
+              pyls_isort = { enabled = true },
+              rope_autoimport = {
+                enabled = false,
+              },
+            },
+          },
+        },
+        flags = {
+          debounce_text_changes = 200,
+        },
+        capabilities = capabilities,
+      }
+
+
+
       local handlers = {
         function(server_name)
-          require("lspconfig") [server_name].setup {
+          require("lspconfig")[server_name].setup {
             capabilities = capabilities,
-            settings = opts.servers [server_name] or {},
-            filetypes = (opts.servers [server_name] or {}).filetypes,
+            settings = opts.servers[server_name] or {},
+            filetypes = (opts.servers[server_name] or {}).filetypes,
           }
         end,
       }
 
       require("mason").setup()
       require("mason-lspconfig").setup({
-        ensure_installed = vim.tbl_keys(opts.servers),
-        automatic_installation = true,
+        ensure_installed = nil, --vim.tbl_keys(opts.servers),
+        automatic_installation = false,
         handlers = handlers,
       })
 

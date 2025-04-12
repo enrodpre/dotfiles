@@ -113,7 +113,7 @@ local mapping = {
   {
     "<leader>ff",
     function(...)
-      require("telescope.builtin").find_files(...)
+      require("telescope.builtin").find_files({ hidden = false, ... })
     end,
     desc = "[F]ind [F]iles",
   },

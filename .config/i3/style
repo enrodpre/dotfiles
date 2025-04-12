@@ -52,12 +52,12 @@ set_from_resource $cyan2 color14 #afd7ff
 set_from_resource $white1 color7 #4E4E4E
 set_from_resource $white2 color15 #ffffff
 
-gaps inner 5
-# gaps outer 6
+gaps inner 0
+ gaps outer 0
 
 # Hide edge borders only if there is one window with no gaps
-hide_edge_borders smart_no_gaps
-smart_borders on
+# hide_edge_borders smart_no_gaps
+# smart_borders on
 
 for_window [class="^.*"] border pixel 1
 
