@@ -34,7 +34,7 @@ bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOU
 set $scripts $HOME/.config/i3/scripts
 bindsym $mod+u exec zsh -c "xmodmap $HOME/.config/Xmodmap"
 bindsym $mod+c exec --no-startup-id $scripts/change_pulseaudio_sink.sh
-bindsym $mod+Shift+t exec $HOME/.config/polybar/launch.sh
+bindsym $mod+Shift+t exec $HOME/.config/polybar/scripts/launch.sh
 bindsym $mod+Shift+s exec --no-startup-id $scripts/screenshot_clipboard.sh
 bindsym $mod+Return exec kitty
 bindsym $mod+Shift+q kill

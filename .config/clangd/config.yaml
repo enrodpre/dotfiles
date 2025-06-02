@@ -1,0 +1,6 @@
+Hover:
+  ShowAKA: true
+Diagnostics:
+  ClangTidy:
+    Add: [modernize*, bugprone*, cppcoreguidelines*, clang-analyzer*, misc*, performance*, readability*]
+    Remove: [readability-magic-numbers,cppcoreguidelines-avoid-magic-numbers,bugprone-easily-swappable-parameters, misc-non-private-member-variables-in-classes, readability-named-parameter ,cppcoreguidelines-non-private-member-variables-in-classes , readability-identifier-length, modernize-use-trailing-return-type, bugprone-branch-clone, misc-no-recursion, cppcoreguidelines-avoid-const-or-ref-data-members, misc-static-assert, readability-function-cognitive-complexity,cppcoreguidelines-owning-memory,cppcoreguidelines-avoid-c-arrays,modernize-avoid-c-arrays,cppcoreguidelines-special-member-functions,readability-avoid-unconditional-preprocessor-if]

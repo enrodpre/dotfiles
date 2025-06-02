@@ -1,5 +1,60 @@
 return {
   "monaqa/dial.nvim",
+  config = function()
+    local augend = require("dial.augend")
+
+    local default_augend = {
+      augend.integer.alias.decimal,
+      augend.integer.alias.hex,
+      augend.date.alias["%Y/%m/%d"],
+      augend.date.alias["%Y-%m-%d"],
+      augend.date.alias["%m/%d"],
+      augend.date.alias["%H:%M"],
+    }
+
+    local create_constant = function(list, opts)
+      local word, case, cyclic = unpack(opts)
+      for _, pair in ipairs(list) do
+        table.insert(
+          default_augend,
+          augend.constant.new({
+            elements = pair,
+            preserve_case = case or true,
+            word = word or true,
+            cyclic = cyclic or true,
+          })
+        )
+      end
+    end
+
+    local words = {
+      { "and",        "or", },
+      { "always",     "never", },
+      { "false",      "true", },
+      { "False",      "True", },
+      { "horizontal", "vertical", },
+      { "yes",        "no", },
+      { "default",    "delete", },
+      -- { "&",          "*", },
+      { "&&",         "||", },
+      { "+",          "-", },
+      { "==",         "!=", },
+    }
+
+    local symbols = {
+      -- { "&",  "*", },
+      { "&&", "||", },
+      { "+",  "-", },
+      { "==", "!=", },
+    }
+
+
+    create_constant(words, { word = true })
+    -- create_constant(symbols, { word = false })
+
+    require("dial.config").augends:register_group({ default = default_augend, })
+  end,
+
   keys = function()
     local keys = {}
 
@@ -29,58 +84,5 @@ return {
     end
 
     return keys
-  end,
-
-  config = function()
-    local augend = require("dial.augend")
-
-    local default_augend = {
-      augend.integer.alias.decimal,
-      augend.integer.alias.hex,
-      augend.date.alias ["%Y/%m/%d"],
-      augend.date.alias ["%Y-%m-%d"],
-      augend.date.alias ["%m/%d"],
-      augend.date.alias ["%H:%M"],
-    }
-
-    local create_autogends = function(list, word)
-      word = word or true
-      for _, pair in ipairs(list) do
-        table.insert(
-          default_augend,
-          augend.constant.new({
-            elements = pair,
-            preserve_case = true,
-            word = true,
-            cyclic = true,
-          })
-        )
-      end
-    end
-
-    local new_augends = {
-      {
-        { "and",        "or", },
-        { "always",     "never", },
-        { "false",      "true", },
-        { "False",      "True", },
-        { "horizontal", "vertical", },
-        { "yes",        "no", },
-        { "default",    "delete", },
-        { "&",          "*", },
-      },
-      {
-        { "&",  "*", },
-        { "&&", "||", },
-        { "+",  "-", },
-        { "==", "!=", },
-      },
-    }
-
-    local words, tokens = unpack(new_augends)
-    create_autogends(words)
-    create_autogends(tokens, false)
-
-    require("dial.config").augends:register_group({ default = default_augend, })
   end,
 }

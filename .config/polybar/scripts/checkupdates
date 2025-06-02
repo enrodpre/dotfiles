@@ -54,10 +54,10 @@ error() {
 	printf "${RED}==> $(gettext "ERROR:")${ALL_OFF}${BOLD} ${mesg}${ALL_OFF}\n" "$@" >&2
 }
 
-# check if messages are to be printed using color
+# check if messages are to be printed using colors
 unset ALL_OFF BOLD BLUE GREEN RED YELLOW
 if [[ -t 2 && ! $USE_COLOR = "n" ]]; then
-	# prefer terminal safe colored and bold text when tput is supported
+	# prefer terminal safe colorsed and bold text when tput is supported
 	if tput setaf 0 &>/dev/null; then
 		ALL_OFF="$(tput sgr0)"
 		BOLD="$(tput bold)"

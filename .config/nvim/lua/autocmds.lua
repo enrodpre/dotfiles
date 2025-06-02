@@ -75,8 +75,25 @@ local grp = vim.api.nvim_create_augroup("write_pre", { clear = false, })
 vim.api.nvim_create_autocmd("BufWritePre", {
   group = grp,
   callback = function(args)
-    if #vim.lsp.get_clients() > 0 then
+    if #vim.lsp.get_clients() > 0 and vim.lsp.format_on_save.value then
       vim.lsp.buf.format({ bufnr = args.buf, })
     end
   end,
+})
+
+-- Change columns if window resized, so i dont have to scroll horizontally
+vim.api.nvim_create_autocmd({ "VimResized", "BufWinEnter" }, {
+  callback = function(args)
+    local width = vim.api.nvim_win_get_width(0)
+
+    local max   = 80
+    local min   = 20
+
+    if width < max and width > min and width ~= vim.api.nvim_get_option_value("textwidth", {}) then
+      vim.api.nvim_set_option_value("textwidth", width, {
+        buf = args.buf,
+        scope = "local"
+      })
+    end
+  end
 })

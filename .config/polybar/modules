@@ -1,3 +1,15 @@
+# vim:ft=dosini:
+
+[module/filesystem]
+type = internal/fs
+mount-0 = /
+interval = 30
+fixed-values = false
+format-mounted-prefix = " "
+format-mounted-prefix-foreground = ${colors.icon}
+label-mounted =  %percentage_used%%
+label-unmounted =  %mountpoint%: NA
+
 [module/i3]
 type = internal/i3
 ws-icon-0 = 1;
@@ -8,8 +20,7 @@ ws-icon-4 = 5;
 format = <label-mode>
 label-mode = %mode%
 label-mode-padding = 2
-label-mode-background = ${color.background_warning}
-label-mode-foreground = ${color.font}
+label-mode-background = ${colors.background_warning}
 pin-workspaces = true
 show-urgent = true
 strip-wsnumbers = true
@@ -27,54 +38,34 @@ type = internal/date
 interval = 1.0
 date = %A, %d %B
 time = at %k:%M:%S
-format =  <label>
-format-prefix = 
-format-prefix-foreground = ${color.icon}
-label = " %date% %time%"
-label-foreground = ${color.font}
-
-[module/filesystem]
-type = internal/fs
-mount-0 = /
-; mount-1 = /home
-interval = 30
-fixed-values = true
-format-mounted = <label-mounted>
-format-mounted-prefix =  
-format-mounted-foreground = ${color.icon}
-label-mounted = " %mountpoint% %percentage_used%%"
-label-mounted-foreground = ${color.font}
-format-unmounted = <label-unmounted>
-format-unmounted-prefix = 
-label-unmounted = " %mountpoint%: NA"
+format-prefix = " "
+format-prefix-foreground = ${colors.icon}
+label = %date% %time%
 
 
 [module/cpu]
 type = internal/cpu
 interval = 1
 warn-percentage = 80
-format = <label>
-format-prefix = 
-format-prefix-foreground = ${color.icon}
-label = " %percentage%%"
-label-foreground = ${color.font}
+format-prefix = " "
+format-prefix-foreground = ${colors.icon}
+label = %percentage%%
 label-warn = " %percentage%%"
-label-warn-background = ${color.background_warning}
-label-warn-foreground = ${color.foreground_warning}
+label-warn-background = ${colors.background_warning}
+label-warn-foreground = ${colors.foreground_warning}
 
 [module/memory]
 type = internal/memory
 interval = 1
 format = <label>
 format-prefix = 
-format-prefix-foreground = ${color.icon}
+format-prefix-foreground = ${colors.icon}
 label = " %percentage_used%%"
-label-foreground = ${color.font}
 
 
 [module/temperature]
 type = internal/temperature
-interval = 0.5
+interval = 1
 ; thermal-zone = 0
 ; zzone-type = k10temp
 hwmon-path = /sys/devices/pci0000:00/0000:00:18.3/hwmon/hwmon2/temp3_input
@@ -82,15 +73,14 @@ warn-temperature = 65
 format = <ramp> <label>
 format-warn = <ramp> <label-warn>
 label = %temperature-c%
-label-foreground = ${color.font}
 label-warn = "%temperature-c%"
-label-warn-foreground = ${color.foreground_warning}
+label-warn-foreground = ${colors.foreground_warning}
 ramp-0 = 
 ramp-1 = 
 ramp-2 = 
 ramp-3 = 
 ramp-4 = 
-ramp-foreground = ${color.icon}
+ramp-foreground = ${colors.icon}
 
 
 [module/network]
@@ -98,47 +88,41 @@ type = internal/network
 interface = enp5s0
 interface-type = wired
 interval = 3.0
-format-connected = <ramp-signal> <label-connected>
-format-disconnected = <label-disconnected>
-label-connected =  %downspeed%
-label-connected-foreground = ${color.font}
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.icon}
+label-connected = %downspeed%
 label-disconnected =  DOWN
-label-disconnected-foreground = ${color.foreground_warning}
-ramp-signal-0 = 😱
-ramp-signal-1 = 😠
-ramp-signal-2 = 😒
-ramp-signal-3 = 😊
-ramp-signal-4 = 😃
-ramp-signal-5 = 😈
+label-disconnected-foreground = ${colors.foreground_warning}
 
 [module/volume]
 type = internal/pulseaudio
 interval = 5
 format-volume = <ramp-volume> <label-volume>
 label-volume = %percentage%%
-label-volume-foreground = ${color.font}
+label-volume-foreground = ${colors.font}
 format-muted = 󰖁 <label-muted>
-format-muted-foreground = ${color.disabled_icon}
-label-muted-foreground = ${color.disabled_icon}
+format-muted-foreground = ${colors.disabled}
+label-muted-foreground = ${colors.disabled}
 ramp-volume-0 = 
 ramp-volume-1 = 
 ramp-volume-2 = 
-ramp-volume-foreground = ${color.icon}
+ramp-volume-foreground = ${colors.icon}
 bar-volume-format = "%fill%%indicator%%empty%"
 bar-volume-width = 11
 bar-volume-gradient = false
 bar-volume-indicator = ${bar.indicator}
-bar-volume-indicator-foreground = ${color.font}
+bar-volume-indicator-foreground = ${colors.font}
 bar-volume-indicator-font = 2
 bar-volume-fill = ${bar.fill}
 bar-volume-fill-font = 2
-bar-volume-foreground-0 = ${color.foreground}
-bar-volume-foreground-1 = ${color.foreground}
-bar-volume-foreground-2 = ${color.foreground}
+bar-volume-foreground-0 = ${colors.foreground}
+bar-volume-foreground-1 = ${colors.foreground}
+bar-volume-foreground-2 = ${colors.foreground}
 bar-volume-empty = ${bar.empty}
 bar-volume-empty-font = 2
-bar-volume-empty-foreground = ${color.foreground-alt}
+bar-volume-empty-foreground = ${colors.foreground-alt}
 ramp-headphones-0 = 
+
 [module/updates]
 type = custom/script
 exec = ~/.config/polybar/scripts/updates.sh
@@ -146,29 +130,35 @@ tail = true
 interval = 5
 format = <label>
 format-prefix = 󰏔
-format-prefix-foreground = ${color.icon}
+format-prefix-foreground = ${colors.icon}
 label = " %output%"
-label-foreground = ${color.font}
-
-
-[module/sep]
-type = custom/text
-content = " " 
-content-foreground = ${color.primary}
-
 
 [module/pulseaudio-output]
 type = custom/script
 tail = true
 exec = pulseaudio-control --node-nickname "*alsa_output.pci*: Speakers" --node-nickname "*G435*: Headphones" --format '$NODE_NICKNAME' listen
 click-middle = exec pavucontrol &
-click-right = exec change_pulseaudio_sink
-label-foreground = ${color.font}
+click-left = exec ~/.config/polybar/scripts/change_pulseaudio_sink.sh
 
 [module/message]
 type = custom/ipc
 format = <output>
 format-padding = 2
-format-background = ${color.background_info}
-format-foreground = ${color.foreground_info}
+format-background = ${colors.background_info}
+format-foreground = ${colors.foreground_info}
 
+[module/workspaces]
+type = internal/xworkspaces
+group-by-monitor = true
+enable-click = false
+enable-scroll = false
+icon-0 = 1;♚
+icon-1 = 2;♛
+icon-2 = 3;♜
+icon-3 = 4;♝
+icon-4 = 5;♞
+format = <label-state>
+label-active = %name%
+label-inactive = 
+label-occupied =
+label-empty =

@@ -1,4 +1,6 @@
-[color]
+# vim:ft=dosini:
+
+[colors]
 white = #FFFFFF
 black = #000000
 # red = #EC7875
@@ -23,16 +25,9 @@ lavender = #b4befe
 transparent = #00
 
 background = ${self.transparent}
-foreground = ${self.red} 
-foreground-alt = #688b94
-primary = #237D95
-secondary = #077FA0
-alternate = #15839B
-
-schema = #237d95
-icon = ${self.lavender}
+icon = ${self.indigo}
 font = ${self.sapphire}
-disabled_icon = ${self.blue-gray}
+disabled = ${self.blue-gray}
 
 background_warning = ${self.yellow}
 foreground_warning = ${self.red}

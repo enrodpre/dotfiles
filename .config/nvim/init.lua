@@ -26,14 +26,14 @@ require("lazy").setup({
     -- import your plugins
     { import = "plugins", },
   },
-  default = { lazy = true, },
+  defaults = { lazy = true, },
   -- Configure any other settings here. See the documentation for more details.
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "catppuccin", }, },
   rocks = { root = "/home/kike/.local/lib/luarocks/rocks-5.1", },
   change_detection = {
     -- automatically check for config file changes and reload the ui
-    enabled = true,
+    enabled = false,
     notify = false, -- get a notification when changes are found
   },
   performance = {

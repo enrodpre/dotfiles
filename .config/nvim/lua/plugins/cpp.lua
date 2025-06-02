@@ -8,10 +8,25 @@ local surroundings = {
   optional = { "std::optional<", ">", },
 }
 
+local function toggle_reference_operator()
+  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+
+  if line:sub(col, col) == "." then
+    vim.lua.replace_line("->", col, col)
+  elseif col <= #line and line:sub(col, col + 1) == "->" then
+    vim.lua.replace_line(".", col, col + 1)
+  elseif col > 1 and line:sub(col - 1, col) == "->" then
+    vim.lua.replace_line(".", col - 1, col)
+  end
+end
+
+
 local local_mapping = {
   {
     ",n", desc = "[N]ode",
   },
+  { ",np", desc = "[N]ode toggle dot <-> arrow",  toggle_reference_operator },
   {
     ",nm",
     function()
@@ -27,6 +42,42 @@ local local_mapping = {
     desc = "[N]ode add std::optional",
   },
   { ",nu", function() vim.lua.unfold_node {} end, desc = "[N]ode [U]nfold", },
+  {
+    "gdh",
+    function()
+      local file = vim.fn.expand('%:t')
+      local filename = vim.fn.expand('%:t:r')
+      local findcmd = { "fd", "-t", "f", "--color", "never", "--exclude", file, "-g", filename .. ".*" }
+      local handle = io.popen(table.concat(findcmd, " "))
+      local result = handle:read("*a")
+      handle:close()
+
+      local files = {}
+      for f in result:gmatch("[^\r\n]+") do
+        table.insert(files, f)
+      end
+
+      if #files == 1 then
+        vim.cmd("e " .. files[1])
+        return
+      elseif #files == 0 then
+        vim.print("No alternative files found")
+        return
+      end
+
+      local pickers = require("telescope.pickers")
+      local finders = require("telescope.finders")
+      local conf = require("telescope.config").values
+
+      pickers.new({}, {
+        prompt_title = "Find alt files of " .. file,
+        finder = finders.new_oneshot_job(findcmd, {}),
+        previewer = conf.grep_previewer({}),
+        sorter = conf.file_sorter({}),
+      }):find()
+    end,
+    desc = "[Go] to other compilation unit files",
+  },
 }
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -37,14 +88,17 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
+
+
 return {
   {
     "p00f/clangd_extensions.nvim",
-    event = "LspAttach",
+    -- event = "LspAttach",
+    ft = "cpp",
     init = function()
       -- load clangd extensions when clangd attaches
       local augroup = vim.api.nvim_create_augroup("clangd_extensions",
-                                                  { clear = true, })
+        { clear = true, })
       vim.api.nvim_create_autocmd("LspAttach", {
         group = augroup,
         desc = "Load clangd_extensions with clangd",

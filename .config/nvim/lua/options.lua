@@ -26,4 +26,9 @@ opt.signcolumn = "yes"
 opt.updatetime = 250
 opt.timeoutlen = 300
 
+vim.g.loaded_perl_provider = false
+vim.g.loaded_node_provider = false
+vim.g.loaded_ruby_provider = false
+
+vim.b.minwidth = 80
 vim.o.termguicolors = true

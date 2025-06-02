@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # Color files
-PFILE="$HOME/.config/polybar/custom/colors.ini"
-RFILE="$HOME/.config/polybar/custom/scripts/rofi/colors.rasi"
+PFILE="$HOME/.config/polybar/custom/colorss.ini"
+RFILE="$HOME/.config/polybar/custom/scripts/rofi/colorss.rasi"
 
-# Change colors
-change_color() {
+# Change colorss
+change_colors() {
 	# polybar
 	sed -i -e "s/background = #.*/background = $BG/g" $PFILE
 	sed -i -e "s/foreground = #.*/foreground = $FG/g" $PFILE
@@ -13,7 +13,7 @@ change_color() {
 	
 	# rofi
 	cat > $RFILE <<- EOF
-	/* colors */
+	/* colorss */
 
 	* {
 	  al:   #00000000;
@@ -35,7 +35,7 @@ if  [[ $1 = "--default" ]]; then
 	SEP="#3F5360"
 	AC="#EC407A"
 	SE="#4DD0E1"
-	change_color
+	change_colors
 elif  [[ $1 = "--nord" ]]; then
 	BG="#3B4252"
 	FG="#E5E9F0"
@@ -43,7 +43,7 @@ elif  [[ $1 = "--nord" ]]; then
 	SEP="#5B6579"
 	AC="#BF616A"
 	SE="#88C0D0"
-	change_color
+	change_colors
 elif  [[ $1 = "--gruvbox" ]]; then
 	BG="#282828"
 	FG="#EBDBB2"
@@ -51,7 +51,7 @@ elif  [[ $1 = "--gruvbox" ]]; then
 	SEP="#505050"
 	AC="#FB4934"
 	SE="#8EC07C"
-	change_color
+	change_colors
 elif  [[ $1 = "--dark" ]]; then
 	BG="#141C21"
 	FG="#93A1A1"
@@ -59,7 +59,7 @@ elif  [[ $1 = "--dark" ]]; then
 	SEP="#3C4449"
 	AC="#D12F2C"
 	SE="#33C5BA"
-	change_color
+	change_colors
 elif  [[ $1 = "--cherry" ]]; then
 	BG="#1F1626"
 	FG="#FFFFFF"
@@ -67,7 +67,7 @@ elif  [[ $1 = "--cherry" ]]; then
 	SEP="#473F4E"
 	AC="#D94084"
 	SE="#4F5D95"
-	change_color
+	change_colors
 else
 	cat <<- _EOF_
 	No option specified, Available options:

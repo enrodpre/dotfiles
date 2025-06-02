@@ -4,5 +4,9 @@
 
 [alias]
     tree = log --graph --decorate --pretty=oneline --abbrev-commit --all
+
 [init]
 	defaultBranch = main
+
+[push]
+  autoSetupRemote = true

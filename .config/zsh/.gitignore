@@ -1,0 +1,13 @@
+/*
+
+!.gitignore
+!.zshrc
+!alias.zsh
+!completion.zsh
+!env.zsh
+!functions.zsh
+!mapping.zsh
+!p10k.zsh
+!scripts
+!themes
+!vi-mode.zsh

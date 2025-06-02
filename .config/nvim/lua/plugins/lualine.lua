@@ -76,12 +76,6 @@ return {
   --   end
   -- end,
   opts = function()
-    -- PERF: we don't need this lualine require madness 🤷
-    -- local lualine_require = require("lualine_require")
-    -- lualine_require.require = require
-    --
-    -- vim.o.laststatus = vim.g.lualine_laststatus
-
     local opts = {
       options = {
         icons_enabled = true,
@@ -90,7 +84,7 @@ return {
         component_separators = "|",
         -- section_separators = "",
       },
-      extensions = { "mason", "lazy", "quickfix" },
+      extensions = { "lazy", "quickfix" },
       sections = {
         lualine_a = {
           "mode",
@@ -105,7 +99,7 @@ return {
         },
         lualine_b = { colored_filename() },
         lualine_c = {
-          "diagnostics",
+          "diagnostics", {},
         },
         lualine_x = {
           "encoding",

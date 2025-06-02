@@ -1,6 +1,7 @@
 return {
   "Civitasv/cmake-tools.nvim",
   ft = "cmake",
+  enabled = false,
   init = function()
     local loaded = false
     local function check()

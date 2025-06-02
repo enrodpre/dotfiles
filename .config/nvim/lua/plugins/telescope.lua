@@ -1,4 +1,58 @@
+local is_inside_work_tree = {}
+local project_files = function()
+  local opts = { hidden = true }
+  local cwd = vim.fn.getcwd()
+  if is_inside_work_tree[cwd] == nil then
+    vim.fn.system("git rev-parse --is-inside-work-tree")
+    is_inside_work_tree[cwd] = vim.v.shell_error == 0
+  end
+  if is_inside_work_tree[cwd] then
+    require("telescope.builtin").git_files(opts)
+  else
+    require("telescope.builtin").find_files(opts)
+  end
+end
+
+local function require_on_exported_call(mod)
+  return setmetatable({}, {
+    __index = function(_, picker)
+      return function(...)
+        return require(mod)[picker](...)
+      end
+    end,
+  })
+end
+local function require_on_exported_call_with_params(mod, opts_table)
+  return setmetatable({}, {
+    __index = function(_, picker)
+      return function(...)
+        local opts = nil
+        if opts_table ~= nil then
+          opts = opts_table[picker]
+        end
+
+        if opts == nil then
+          return require(mod)[picker](...)
+        else
+          opts = vim.tbl_deep_extend('force', opts, { ... })
+          return require(mod)[picker](opts)
+        end
+      end
+    end,
+  })
+end
+
+local tbl_opts = {
+  find_files = { results_title = vim.uv.cwd() },
+}
+
+local telescope = require_on_exported_call('telescope.builtin')
 local mapping = {
+  {
+    "<leader>ff",
+    telescope.find_files,
+    desc = "[F]ind [F]iles",
+  },
   {
     "<leader>rp",
     group = "[R]efactoring [P]rintf",
@@ -36,11 +90,6 @@ local mapping = {
     "gli",
     "<cmd>Telescope lsp_implementations<CR>",
     desc = "[I]mplementations",
-  },
-  {
-    "<leader>rr",
-    vim.lsp.buf.rename,
-    desc = "[R]ename",
   },
   {
     "<leader>re",
@@ -81,7 +130,13 @@ local mapping = {
   },
   {
     "<leader>t",
-    group = "[T]elescope",
+    function()
+      local t = require("telescope")
+      for k, _ in pairs(t.extensions) do
+        t.load_extension(k)
+      end
+    end,
+    desc = "[T]elescope",
   },
   {
     "<leader>f",
@@ -101,86 +156,59 @@ local mapping = {
   },
   {
     "<leader>fb",
-    function()
-      require("telescope.builtin").current_buffer_fuzzy_find(require(
-        "telescope.themes").get_dropdown({
-        winblend = 10,
-        previewer = false,
-      }))
-    end,
+    telescope.current_buffer_fuzzy_find,
     desc = "[F]uzzily search in current [B]uffer",
   },
   {
-    "<leader>ff",
-    function(...)
-      require("telescope.builtin").find_files({ hidden = false, ... })
-    end,
-    desc = "[F]ind [F]iles",
-  },
-  {
     "<leader>fg",
-    function(...)
-      require("telescope.builtin").live_grep(...)
-    end,
-    desc = "[G]o [G]rep",
+    telescope.live_grep,
+    desc = "[F]ind [G]rep",
   },
   {
     "gh",
-    function(...)
-      require("telescope.builtin").help_tags(...)
-    end,
+    telescope.help_tags,
     desc = "[G]o [H]elp",
   },
   {
-    "<leader>fgw",
-    function(...)
-      require("telescope.builtin").grep_string(...)
-    end,
-    desc = "[F]ind by [G]rep current [W]ord",
-  },
-  {
-    "<leader>gf",
-    function(...)
-      require("telescope.builtin").git_files(...)
-    end,
-    desc = "[G]it [F]iles",
-  },
-  {
-    "<leader>fgg",
-    "<cmd>LiveGrepGitRoot<cr>",
-    desc = "[F]ind by [G]rep on [G]it root",
-  },
-  {
     "<leader>tb",
-    function()
-      require("telescope.builtin").builtin()
-    end,
+    telescope.builtin,
     desc = "[T]elescope [B]uiltins",
   },
   {
     "<leader>tk",
-    function()
-      require("telescope.builtin").keymaps()
-    end,
+    telescope.keymaps,
     desc = "[T]elescope [K]eymaps",
   },
 }
 
+local function show_two_parent_dirs(path)
+  -- Get the absolute path
+  local abs_path = vim.fn.fnamemodify(path, ":p")
+
+  -- Get the last two parent directories
+  local parent_dirs = vim.fn.fnamemodify(abs_path, ":h:h") -- Get the grandparent directory
+  local last_dir = vim.fn.fnamemodify(abs_path, ":h")      -- Get the parent directory
+
+  -- Combine the last two directories
+  local result = vim.fn.fnamemodify(parent_dirs, ":t") .. "/" .. vim.fn.fnamemodify(last_dir, ":t")
+
+  return '.../' .. result .. '/'
+end
+
 local go_up_cwd_find_files = function(prompt)
   local current_picker = require("telescope.actions.state").get_current_picker(
     prompt)
-  if not current_picker then return end
-
+  if current_picker == nil then return end
   -- cwd is only set if passed as telescope option
-  local cwd = current_picker.cwd and tostring(current_picker.cwd)
-  local parent_dir = vim.fs.dirname(cwd)
+  local cwd = current_picker.cwd and tostring(current_picker.cwd) or vim.uv.cwd()
 
+  local parent_dir = vim.fs.dirname(cwd)
+  local formatted_parent = show_two_parent_dirs(parent_dir)
   require("telescope.actions").close(prompt)
-  require("telescope.builtin").find_files({
-    prompt_title = parent_dir,
+  require("telescope.builtin").find_files {
     cwd = parent_dir,
-    hidden = true,
-  })
+    results_title = formatted_parent
+  }
 end
 
 return {
@@ -207,56 +235,72 @@ return {
     },
     { "gbrlsnchs/telescope-lsp-handlers.nvim", cmd = "Telescope lsp", },
     {
-      "nvim-telescope/telescope-fzf-native.nvim",
-      event = "VeryLazy",
+      'nvim-telescope/telescope-fzf-native.nvim',
       build =
-      "cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release",
+      'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release'
     },
     -- Dependencies
     { "nvim-treesitter/nvim-treesitter", },
     { "nvim-lua/plenary.nvim", },
   },
   keys         = mapping,
-  config       = function(_, o)
-    local telescope = require("telescope")
-    telescope.setup(o)
-  end,
-  opts         = function()
-    local actions = require("telescope.actions")
-    local ret = {
-      defaults = { mappings = { i = { ["<esc>"] = actions.close, }, }, },
-      extensions = {
-        undo = {
-          side_by_side = true,
-          layout_strategy = "vertical",
-          layout_config = {
-            preview_height = 0.8,
-          },
-        },
-        -- lazy_plugins = {
-        --   lazy_config = vim.fn.stdpath("config") .. "/init.lua",
-        -- },
-        lsp_handlers = {
-          telescope = { require("telescope.themes").get_dropdown({}), },
-        },
-        fzf = {
-          fuzzy = true,
-          override_generic_sorter = true,
-          override_file_sorter = true,
-          case_mode = "smart_case",
+  lazy         = true,
+  opts         = {
+    defaults = {
+      mappings = {
+        i = {
+          ["<esc>"] = "close",
         },
       },
-      pickers = {
-        prompt_title = (vim.uv.cwd() or vim.loop.cwd()),
-        find_files = {
-          mappings = {
-            i = {
-              ["<C-b>"] = go_up_cwd_find_files,
-            },
+    },
+    extensions = {
+      aerial = {
+        -- Set the width of the first two columns (the second
+        -- is relevant only when show_columns is set to 'both')
+        col1_width = 4,
+        col2_width = 30,
+        -- How to format the symbols
+        format_symbol = function(symbol_path, filetype)
+          if filetype == "json" or filetype == "yaml" then
+            return table.concat(symbol_path, ".")
+          else
+            return symbol_path[#symbol_path]
+          end
+        end,
+        -- Available modes: symbols, lines, both
+        show_columns = "both",
+      },
+      undo = {
+        side_by_side = true,
+        layout_strategy = "vertical",
+        layout_config = {
+          preview_height = 0.8,
+        },
+      },
+      -- lazy_plugins = {
+      --   lazy_config = vim.fn.stdpath("config") .. "/init.lua",
+      -- },
+      -- lsp_handlers = {
+      --   telescope = { require("telescope.themes").get_dropdown({}), },
+      -- },
+      fzf = {
+        fuzzy = true,
+        override_generic_sorter = true,
+        override_file_sorter = true,
+        case_mode = "smart_case",
+      },
+      -- macros = {},
+    },
+    pickers = {
+      find_files = {
+        results_title = show_two_parent_dirs(vim.uv.cwd()),
+        hidden = false,
+        mappings = {
+          i = {
+            ["<C-b>"] = go_up_cwd_find_files,
           },
         },
       },
-    }
-    return ret
-  end,
+    },
+  },
 }

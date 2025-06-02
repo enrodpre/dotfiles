@@ -1,15 +1,21 @@
+local init_gdb_breakpoint_file = function(filename)
+  vim.system({ 'echo', 'b', '>', filename })
+end
 local gdb_breakpoint = function()
-  local Path = require("plenary.path")
-  local filepath = vim.fn.getenv("PWD") .. "/breakpoints"
-  local destination = Path:new(filepath)
+  local destination = vim.fn.getcwd() .. "/breakpoints"
+
+  if not vim.uv.fs_stat(destination) then
+    init_gdb_breakpoint_file(destination)
+  end
 
   local file = vim.fn.fnamemodify(vim.fn.expand("%"), ":t")
-  local line = vim.api.nvim_win_get_cursor(0) [1]
+  local line = vim.api.nvim_win_get_cursor(0)[1]
   local gdb_instruction = string.format("b %s:%s", file, line)
-  vim.print(gdb_instruction)
+  vim.system({ 'echo', gdb_instruction, '>>', destination })
+end
 
-  destination:touch(gdb_instruction, "w")
-  destination:write(gdb_instruction, "w")
+local reset_gdb_breakpoints = function()
+  vim.fs.rm(vim.fn.getcwd() .. '/breakpoints')
 end
 
 local global_mapping = {
@@ -39,7 +45,12 @@ local global_mapping = {
     desc = "[P]rint Full [T]ype",
   },
   {
-    "<leader>sb",
+    "<leader>dr",
+    reset_gdb_breakpoints,
+    desc = "Reset breakpoints for gdb",
+  },
+  {
+    "<leader>db",
     gdb_breakpoint,
     desc = "Set breakpoint for gdb",
   },
@@ -67,13 +78,6 @@ local global_mapping = {
     group = "[D]ap",
   },
   {
-    "<leader>ar",
-    function()
-      vim.print(vim.lua.fn.editor)
-    end,
-    desc = "[A]pply [R]eload",
-  },
-  {
     {
       "<C-Q>",
       ":q <CR>",
@@ -99,14 +103,6 @@ local global_mapping = {
     "<C-s><C-a>",
     "<cmd>wa<CR>",
     desc = "Save all buffers",
-  },
-  {
-    "kj",
-    "<Esc>",
-    desc = "Better escape",
-    hidden = true,
-    silent = true,
-    mode = { "i", },
   },
   {
     "g",
@@ -143,6 +139,7 @@ local global_mapping = {
     silent = true,
   },
   { "<leader>e", group = "[E]xecute", },
+  -- { "<Esc>",     "<C-c>",             desc = "Better escape", },
   {
     "<leader>at",
     "<Plug>PlenaryTestFile",
@@ -158,7 +155,7 @@ local global_mapping = {
       function()
         require("lazy").show()
       end,
-      desc = "[O]pen [L]azy",
+      desc = "[O]pen Lazy",
     },
     {
       "<leader>om",
