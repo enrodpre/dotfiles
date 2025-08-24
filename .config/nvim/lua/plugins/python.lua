@@ -6,7 +6,7 @@ vim.api.nvim_create_autocmd("FileType", {
         settings = {
           plugins = {
             -- formatter options
-            black = { enabled = true },
+            black = { enabled = true, line_length = 88 },
             autopep8 = { enabled = false },
             yapf = { enabled = false },
             -- linter options

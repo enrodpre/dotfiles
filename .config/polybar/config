@@ -20,9 +20,9 @@ format = %{T4}%fill%%indicator%%empty%%{F-}%{T-}
 ; Nerd font :   ,  ⏽,  樂 籠 錄 , 雷 絛
 
 [bar/main]
-modules-left = workspaces
-modules-center = filesystem updates cpu memory temperature network
-modules-right = message date volume pulseaudio-output
+modules-left = workspaces spotify spotify-prev spotify-play-pause spotify-next
+modules-center = updates filesystem cpu memory temperature network
+modules-right = i3 message date volume pulseaudio-output
 background = ${colors.background}
 foreground = ${colors.font}
 monitor = HDMI-A-0
@@ -45,7 +45,8 @@ module-margin-left = 1
 module-margin-right = 1
 font-0 = "MesloLGS NF:size=13:style=Bold"
 font-1 = "Symbols Nerd Font Mono:size=13"
-separator = |
+font-2 = "Font Awesome 5 Free:size=10;1"
+separator = 
 separator-foreground = ${colors.disabled}
 dim-value = 1.0
 enable-ipc = true

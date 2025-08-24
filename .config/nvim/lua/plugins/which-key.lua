@@ -21,6 +21,16 @@ end
 local global_mapping = {
   { "<leader>p", group = "[P]rint", },
   {
+    "<leader>ar",
+    function()
+      local functions_path = vim.fn.stdpath("config") .. "/lua/functions.lua"
+      dofile(functions_path)
+      vim.print("Reloaded " .. functions_path)
+    end
+    ,
+    desc = "[A]pply functions [R]eload",
+  },
+  {
     "<leader>pp",
     function()
       local node = vim.treesitter.get_node():parent()
@@ -53,6 +63,13 @@ local global_mapping = {
     "<leader>db",
     gdb_breakpoint,
     desc = "Set breakpoint for gdb",
+  },
+  {
+    ",p",
+    function()
+      vim.lua.get_lsp_diagnostic_information()
+    end,
+    desc = "Print more info about diagnostic",
   },
   {
     "gw",

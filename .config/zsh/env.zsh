@@ -18,7 +18,6 @@ export SANE_CONFIG_DIR="$XDG_CONFIG_HOME"/sane
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export ANDROID_USER_HOME="$XDG_DATA_HOME"/android
-export PYTHONSTARTUP="$HOME"/.config/python/pythonrc
 export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
 export XAUTHORITY="$XDG_CONFIG_HOME"/Xauthority
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
@@ -29,11 +28,24 @@ export BUNDLE_USER_CACHE="$XDG_CACHE_HOME"/bundle
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
 
 # ccache
-export CXX="ccache g++"
+# export CXX="ccache g++"
+export PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 export PYTHONPATH=$XDG_DATA_HOME/python/functions:$HOME/.local/bin:/bin/python
 
 export LUA_PATH='/usr/share/lua/5.1/?.lua;./?.lua;./?/init.lua;'
 export LUA_CPATH='$HOME/.local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;./?.so;$HOME/.local/lib/lua/5.1/?.so'
-export PATH=${PATH}:'/usr/local/sbin:/usr/local/bin:/usr/bin:$HOME/.local/bin:$CARGO_HOME/bin:/usr/lib/jvm/default/bin:/usr/bin/site_perl:/usr/bin/vendor_perl:/usr/bin/core_perl:$HOME/.local/share/zsh/plugins/0-colors/bin'}
+
+typeset -U path
+path=(
+  $HOME/.local/bin
+  $CARGO_HOME/bin
+  /usr/lib/jvm/default/bin
+  /usr/bin/site_perl
+  /usr/bin/vendor_perl
+  /usr/bin/core_perl
+  $path
+)
 
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=${XDG_CONFIG_HOME}/java -Djavafx.cachedir=${XDG_CACHE_HOME}/openjfx"
+
+source $ZDOTDIR/functions.zsh

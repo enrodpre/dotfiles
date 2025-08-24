@@ -1,0 +1,1 @@
+/home/kike/.local/share/polybar/modules/polybar-spotify/get_spotify_status.sh

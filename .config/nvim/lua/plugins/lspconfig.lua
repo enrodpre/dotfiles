@@ -93,21 +93,81 @@ return {
     event = { "BufReadPost", "BufNewFile", "BufWritePre", },
     keys = mapping,
     opts = {
-      capabilities = {
-        offsetEncoding = { "utf-16", },
-        workspace = {
-          fileOperations = {
-            didRename = true,
-            willRename = true,
+      bashls = { filetypes = { "sh", "zsh", "bash", }, },
+      neocmake = {
+        cmd = { "neocmakelsp", "--stdio" },
+        single_file_support = true, -- suggested
+        init_options = {
+          format = {
+            enable = true, -- to use lsp format
           },
-          didChangeWatchedFiles = {
-            dynamicRegistration = true,
-            relative_pattern_support = true,
+          lint = {
+            enable = true
+          },
+          semantic_token = false,
+        },
+        filetypes = { "cmake", "CMakeLists.txt", },
+      },
+      jqls = {},
+      clangd = {
+        cmd = {
+          "clangd",
+          "--enable-config",
+          "--background-index",
+          "-j", "12",
+          "--query-driver=/usr/bin/g++",
+          "--malloc-trim",
+          "--clang-tidy",
+          "--pch-storage=disk",
+          "--pretty",
+          "--header-insertion=iwyu",
+          "--header-insertion-decorators",
+          "--import-insertions",
+          "--completion-style=detailed",
+          "--cross-file-rename",
+          "--all-scopes-completion"
+        },
+        filetypes = { "cpp", "hpp", "c", "inl", },
+        init_options = {
+          -- usePlaceholders = true,
+          completeUnimported = true,
+          clangdFileStatus = true,
+          -- Increase the timeout for semantic tokens
+          semanticTokens = {
+            -- Adjust the timeout value as needed
+            timeout = 5000, -- Example: 5000 ms
           },
         },
       },
-      diagnostic = {
-        -- icons = vim.config.icons.diagnostic,
+      lua_ls = {
+        Lua = {
+          codeLens = {
+            enable = true,
+          },
+          completion = {
+            callSnippet = "Replace",
+          },
+          doc = {
+            privateName = { "^_", },
+          },
+          hint = {
+            enable = true,
+            setType = false,
+            paramType = true,
+            paramName = "Disable",
+            semicolon = "Disable",
+            arrayIndex = "Disable",
+          },
+          diagnostics = {
+            globals = { "vim" },
+          },
+          -- semantoc = { enable = false },
+        },
+      },
+      yamlls = {},
+    },
+    config = function(_, opts)
+      vim.diagnostic.config({
         underline = true,
         update_in_insert = true,
         severity_sort = true,
@@ -116,106 +176,29 @@ return {
           source = "if_many",
           prefix = "●",
         },
-      },
+      })
 
-      servers = {
-        bashls = { filetypes = { "sh", "zsh", "bash", }, },
-        neocmake = {
-          cmd = { "neocmakelsp", "--stdio" },
-          single_file_support = true, -- suggested
-          init_options = {
-            format = {
-              enable = true, -- to use lsp format
+      vim.lsp.config("*", {
+        capabilities = vim.lsp.protocol.make_client_capabilities()
+      })
+      vim.lsp.config("*", {
+        capabilities = {
+          offsetEncoding = { "utf-16", },
+          workspace = {
+            fileOperations = {
+              didRename = true,
+              -- willRename = true,
             },
-            lint = {
-              enable = true
-            },
-            semantic_token = false,
-          },
-          filetypes = { "cmake", "CMakeLists.txt", },
-        },
-        jqls = {},
-        clangd = {
-          cmd = {
-            "clangd",
-            "--enable-config",
-            "--background-index",
-            "-j", "12",
-            "--query-driver=/usr/bin/c++",
-            "--clang-tidy",
-            "--pch-storage=memory",
-            "--pretty",
-            "--header-insertion=iwyu",
-            "--import-insertions",
-            "--limit-references=0",
-            "--log=verbose",
-            "--completion-style=detailed",
-            "--experimental-modules-support"
-          },
-          filetypes = { "cpp", "hpp", "c", "inl", },
-          init_options = {
-            usePlaceholders = false,
-            completeUnimported = true,
-            clangdFileStatus = true,
-            semanticHighlighting = false,
-            -- Increase the timeout for semantic tokens
-            semanticTokens = {
-              -- Adjust the timeout value as needed
-              timeout = 5000, -- Example: 5000 ms
+            didChangeWatchedFiles = {
+              dynamicRegistration = true,
+              relative_pattern_support = true,
             },
           },
-        },
-        lua_ls = {
-          Lua = {
-            codeLens = {
-              enable = true,
-            },
-            completion = {
-              callSnippet = "Replace",
-            },
-            doc = {
-              privateName = { "^_", },
-            },
-            hint = {
-              enable = true,
-              setType = false,
-              paramType = true,
-              paramName = "Disable",
-              semicolon = "Disable",
-              arrayIndex = "Disable",
-            },
-            diagnostics = {
-              globals = { "safereq", "vim" },
-            },
-            -- semantoc = { enable = false },
-          },
-        },
-        yamlls = {},
-      },
-    },
-    config = function(_, opts)
-      -- require("java").setup()
-      vim.diagnostic.config(vim.deepcopy(opts.diagnostic))
-      local has_cmp, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-      local capabilities = vim.tbl_deep_extend(
-        "force",
-        {},
-        vim.lsp.protocol.make_client_capabilities(),
-        has_cmp and cmp_nvim_lsp.default_capabilities() or {},
-        opts.capabilities or {}
-      )
-      capabilities.textDocument.completion.completionItem.snippetSupport = true
+        }
+      })
 
-      -- vim.lsp.config("*", {
-      --   capabilities = capabilities,
-      --   on_attach = function()
-      --     require("which-key").add(mapping)
-      --     vim.lua_omnifunc(1)
-      --     -- vim.lsp.inlay_hint.on_inlayhint(err, result?, ctx, _)
-      --   end
-      -- })
 
-      for server, conf in pairs(opts.servers) do
+      for server, conf in pairs(opts) do
         vim.lsp.config(server, conf)
         vim.lsp.enable(server)
       end

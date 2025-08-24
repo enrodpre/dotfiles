@@ -1,0 +1,1 @@
+/home/kike/.config/mpv/scripts/play_music.sh

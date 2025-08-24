@@ -1,5 +1,9 @@
 # vim:ft=dosini:
 
+[module/sep]
+type = custom/text
+label = |
+
 [module/filesystem]
 type = internal/fs
 mount-0 = /
@@ -162,3 +166,33 @@ label-active = %name%
 label-inactive = 
 label-occupied =
 label-empty =
+
+# Spotify
+
+[module/spotify]
+type = custom/script
+tail = true
+interval = 1
+; prefix symbol is shown before the text
+format-prefix = " "
+format = <label>
+exec = ~/.config/polybar/scripts/scroll_spotify_status.sh
+
+[module/spotify-prev]
+type = custom/script
+exec = echo "󰒮"
+format = <label>
+click-left = playerctl previous -p spotify
+
+[module/spotify-play-pause]
+type = custom/ipc
+hook-0 = echo ""
+hook-1 = echo ""
+initial = 1
+click-left = playerctl play-pause -p spotify
+
+[module/spotify-next]
+type = custom/script
+exec = echo "󰒭"
+format = <label>
+click-left = playerctl next -p spotify

@@ -2,7 +2,16 @@ return {
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      "hrsh7th/cmp-nvim-lsp",
+      {
+        "hrsh7th/cmp-nvim-lsp",
+        config = function(opts)
+          local capabilities = require("cmp_nvim_lsp").default_capabilities();
+          vim.lsp.config("*", {
+            capabilities = capabilities
+          })
+          return opts
+        end
+      },
       "hrsh7th/cmp-nvim-lua",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-buffer",
@@ -103,13 +112,25 @@ return {
         },
         mapping = mapping,
         preselect = true,
+        sorting = {
+          comparators = {
+            cmp.config.compare.offset,
+            cmp.config.compare.exact,
+            cmp.config.compare.recently_used,
+            require("clangd_extensions.cmp_scores"),
+            cmp.config.compare.kind,
+            cmp.config.compare.sort_text,
+            cmp.config.compare.length,
+            cmp.config.compare.order,
+          },
+        },
         sources = cmp.config.sources({
+          { name = "nvim_lsp" },
           { name = "snippets", },
           { name = "lazydev",  group_index = 0 },
           { name = "nvim_lua", },
-          { name = "nvim_lsp" },
           { name = "path", },
-        }),
+        }, { { name = "buffer", }, }),
         -- view = {
         --   entries = {
         --     selection_order = 'near_cursor',

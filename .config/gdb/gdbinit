@@ -1,0 +1,22 @@
+set debuginfod enabled on
+set history save on  
+set pagination off   
+# set print static-members on
+set print vtbl on
+set print demangle on
+set demangle-style gnu-v3
+set confirm off     
+# set print frame-arguments yes
+set print pretty on
+set print object on
+
+# Skip standard library frames
+# skip -gfile "/usr/include/*"
+# skip -gfile "/usr/local/include/*"
+# skip -gfile "*/libstdc++/*"
+
+set auto-load safe-path /
+add-auto-load-scripts-directory /home/kike/dev/cmm/.gdb/
+set verbose off
+
+source ~/.config/gdb/gef.py

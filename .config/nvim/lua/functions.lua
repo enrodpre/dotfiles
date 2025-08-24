@@ -13,9 +13,40 @@ F.wildcard_position = function(w)
   local new_pos = vim.api.nvim_win_get_cursor(0)
   vim.api.nvim_win_set_cursor(0, cur_pos)
   -- zero-indexed, add 1 as example indicates 1 indexing
-  local start = new_pos [2]
+  local start = new_pos[2]
   local end_ = start + #cword
   return start, end_
+end
+
+F.get_diagnostic_on_cursor = function()
+  local line = vim.api.nvim_win_get_cursor(0)[1] - 1
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+
+  return vim.diagnostic.get(0, {
+    lnum = line,
+    col = col
+  })
+end
+
+vim.lua.get_lsp_diagnostic_information = function()
+  local diagnostic = F.get_diagnostic_on_cursor()[1]
+  if diagnostic == nil then return end
+
+  local data = diagnostic.user_data.lsp
+  local message = data.message
+  local source = data.source
+  local output = string.format("Source = %s\n\"%s\"", source, message)
+  local related = data.relatedInformation
+  if related ~= nil then
+    local messages = {}
+    for _, row in ipairs(related) do
+      table.insert(messages, row.message)
+    end
+
+    local relatedMessages = table.concat(messages, "\n")
+    output = string.format("%s\n%s", output, relatedMessages)
+  end
+  vim.print(output)
 end
 
 
@@ -54,6 +85,93 @@ F.line_match = function(pattern, init)
   return surrounded, start, end_
 end
 
+F.replace_text_object_precise = function(motion, transform_fn)
+  -- Save current register
+  local saved_reg = vim.fn.getreg('"')
+  local saved_regtype = vim.fn.getregtype('"')
+
+  -- Feed real keys like the user would type: vi(, vi", etc.
+  local keys = 'vi' .. motion
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes(keys, true, false, true),
+    'x', -- visual mode
+    false
+  )
+
+  -- Exit visual mode so the marks are updated
+  vim.api.nvim_feedkeys(
+    vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
+    'n',
+    false
+  )
+
+  -- Wait for the visual selection to actually be made
+  vim.defer_fn(function()
+    local bufnr = 0
+
+    local start_pos = vim.api.nvim_buf_get_mark(bufnr, '<')
+    local end_pos = vim.api.nvim_buf_get_mark(bufnr, '>')
+
+    -- If marks are still invalid, abort
+    if start_pos[1] == 0 and start_pos[2] == 0 and end_pos[1] == 0 and end_pos[2] == 0 then
+      vim.notify("No valid visual selection found", vim.log.levels.ERROR)
+      return
+    end
+
+    -- Extract selected text
+    local lines = vim.api.nvim_buf_get_text(
+      bufnr,
+      start_pos[1] - 1, start_pos[2],
+      end_pos[1] - 1, end_pos[2] + 1,
+      {}
+    )
+
+    local original_text = table.concat(lines, '\n')
+    local new_text = transform_fn(original_text)
+
+    if new_text then
+      local new_lines = vim.split(new_text, '\n', { plain = true })
+
+      vim.api.nvim_buf_set_text(
+        bufnr,
+        start_pos[1] - 1, start_pos[2],
+        end_pos[1] - 1, end_pos[2] + 1,
+        new_lines
+      )
+
+      vim.notify("Replaced text object.")
+    else
+      vim.notify("Transformation returned nil, nothing replaced.")
+    end
+
+
+    -- Restore register
+    vim.fn.setreg('"', saved_reg, saved_regtype)
+  end, 20) -- wait ~20ms before reading marks
+end
+
+F.surround_with_textobj = function(surr)
+  local textobj = vim.fn.getcharstr()
+  local left, right = unpack(surr)
+  local do_surround = function(str)
+    return left .. str .. right
+  end
+
+  F.replace_text_object_precise(textobj, do_surround)
+end
+
+F.surround_word = function(args)
+  local left, right = unpack(args)
+  local start, end_ = F.wildcard_position("<cword>")
+
+  local str_node = vim.api.nvim_get_current_line():sub(start + 1, end_)
+  vim.print(string.format("matched: %s", str_node))
+
+  local result = left .. str_node .. right
+  vim.print(result)
+
+  F.replace_line(result, start, end_)
+end
 
 F.surround_node = function(args)
   local left, right = unpack(args)
@@ -97,7 +215,7 @@ F.unfold_call_node = function(args)
 
   local call = vim.treesitter.cpp.Call.new(cword)
   local top_node = call.top_node
-  local ith_arg = call.args [index]
+  local ith_arg = call.args[index]
   F.replace_node(top_node, ith_arg)
 end
 

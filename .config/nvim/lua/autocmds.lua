@@ -81,12 +81,13 @@ vim.api.nvim_create_autocmd("BufWritePre", {
   end,
 })
 
+
 -- Change columns if window resized, so i dont have to scroll horizontally
 vim.api.nvim_create_autocmd({ "VimResized", "BufWinEnter" }, {
   callback = function(args)
     local width = vim.api.nvim_win_get_width(0)
 
-    local max   = 80
+    local max   = 100
     local min   = 20
 
     if width < max and width > min and width ~= vim.api.nvim_get_option_value("textwidth", {}) then

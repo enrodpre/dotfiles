@@ -6,6 +6,7 @@ local patterns = {
 local surroundings = {
   move = { "std::move(", ")", },
   optional = { "std::optional<", ">", },
+  cref = { "const ", "&", },
 }
 
 local function toggle_reference_operator()
@@ -24,24 +25,43 @@ end
 
 local local_mapping = {
   {
-    ",n", desc = "[N]ode",
-  },
-  { ",np", desc = "[N]ode toggle dot <-> arrow",  toggle_reference_operator },
-  {
-    ",nm",
+    "<leader>sb",
     function()
-      vim.lua.surround_node(surroundings.move)
+      local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':t')
+      local line = vim.fn.line('.')
+      local target = "/home/kike/dev/cmm/.gdb/breakpoints.gdb"
+      local command = string.format('echo "b %s:%s" > %s', filename, line, target)
+      vim.fn.system(command)
+      vim.print('Executed ' .. command)
     end,
-    desc = "[N]ode add std::move",
+    desc = "[S]et [B]reakpoint",
   },
   {
-    ",no",
+    ",c", desc = "[C]hange node",
+  },
+  { ",cp", desc = "[C]ange node toggle dot <-> arrow", toggle_reference_operator },
+  {
+    ",cr",
+    function()
+      vim.lua.surround_with_textobj(surroundings.cref)
+    end,
+    desc = "[C]hange node add std::move",
+  },
+  {
+    ",cm",
+    function()
+      vim.lua.surround_with_textobj(surroundings.move)
+    end,
+    desc = "[C]hange node add std::move",
+  },
+  {
+    ",co",
     function()
       vim.lua.surround_node(surroundings.optional)
     end,
-    desc = "[N]ode add std::optional",
+    desc = "[C]hange node add std::optional",
   },
-  { ",nu", function() vim.lua.unfold_node {} end, desc = "[N]ode [U]nfold", },
+  { ",cu", function() vim.lua.unfold_node {} end,      desc = "[N]ode [U]nfold", },
   {
     "gdh",
     function()
@@ -82,6 +102,7 @@ local local_mapping = {
 
 vim.api.nvim_create_autocmd("FileType", {
   desc = "Keymaps for cpp files",
+  pattern = "cpp",
   callback = function()
     local wk = require("which-key")
     wk.add(local_mapping)
@@ -103,7 +124,10 @@ return {
         group = augroup,
         desc = "Load clangd_extensions with clangd",
         callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+
           if assert(vim.lsp.get_client_by_id(args.data.client_id)).name == "clangd" then
+            -- require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
             require("clangd_extensions")
             -- add more `clangd` setup here as needed such as loading autocmds
             vim.api.nvim_del_augroup_by_id(augroup) -- delete auto command since it only needs to happen once

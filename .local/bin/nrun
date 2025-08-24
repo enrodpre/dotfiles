@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+
+if [ $# -lt 1 ]; then
+  exit 0
+fi
+
+while getopts "m:" opt; do
+  case $opt in
+  --)
+    shift
+    break
+    ;;
+  m)
+    message="$OPTARG"
+    ;;
+  esac
+done
+
+shift $((OPTIND - 1))
+
+: ${message:="Executed $@"}
+
+notifybar "$message"
+exec "$@"

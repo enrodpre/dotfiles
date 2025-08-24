@@ -6,6 +6,7 @@ alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias icat="kitty +kitten icat"
 alias visudo='EDITOR=nvim visudo'
 
+alias coredebug='zsh -c "cd && coredumpctl debug"'
 alias py='python'
 alias xclip="xclip -selection clip"
 #Replaces

@@ -21,7 +21,7 @@ return {
           -- Detect snake_case
         elseif before:find("_[a-z]") then
           local camel_case_word = before:gsub("(_)([a-z])",
-                                              function(_, l) return l:upper() end)
+            function(_, l) return l:upper() end)
           return camel_case_word
         else
           print("Not a snake_case or camelCase word")
@@ -49,7 +49,7 @@ return {
       function()
         local ext
         if vim.bo.filetype == "cpp" then
-          ext = "?pp"
+          ext = "{cpp,hpp,inl,h.c.cc}"
         else
           ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
         end

@@ -32,7 +32,7 @@ bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ to
 bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_SOURCE@ toggle && $refresh_i3status
 
 set $scripts $HOME/.config/i3/scripts
-bindsym $mod+u exec zsh -c "xmodmap $HOME/.config/Xmodmap"
+bindsym $mod+u exec --no-startup-id $scripts/set_keymap.sh
 bindsym $mod+c exec --no-startup-id $scripts/change_pulseaudio_sink.sh
 bindsym $mod+Shift+t exec $HOME/.config/polybar/scripts/launch.sh
 bindsym $mod+Shift+s exec --no-startup-id $scripts/screenshot_clipboard.sh
@@ -49,11 +49,7 @@ bindsym $mod+Shift+$right move right
 bindsym $mod+b split h
 bindsym $mod+v split v
 bindsym $mod+f fullscreen toggle
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
 bindsym $mod+e layout toggle split
-bindsym $mod+a focus parent
-#bindsym $mod+d focus child
 bindsym $mod+Shift+c exec --no-startup-id $scripts/reload.sh
 bindsym $mod+Shift+r restart
 
@@ -66,8 +62,21 @@ mode "Resize" {
 
   bindsym Return mode "default"
   bindsym Escape mode "default"
+  bindsym q mode "default"
 }
 
+set $mode_spotify Spotify [H] Prev [Space] Toggle [L] Next
+bindsym $mod+s mode "$mode_spotify"
+
+mode "$mode_spotify" {
+  bindsym h exec playerctl previous -p spotify
+  bindsym Space exec playerctl play-pause -p spotify
+  bindsym l exec playerctl next -p spotify
+
+  bindsym Escape mode "default"
+  bindsym Return mode "default"
+  bindsym q mode "default"
+}
 
 set $mode_gaps [Kk] Plus [Jj] Minus 
 bindsym $mod+g mode "$mode_gaps"
@@ -80,6 +89,7 @@ mode "$mode_gaps" {
 
   bindsym Escape mode "default"
   bindsym Return mode "default"
+  bindsym q mode "default"
 }
 
 # Rofi

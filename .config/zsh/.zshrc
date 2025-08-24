@@ -20,7 +20,6 @@ alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 # Themes
 source $ZDOTDIR/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
 
-source $ZDOTDIR/functions.zsh
 source $ZDOTDIR/alias.zsh
 
 
