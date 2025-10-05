@@ -36,7 +36,7 @@ bindsym $mod+u exec --no-startup-id $scripts/set_keymap.sh
 bindsym $mod+c exec --no-startup-id $scripts/change_pulseaudio_sink.sh
 bindsym $mod+Shift+t exec $HOME/.config/polybar/scripts/launch.sh
 bindsym $mod+Shift+s exec --no-startup-id $scripts/screenshot_clipboard.sh
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec "$TERM_EMULATOR"
 bindsym $mod+Shift+q kill
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down

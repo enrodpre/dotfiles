@@ -17,8 +17,6 @@ return {
     local cond = require("nvim-autopairs.conds")
     local npairs = require("nvim-autopairs")
     local ts = require("nvim-autopairs.ts-conds")
-    local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-    local cmp = require("cmp")
 
     npairs.setup(opts)
 
@@ -37,19 +35,10 @@ return {
     ):with_move(function(o)
       return o.char == ">"
     end))
-
     -- lua -- add comma if brackets in table
     npairs.add_rule(Rule("{", "},", { "lua", }):with_pair(ts.is_ts_node(
       "table_constructor")))
     npairs.add_rule(Rule("\"", "\",", { "lua", }):with_pair(ts.is_ts_node(
       "table_constructor")))
-
-    --- cmp integration
-    cmp.event:on(
-      "confirm_done",
-      cmp_autopairs.on_confirm_done({
-        sh = false,
-      })
-    )
   end,
 }

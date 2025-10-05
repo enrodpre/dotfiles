@@ -1,7 +1,7 @@
-local left = "<C-h>"
-local right = "<C-l>"
-local down = "<C-j>"
-local up = "<C-k>"
+local left = "<C-S-h>"
+local right = "<C-S-l>"
+local down = "<C-S-j>"
+local up = "<C-S-k>"
 
 return
 {
@@ -11,7 +11,7 @@ return
     mappings = {
       left = left,
       right = right,
-      down = left,
+      down = down,
       up = up,
 
       line_left = left,
@@ -20,5 +20,4 @@ return
       line_up = up,
     },
   },
-  config = true,
 }

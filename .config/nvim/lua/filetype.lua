@@ -3,4 +3,5 @@ vim.filetype.add({
     tpp = "cpp",
     cmm = "cpp",
   },
+  filename = { [".nvimrc"] = "lua", },
 })

@@ -7,7 +7,6 @@ export XDG_CACHE_HOME=$HOME/.cache
 export ZDOTCACHE=$XDG_CACHE_HOME/zsh
 export ZSH_COMPDUMP=$ZDOTCACHE/zcompdump
 
-#Config location overrides
 export RIPGREP_CONFIG_PATH=$XDG_CONFIG_HOME/ripgreprc
 export GITIGNORE_DIR=$XDG_DATA_HOME/gitignore
 export KITTY_ORIG_ZDOTDIR=$XDG_CONFIG_HOME
@@ -27,8 +26,9 @@ export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME"/bundle
 export BUNDLE_USER_CACHE="$XDG_CACHE_HOME"/bundle
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
 
+export TERM_EMULATOR=/usr/bin/kitty
+
 # ccache
-# export CXX="ccache g++"
 export PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 export PYTHONPATH=$XDG_DATA_HOME/python/functions:$HOME/.local/bin:/bin/python
 

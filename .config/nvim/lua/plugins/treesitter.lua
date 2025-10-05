@@ -13,10 +13,10 @@ return {
       local configs = require("nvim-treesitter.configs")
       for name, fn in pairs(move) do
         if name:find("goto") == 1 then
-          move [name] = function(q, ...)
+          move[name] = function(q, ...)
             if vim.wo.diff then
               local config = configs.get_module("textobjects.move")
-                [name] ---@type table<string,string>
+                  [name] ---@type table<string,string>
               for key, query in pairs(config or {}) do
                 if q == query and key:find("[%]%[][cC]") then
                   vim.cmd("normal! " .. key)
@@ -36,6 +36,14 @@ return {
     enabled = treesitter_enabled,
     dependencies = {
       "nvim-treesitter/nvim-treesitter-textobjects",
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        opts = {
+          max_lines = 2,
+          mode = "topline",
+          multiline_threshold = 10
+        },
+      },
     },
     event = { "VeryLazy", },
     cmd = { "TSUpdateSync", "TSUpdate", "TSInstall", },
@@ -72,7 +80,7 @@ return {
         "java",
       },
       auto_install = true,
-      highlight = { enable = true, additional_vim_regex_highlighting = true, },
+      highlight = { enable = true, additional_vim_regex_highlighting = false, },
       indent = { enable = true, },
       incremental_selection = { enable = false, },
       endwise = { enable = true, },
@@ -82,8 +90,8 @@ return {
           border = "none",
           floating_preview_opts = {},
           peek_definition_code = {
-            ["<leader>df"] = "@function.outer",
-            ["<leader>dF"] = "@class.outer",
+            ["<leader>lf"] = "@function.outer",
+            ["<leader>lF"] = "@class.outer",
           },
         },
         select = {

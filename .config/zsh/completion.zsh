@@ -2,7 +2,7 @@
 
 zstyle ':completion:*' completer _extensions _complete
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
-zstyle ':completion:*' verbose yes
+# zstyle ':completion:*' verbose yes
 zstyle ':completion:*' menu select
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' use-cache on
@@ -14,6 +14,8 @@ fpath=("$XDG_DATA_HOME/zsh/completions" /usr/share/zsh/site-functions /usr/share
 _comp_options+=(globdots) # With hidden files
 autoload -U compinit; compinit
 
-setopt MENU_COMPLETE        # Automatically highlight first element of completion menu
+# unsetopt AUTO_MENU
+# setopt MENU_COMPLETE      
 setopt AUTO_LIST            # Automatically list choices on ambiguous completion.
 setopt COMPLETE_IN_WORD     # Complete from both ends of a word.
+setopt ALWAYS_TO_END

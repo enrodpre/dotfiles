@@ -1,170 +1,62 @@
 return {
   {
-    "hrsh7th/nvim-cmp",
+    'saghen/blink.cmp',
+    -- optional: provides snippets for the snippet source
     dependencies = {
+      { 'rafamadriz/friendly-snippets' },
       {
-        "hrsh7th/cmp-nvim-lsp",
-        config = function(opts)
-          local capabilities = require("cmp_nvim_lsp").default_capabilities();
-          vim.lsp.config("*", {
-            capabilities = capabilities
-          })
-          return opts
-        end
+        "saghen/blink.compat",
+        optional = true,
+        opts = {},
+        version = not vim.g.lazyvim_blink_main and "*",
       },
-      "hrsh7th/cmp-nvim-lua",
-      "hrsh7th/cmp-path",
-      "hrsh7th/cmp-buffer",
-      "hrsh7th/cmp-cmdline",
-      "ray-x/cmp-treesitter",
-      "chrisgrieser/cmp-nerdfont",
-      {
-        "garymjr/nvim-snippets",
-        opts = {
-          friendly_snippets = true,
-        },
-        dependencies = { "rafamadriz/friendly-snippets", },
-      },
+
     },
-    event = { "CmdlineEnter", "InsertEnter", },
-    config = function(_, opts)
-      local cmp = require("cmp")
-      local auto_select = false
-      local mapping = {
-        ["<C-n>"] = cmp.mapping(function()
-          if not cmp.visible() then
-            cmp.complete()
-          else
-            cmp.select_next_item({
-              behavior = cmp
-                  .SelectBehavior.Select,
-            })
-          end
-        end, { "i", "c", }),
-        ["<C-p>"] = cmp.mapping(function()
-          if not cmp.visible() then
-            cmp.complete()
-          else
-            cmp.select_prev_item({
-              behavior = cmp
-                  .SelectBehavior.Select,
-            })
-          end
-        end, { "i", "c", }),
-        ["<C-b>"] = cmp.mapping(function()
-          cmp.scroll_docs(-4)
-        end, { "i", "c", }),
-        ["<C-f>"] = cmp.mapping(function()
-          cmp.scroll_docs(4)
-        end, { "i", "c", }),
-        ["<CR>"] = cmp.mapping(function(fallback)
-          if cmp.visible() and cmp.get_active_entry() then
-            cmp.confirm()
-          else
-            fallback()
-          end
-        end, { "i", "c", }),
-        ["<C-CR>"] = cmp.mapping(function(fallback)
-          if cmp.visible() and cmp.get_active_entry() then
-            cmp.confirm()
-          else
-            fallback()
-          end
-        end, { "i", "c", }),
-        ["<C-y>"] = cmp.mapping(function()
-          cmp.confirm({ select = true, })
-        end, { "i", "c", }),
-        ["<C-e>"] = cmp.mapping(function()
-          cmp.abort()
-        end, { "i", "c", }),
-        ["<Tab>"] = cmp.mapping(function(failback)
-          return failback
-        end, { "c", }),
-      }
-
-      local cmp_opts = {
+    event = { "InsertEnter", "CmdlineEnter" },
+    version = "1.*",
+    opts = {
+      completion = {
+        documentation = { auto_show = true },
+        keyword = { range = "prefix", },
+        list = {
+          selection = { preselect = true, auto_insert = true },
+          cycle = {
+            from_bottom = true,
+            from_top = true,
+          }
+        },
+        trigger = {
+          show_on_insert = false,
+        },
+      },
+      cmdline = {
+        keymap = {
+          -- recommended, as the default keymap will only show and select the next item
+          ['<C-n>'] = { 'show', "select_next", },
+          ['<C-p>'] = { 'show', "select_prev" },
+        },
         completion = {
-          completeopt = "menu,menuone,noinsert" ..
-              (auto_select and "" or ",noselect"),
-        },
-        formatting = {
-          format = function(entry, item)
-            local icon = require("mini.icons").get("lsp", item.kind)
-            if entry.source.name == "cmdline" then
-              item.kind = "󰘳 Cmdline"
-            elseif icon then
-              item.kind = icon .. " " .. item.kind
-            end
-
-            local widths = {
-              abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
-              menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
-            }
-
-            for key, width in pairs(widths) do
-              if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
-                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
-              end
-            end
-
-            return item
-          end,
-        },
-        mapping = mapping,
-        preselect = true,
-        sorting = {
-          comparators = {
-            cmp.config.compare.offset,
-            cmp.config.compare.exact,
-            cmp.config.compare.recently_used,
-            require("clangd_extensions.cmp_scores"),
-            cmp.config.compare.kind,
-            cmp.config.compare.sort_text,
-            cmp.config.compare.length,
-            cmp.config.compare.order,
+          menu = {
+            auto_show = function(_)
+              return vim.fn.getcmdtype() == ':'
+            end,
           },
+        }
+      },
+      keymap = {
+        ['<C-n>'] = {
+          "show", "select_next", 'fallback_to_mappings'
         },
-        sources = cmp.config.sources({
-          { name = "nvim_lsp" },
-          { name = "snippets", },
-          { name = "lazydev",  group_index = 0 },
-          { name = "nvim_lua", },
-          { name = "path", },
-        }, { { name = "buffer", }, }),
-        -- view = {
-        --   entries = {
-        --     selection_order = 'near_cursor',
-        --     follow_cursor = true,
-        --   },
-        -- },
-        window = {
-          completion = cmp.config.window.bordered(),
-          documentation = cmp.config.window.bordered(),
-        },
-      }
-
-      opts = vim.tbl_deep_extend("force", cmp_opts, opts)
-      cmp.setup(opts)
-
-      -- `/` cmdline setup.
-      cmp.setup.cmdline({ "/", "?", }, {
-        mapping = cmp.mapping.preset.cmdline(),
-        sources = {
-          { name = "buffer", },
-        },
-      })
-
-      -- `:` cmdline setup.
-      cmp.setup.cmdline(":", {
-        mapping = mapping,
-        sources = cmp.config.sources({
-          { name = "path", },
-          { name = "dotenv", },
-        }, {
-          { name = "cmdline", },
-        }),
-        matching = { disallow_symbol_nonprefix_matching = false, },
-      })
-    end,
+      },
+      signature = { enabled = true },
+    }
   },
+  {
+    "catppuccin",
+    optional = true,
+    opts = {
+      integrations = { blink_cmp = true },
+    },
+  },
+
 }

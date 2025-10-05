@@ -1,5 +1,5 @@
-CompileFlags:
-  BuiltinHeaders: QueryDriver
+# CompileFlags:
+#   BuiltinHeaders: QueryDriver
 Hover:
   ShowAKA: true
 Diagnostics:
@@ -38,7 +38,7 @@ Diagnostics:
         cppcoreguidelines-special-member-functions,
         readability-avoid-unconditional-preprocessor-if,
       ]
-If:
-  PathMatch: .*/example/.*\.cmm$
-Index:
-  Background: Skip
+# If:
+#   PathExclude: .*/example/.*\.cmm$
+# Index:
+#   Background: Skip

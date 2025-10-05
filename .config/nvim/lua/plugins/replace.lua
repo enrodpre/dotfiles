@@ -6,7 +6,6 @@ return {
       transient = true,
       startCursorRow = 4,
       startInInsertMode = false,
-
     }
     return ret
   end,
@@ -29,7 +28,7 @@ return {
       end
       local ext
       if vim.bo.filetype == "cpp" then
-        ext = "?pp"
+        ext = "?pp|inl"
       else
         ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
       end
@@ -49,7 +48,7 @@ return {
       function()
         local ext
         if vim.bo.filetype == "cpp" then
-          ext = "{cpp,hpp,inl,h.c.cc}"
+          ext = "{cpp,hpp,inl}"
         else
           ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
         end

@@ -15,8 +15,9 @@ set print object on
 # skip -gfile "/usr/local/include/*"
 # skip -gfile "*/libstdc++/*"
 
+set output-radix 10
 set auto-load safe-path /
 add-auto-load-scripts-directory /home/kike/dev/cmm/.gdb/
 set verbose off
 
-source ~/.config/gdb/gef.py
+# source ~/.config/gdb/gef.py

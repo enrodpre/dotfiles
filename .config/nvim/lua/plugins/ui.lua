@@ -1,120 +1,71 @@
 return {
   {
+    "folke/edgy.nvim",
+    init = function()
+      -- vim.opt.laststatus = 3
+      vim.opt.splitkeep = "screen"
+    end,
+    event = "VeryLazy",
+    opts = {
+      left = {
+        {
+          ft = "snacks_terminal",
+          size = { height = 0.3, width = 45 },
+          wo = {
+            wrap = false, signcolumn = "no",
+          },
+          title = "",
+          filter = function(_, win)
+            return vim.w[win].snacks_win
+                and vim.w[win].snacks_win.position ~= "float"
+                and vim.w[win].snacks_win.relative == "editor"
+                and not vim.w[win].trouble_preview
+          end
+        },
+      },
+      bottom = { "Trouble", },
+      exit_when_last = true,
+      keys = {
+        ["<c-q>"] = false
+      },
+    },
+  },
+  {
+    "pogyomo/winresize.nvim",
+    dependencies = {
+      { "pogyomo/submode.nvim" },
+    },
+    keys = {
+      { "<c-w>r", function()
+        require "submode".create("WinResize", {
+          mode = "n",
+          enter = "<c-w>r",
+          leave = { "q", "<esc>", },
+          default = function(register)
+            local res = require "winresize".resize
+            register("h", function() res(0, 2, "left") end)
+            register("j", function() res(0, 1, "down") end)
+            register("k", function() res(0, 1, "up") end)
+            register("l", function() res(0, 2, "right") end)
+          end
+        })
+        require "submode".enter("WinResize")
+      end },
+    },
+  },
+  {
     "tpope/vim-sleuth",
     event = "UiEnter",
   },
   {
-    "norcalli/nvim-colorizer.lua",
+    'nvim-mini/mini.hipatterns',
+    version = false,
     event = "UiEnter",
-    opts = {
-      "*",
-    },
+    opts = {},
   },
   {
-    "lukas-reineke/indent-blankline.nvim",
+    'nvim-mini/mini.cursorword',
     event = "UiEnter",
-    main = "ibl",
-    opts = {
-      indent = { char = "│", tab_char = "│", },
-      scope = { enabled = false, },
-      exclude = {
-        filetypes = {
-          "help",
-          "Trouble",
-          "trouble",
-          "lazy",
-          "notify",
-          "toggleterm",
-          "lazyterm",
-        },
-      },
-    },
-  },
-  {
-    "echasnovski/mini.indentscope",
-    event = "UiEnter",
-    opts = {
-      symbol = "│",
-      options = { try_as_border = true, },
-    },
-    init = function()
-      vim.api.nvim_create_autocmd("FileType", {
-        pattern = {
-          "help",
-          "Trouble",
-          "trouble",
-          "lazy",
-          "notify",
-          "toggleterm",
-          "lazyterm",
-        },
-        callback = function()
-          vim.b.miniindentscope_disable = true
-        end,
-      })
-    end,
-  },
-  {
-    "RRethy/vim-illuminate",
-    event = "LazyFile",
-    enabled = false,
-    opts = {
-      delay = 100,
-      filetypes_denylist = {
-        "lazy",
-        "lazy_backdrop",
-      },
-      large_file_cutoff = 2000,
-      providers = {
-        "lsp",
-        "treesitter",
-        "regex",
-      },
-    },
-    config = function(_, opts)
-      require("illuminate").configure(opts)
-
-      local function map(key, dir, buffer)
-        vim.keymap.set("n", key, function()
-            require("illuminate")["goto_" .. dir .. "_reference"](false)
-          end,
-          {
-            desc = dir:sub(1, 1):upper() ..
-                dir:sub(2) .. " Reference",
-            buffer = buffer,
-          })
-      end
-
-      map("]]", "next")
-      map("[[", "prev")
-
-      vim.api.nvim_create_autocmd("FileType", {
-        callback = function()
-          local buffer = vim.api.nvim_get_current_buf()
-          map("]]", "next", buffer)
-          map("[[", "prev", buffer)
-        end,
-      })
-    end,
-    keys = {
-      { "]]", desc = "Next Reference", },
-      { "[[", desc = "Prev Reference", },
-    },
-  },
-  {
-    "stevearc/dressing.nvim",
-    lazy = true,
-    init = function()
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.ui.select = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim", }, })
-        return vim.ui.select(...)
-      end
-      ---@diagnostic disable-next-line: duplicate-set-field
-      vim.ui.input = function(...)
-        require("lazy").load({ plugins = { "dressing.nvim", }, })
-        return vim.ui.input(...)
-      end
-    end,
+    opts = {},
   },
 }

@@ -1,24 +1,23 @@
+table.insert(vim.g.linters, "cmake_lint")
 return {
-  "Civitasv/cmake-tools.nvim",
-  ft = "cmake",
-  enabled = false,
-  init = function()
-    local loaded = false
-    local function check()
-      local cwd = vim.uv.cwd()
-      if vim.fn.filereadable(cwd .. "/CMakeLists.txt") == 1 then
-        require("lazy").load({ plugins = { "cmake-tools.nvim" } })
-        loaded = true
-      end
-    end
-    check()
-    vim.api.nvim_create_autocmd("DirChanged", {
-      callback = function()
-        if not loaded then
-          check()
-        end
-      end,
-    })
-  end,
-  opts = {},
+  {
+    "neovim/nvim-lspconfig",
+    optional = true,
+    opts = {
+      neocmake = {
+        cmd = { "neocmakelsp", "--stdio" },
+        single_file_support = true, -- suggested
+        init_options = {
+          format = {
+            enable = true, -- to use lsp format
+          },
+          lint = {
+            enable = true
+          },
+          semantic_token = false,
+        },
+        filetypes = { "cmake", "CMakeLists.txt", },
+      },
+    },
+  }
 }

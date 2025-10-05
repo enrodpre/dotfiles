@@ -1,114 +1,215 @@
-local patterns = {
-  type = [[ [A-Za-z]+[A-Za-z(::)0-9_-]* ]],
-  variable = [[[A-Za-z]+[A-Za-z0-9_-]*]],
-}
-
 local surroundings = {
   move = { "std::move(", ")", },
   optional = { "std::optional<", ">", },
   cref = { "const ", "&", },
 }
 
-local function toggle_reference_operator()
-  local row, col = unpack(vim.api.nvim_win_get_cursor(0))
-  local line = vim.api.nvim_get_current_line()
+local function find_alternate_files()
+  local file = vim.fn.expand('%:t')
+  local filename = vim.fn.expand('%:t:r')
 
-  if line:sub(col, col) == "." then
-    vim.lua.replace_line("->", col, col)
-  elseif col <= #line and line:sub(col, col + 1) == "->" then
-    vim.lua.replace_line(".", col, col + 1)
-  elseif col > 1 and line:sub(col - 1, col) == "->" then
-    vim.lua.replace_line(".", col - 1, col)
-  end
+  local fzf = require "fzf-lua"
+  local fd_opts = { "-t", "f",
+    "--exclude", file, "--exclude", "build",
+    "-g", filename .. ".*" }
+  fzf.files {
+    fd_opts = table.concat(fd_opts, " ")
+  }
 end
 
 
+local function toggle_reference_operator()
+  local _, col = unpack(vim.api.nvim_win_get_cursor(0))
+  local line = vim.api.nvim_get_current_line()
+
+  if line:sub(col, col) == "." then
+    Lua.replace_line("->", col, col)
+  elseif col <= #line and line:sub(col, col + 1) == "->" then
+    Lua.replace_line(".", col, col + 1)
+  elseif col > 1 and line:sub(col - 1, col) == "->" then
+    Lua.replace_line(".", col - 1, col)
+  end
+end
+
+-- vim.cmd [[packadd termdebug]]
+vim.api.nvim_create_autocmd("User", {
+  pattern = "TermdebugStartPre",
+  callback = function()
+    vim.cmd [[let g:termdebug_wide = 1]]
+  end
+})
+
+vim.api.nvim_create_user_command("Debug",
+  function()
+
+  end,
+  {})
+
+
+
 local local_mapping = {
+  { "<leader>bt", function() return Gdb.toggle_gdb_breakpoint() end, desc = 'Toggle GDB breakpoint' },
+  { "<leader>bc", function() return Gdb.clear_all_breakpoints() end, desc = 'Clear all GDB breakpoints' },
+  { "<leader>bl", function() return Gdb.list_breakpoints() end,      desc = 'List GDB breakpoints' },
   {
-    "<leader>sb",
+    "<leader>bs",
     function()
-      local filename = vim.fn.fnamemodify(vim.fn.expand('%'), ':t')
-      local line = vim.fn.line('.')
-      local target = "/home/kike/dev/cmm/.gdb/breakpoints.gdb"
-      local command = string.format('echo "b %s:%s" > %s', filename, line, target)
-      vim.fn.system(command)
-      vim.print('Executed ' .. command)
+      Lua.gdb.clear_all_breakpoints()
+      return Lua.gdb.toggle_gdb_breakpoint()
     end,
-    desc = "[S]et [B]reakpoint",
+    desc = 'List GDB breakpoints'
   },
-  {
-    ",c", desc = "[C]hange node",
-  },
+  { ",c",  desc = "[C]hange node", },
   { ",cp", desc = "[C]ange node toggle dot <-> arrow", toggle_reference_operator },
   {
     ",cr",
-    function()
-      vim.lua.surround_with_textobj(surroundings.cref)
-    end,
+    function() Lua.surround_with_textobj(surroundings.cref) end,
     desc = "[C]hange node add std::move",
   },
   {
     ",cm",
     function()
-      vim.lua.surround_with_textobj(surroundings.move)
+      Lua.surround_with_textobj(surroundings.move)
     end,
     desc = "[C]hange node add std::move",
   },
   {
     ",co",
     function()
-      vim.lua.surround_node(surroundings.optional)
+      Lua.surround_node(surroundings.optional)
     end,
     desc = "[C]hange node add std::optional",
   },
-  { ",cu", function() vim.lua.unfold_node {} end,      desc = "[N]ode [U]nfold", },
-  {
-    "gdh",
-    function()
-      local file = vim.fn.expand('%:t')
-      local filename = vim.fn.expand('%:t:r')
-      local findcmd = { "fd", "-t", "f", "--color", "never", "--exclude", file, "-g", filename .. ".*" }
-      local handle = io.popen(table.concat(findcmd, " "))
-      local result = handle:read("*a")
-      handle:close()
-
-      local files = {}
-      for f in result:gmatch("[^\r\n]+") do
-        table.insert(files, f)
-      end
-
-      if #files == 1 then
-        vim.cmd("e " .. files[1])
-        return
-      elseif #files == 0 then
-        vim.print("No alternative files found")
-        return
-      end
-
-      local pickers = require("telescope.pickers")
-      local finders = require("telescope.finders")
-      local conf = require("telescope.config").values
-
-      pickers.new({}, {
-        prompt_title = "Find alt files of " .. file,
-        finder = finders.new_oneshot_job(findcmd, {}),
-        previewer = conf.grep_previewer({}),
-        sorter = conf.file_sorter({}),
-      }):find()
-    end,
-    desc = "[Go] to other compilation unit files",
-  },
+  { ",cu", Lua.unfold_node {},   desc = "[N]ode [U]nfold", },
+  { "gdh", find_alternate_files, desc = "[Go] to other compilation unit files", },
 }
 
+local function create_commands()
+  local build_path = "build/dev-test"
+
+  local function run_test(test)
+    vim.api.nvim_create_autocmd("TermClose", {
+      callback = function()
+        vim.g.last_tests_result = vim.v.event.status
+      end,
+      once = true
+    })
+    local term = require("snacks.terminal")
+    local cmd = { "ctest" }
+
+    local args
+    if not test then
+      args = { "--preset", "unit" }
+    else
+      args = { "--test-dir", build_path, "-R", test }
+    end
+
+    table.insert(args, "--output-on-failure")
+
+    if vim.g.last_tests_result and vim.g.last_tests_result ~= 0 then
+      table.insert(args, "--rerun-failed")
+    end
+
+    for _, arg in ipairs(args) do
+      table.insert(cmd, arg)
+    end
+
+    term.get(cmd, {
+      win = { bo = { filetype = "test_executor", } },
+      on_exit = function()
+        vim.print('a')
+      end
+    })
+  end
+
+
+  vim.api.nvim_create_user_command("RunTest",
+    function()
+      local command = "ctest"
+      local args = { "--test-dir", build_path, "--show-only=json-v1" }
+      local runner = require('plenary.job')
+      local job = runner:new({
+        command = command,
+        args = args,
+        on_exit = function(json_data, _, _)
+          vim.schedule(function()
+            local json_str = ""
+            for _, v in pairs(json_data:result()) do
+              json_str = json_str .. v
+            end
+            local tests = {}
+            local result = vim.fn.json_decode(json_str)
+            for _, item in ipairs(result.tests) do
+              table.insert(tests, item["name"])
+            end
+
+            vim.ui.select(tests, {}, function(idx)
+              if not idx then
+                vim.notify("No test was selected", 4)
+                return
+              end
+
+              run_test(idx)
+            end)
+          end)
+        end
+      })
+
+      job:start()
+    end, {})
+
+  vim.api.nvim_create_user_command("RunTests", function()
+    run_test()
+  end, {})
+end
 vim.api.nvim_create_autocmd("FileType", {
-  desc = "Keymaps for cpp files",
+  desc = "Config for c++ files",
   pattern = "cpp",
   callback = function()
+    local clangd_opts = {
+      cmd = {
+        "clangd",
+        "--enable-config",
+        "--background-index",
+        "-j", "12",
+        "--malloc-trim",
+        "--clang-tidy",
+        "--pch-storage=disk",
+        "--pretty",
+        "--header-insertion=iwyu",
+        "--header-insertion-decorators",
+        "--completion-style=detailed",
+        "--all-scopes-completion",
+      },
+      filetypes = { "cpp", "hpp", "inl", },
+      init_options = {
+        clangdFileStatus = true,
+        semanticTokens = {
+          timeout = 5000,
+        },
+      },
+    }
+
+    vim.lsp.config("clangd", clangd_opts)
+    vim.lsp.enable("clangd")
+
     local wk = require("which-key")
     wk.add(local_mapping)
+
+    vim.cmd [[set makeprg=cmake\ --build\ --preset\ dev-test]]
+    create_commands()
   end,
 })
 
+vim.api.nvim_create_user_command("CmmSetFile", function(command)
+  vim.system({ "ln", "-sf", command.fargs[1], "current.cmm" })
+  local exit_code = vim.v.shell_error
+  if exit_code == 0 then
+    vim.print("Created successfully a symlink of " .. command.fargs[1])
+  else
+    vim.print(string.format("CmmSetFile returned %d", exit_code))
+  end
+end, { nargs = 1 })
 
 
 return {
@@ -124,13 +225,13 @@ return {
         group = augroup,
         desc = "Load clangd_extensions with clangd",
         callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          vim.opt.colorcolumn = "100"
+          -- local client = vim.lsp.get_client_by_id(args.data.client_id)
 
           if assert(vim.lsp.get_client_by_id(args.data.client_id)).name == "clangd" then
             -- require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
-            require("clangd_extensions")
             -- add more `clangd` setup here as needed such as loading autocmds
-            vim.api.nvim_del_augroup_by_id(augroup) -- delete auto command since it only needs to happen once
+            vim.api.nvim_del_augroup_by_id(augroup)
           end
         end,
       })
@@ -166,23 +267,10 @@ return {
       { "MunifTanjim/nui.nvim", },
     },
     ft = "cpp",
-    -- keys = {
-    --   "<leader>ok",
-    --   "<leader>fk",
-    -- },
-    config = function()
-      local cppman = require("cppman")
-      cppman.setup()
-
-      -- Make a keymap to open the word under cursor in CPPman
-      vim.keymap.set("n", "<leader>ok", function()
-        cppman.open_cppman_for(vim.fn.expand("<cword>"))
-      end)
-
-      -- Open search box
-      vim.keymap.set("n", "<leader>fk", function()
-        cppman.input()
-      end)
-    end,
+    keys = {
+      { "<leader>cm", function() require "cppman".open_cppman_for(vim.fn.expand('<cword>')) end, desc = "[C]pp [M]anual on cword", },
+      { "<leader>cc", function() require "cppman".input() end,                                   desc = '[C]pp input word' },
+    },
+    config = true
   },
 }

@@ -2,6 +2,7 @@ return {
   {
     "nvim-java/nvim-java",
     pattern = "*.java",
+    enabled = false,
     lazy = true,
     opts = { jdk = { auto_install = false, }, },
   },

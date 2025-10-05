@@ -1,6 +1,7 @@
 return {
   {
     "elihunter173/dirbuf.nvim",
+    enabled = false,
     keys = {
       {
         "<leader>ob",

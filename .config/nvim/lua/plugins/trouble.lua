@@ -1,4 +1,4 @@
-return { { "artemave/workspace-diagnostics.nvim" },
+return {
   {
     "folke/trouble.nvim",
     cmd = "Trouble",
@@ -41,6 +41,8 @@ return { { "artemave/workspace-diagnostics.nvim" },
         ["<c-p>"] = "prev",
         ["<c-n>"] = "next",
       },
+      quickfix = { auto_open = true, auto_close = true, },
+
     },
   }
 }

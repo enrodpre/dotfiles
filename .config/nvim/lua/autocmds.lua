@@ -37,11 +37,11 @@ local highlight_group = vim.api.nvim_create_augroup("YankHighlight", {
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlights when yanking",
+  pattern = "*",
   callback = function()
-    vim.highlight.on_yank()
+    vim.highlight.on_yank { higroup = "Visual", timeout = 250 }
   end,
   group = highlight_group,
-  pattern = "*",
 })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -87,7 +87,7 @@ vim.api.nvim_create_autocmd({ "VimResized", "BufWinEnter" }, {
   callback = function(args)
     local width = vim.api.nvim_win_get_width(0)
 
-    local max   = 100
+    local max   = 150
     local min   = 20
 
     if width < max and width > min and width ~= vim.api.nvim_get_option_value("textwidth", {}) then
@@ -95,6 +95,14 @@ vim.api.nvim_create_autocmd({ "VimResized", "BufWinEnter" }, {
         buf = args.buf,
         scope = "local"
       })
+    end
+  end
+})
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function(args)
+    if vim.bo[args.buf].filetype == "" then
+      vim.cmd [[filetype detect]]
     end
   end
 })

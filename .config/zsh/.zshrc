@@ -1,5 +1,12 @@
 #!/usr/bin/zsh
 
+if [[ -z $DISPLAY && $(tty) == /dev/tty1 ]]; then
+    # Check if no X session is already running
+    if ! pgrep -x X >/dev/null && ! pgrep -x Xorg >/dev/null; then
+        exec startx
+    fi
+fi
+
 ########### SHELL VARS ############
 export EZA_COLORS="$(cat $ZDOTDIR/themes/eza)"
 export HISTFILE=$ZDOTCACHE/.zsh_history
@@ -68,6 +75,6 @@ setopt PUSHD_SILENT
 
 [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
 
-source $ZDOTDIR/vi-mode.zsh
+# source $ZDOTDIR/vi-mode.zsh
 source $ZDOTDIR/completion.zsh
 source $ZDOTDIR/mapping.zsh

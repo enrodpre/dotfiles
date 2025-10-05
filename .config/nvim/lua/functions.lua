@@ -1,5 +1,17 @@
-vim.lua = vim.lua or {}
-local F = vim.lua
+local F = {}
+_G.Lua = F
+
+F.add_linting = function(filetype, data)
+  if type(data) == "string" then
+    data = { data }
+  end
+
+  require('lint').linters_by_ft[filetype] = data
+  vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+    pattern = filetype,
+    callback = function() require("lint").try_lint() end
+  })
+end
 
 F.wildcard_position = function(w)
   w = w or "<cword>"
@@ -28,7 +40,7 @@ F.get_diagnostic_on_cursor = function()
   })
 end
 
-vim.lua.get_lsp_diagnostic_information = function()
+F.get_lsp_diagnostic_information = function()
   local diagnostic = F.get_diagnostic_on_cursor()[1]
   if diagnostic == nil then return end
 
@@ -196,7 +208,7 @@ F.replace_node = function(before, after)
 end
 
 
-F.unfold_template_node = function(args)
+F.unfold_template_node                 = function(args)
   local index = args.index or 1
   local template_node = args.node or vim.treesitter.get_node()
   if not template_node then return end
@@ -208,7 +220,7 @@ F.unfold_template_node = function(args)
   F.replace_node(node, parameter)
 end
 
-F.unfold_call_node = function(args)
+F.unfold_call_node                     = function(args)
   local index = args.index or 1
   local cword = args.node or vim.treesitter.get_node()
   if not cword then return end
@@ -219,7 +231,7 @@ F.unfold_call_node = function(args)
   F.replace_node(top_node, ith_arg)
 end
 
-F.unfold_node = function(args)
+F.unfold_node                          = function(args)
   local node = args.node or vim.treesitter.get_node()
   if not node then return end
 
@@ -231,3 +243,36 @@ F.unfold_node = function(args)
     vim.print("Unrecognized node")
   end
 end
+
+F.required_on_exported_call            = function(mod)
+  local mt = setmetatable({}, {
+    __index = function(_, picker)
+      return function(...)
+        return require(mod)[picker](...)
+      end
+    end,
+  })
+
+  return mt
+end
+
+F.require_on_exported_call_with_params = function(mod, opts_table)
+  return setmetatable({}, {
+    __index = function(_, picker)
+      return function(...)
+        local opts = nil
+        if opts_table ~= nil then
+          opts = opts_table[picker]
+        end
+
+        if opts == nil then
+          return require(mod)[picker](...)
+        else
+          opts = vim.tbl_deep_extend('force', opts, { ... })
+          return require(mod)[picker](opts)
+        end
+      end
+    end,
+  })
+end
+return F

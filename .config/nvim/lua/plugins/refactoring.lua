@@ -1,5 +1,5 @@
 return {
-  enabled = true,
+  enabled = false,
   "ThePrimeagen/refactoring.nvim",
   event = "LspAttach",
   dependencies = {

@@ -90,79 +90,14 @@ end
 return {
   {
     "neovim/nvim-lspconfig",
-    event = { "BufReadPost", "BufNewFile", "BufWritePre", },
+    event = { "VeryLazy" },
     keys = mapping,
     opts = {
-      bashls = { filetypes = { "sh", "zsh", "bash", }, },
-      neocmake = {
-        cmd = { "neocmakelsp", "--stdio" },
-        single_file_support = true, -- suggested
-        init_options = {
-          format = {
-            enable = true, -- to use lsp format
-          },
-          lint = {
-            enable = true
-          },
-          semantic_token = false,
-        },
-        filetypes = { "cmake", "CMakeLists.txt", },
-      },
-      jqls = {},
-      clangd = {
-        cmd = {
-          "clangd",
-          "--enable-config",
-          "--background-index",
-          "-j", "12",
-          "--query-driver=/usr/bin/g++",
-          "--malloc-trim",
-          "--clang-tidy",
-          "--pch-storage=disk",
-          "--pretty",
-          "--header-insertion=iwyu",
-          "--header-insertion-decorators",
-          "--import-insertions",
-          "--completion-style=detailed",
-          "--cross-file-rename",
-          "--all-scopes-completion"
-        },
-        filetypes = { "cpp", "hpp", "c", "inl", },
-        init_options = {
-          -- usePlaceholders = true,
-          completeUnimported = true,
-          clangdFileStatus = true,
-          -- Increase the timeout for semantic tokens
-          semanticTokens = {
-            -- Adjust the timeout value as needed
-            timeout = 5000, -- Example: 5000 ms
-          },
-        },
-      },
-      lua_ls = {
-        Lua = {
-          codeLens = {
-            enable = true,
-          },
-          completion = {
-            callSnippet = "Replace",
-          },
-          doc = {
-            privateName = { "^_", },
-          },
-          hint = {
-            enable = true,
-            setType = false,
-            paramType = true,
-            paramName = "Disable",
-            semicolon = "Disable",
-            arrayIndex = "Disable",
-          },
-          diagnostics = {
-            globals = { "vim" },
-          },
-          -- semantoc = { enable = false },
-        },
+      tombi = {},
+      bashls = { filetypes = { "zsh", }, },
+      asm_lsp = {},
+      jsonls = {
+        cmd = { "vscode-json-language-server", "--stdio" },
       },
       yamlls = {},
     },
@@ -177,26 +112,24 @@ return {
           prefix = "●",
         },
       })
-
       vim.lsp.config("*", {
-        capabilities = vim.lsp.protocol.make_client_capabilities()
+        capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities(), true)
       })
-      vim.lsp.config("*", {
-        capabilities = {
-          offsetEncoding = { "utf-16", },
-          workspace = {
-            fileOperations = {
-              didRename = true,
-              -- willRename = true,
-            },
-            didChangeWatchedFiles = {
-              dynamicRegistration = true,
-              relative_pattern_support = true,
-            },
-          },
-        }
-      })
-
+      -- vim.lsp.config("*", {
+      --   capabilities = {
+      --     offsetEncoding = { "utf-16", },
+      --     workspace = {
+      --       fileOperations = {
+      --         didRename = true,
+      --         -- willRename = true,
+      --       },
+      --       didChangeWatchedFiles = {
+      --         dynamicRegistration = true,
+      --         relative_pattern_support = true,
+      --       },
+      --     },
+      --   }
+      -- })
 
       for server, conf in pairs(opts) do
         vim.lsp.config(server, conf)

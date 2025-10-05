@@ -1,5 +1,5 @@
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = "python",
+vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
+  pattern = { '*.py' },
   callback = function()
     vim.lsp.config("pylsp",
       {
@@ -33,9 +33,10 @@ return {
   {
     "mfussenegger/nvim-dap-python",
     ft = "python",
+    enabled = false,
     dependencies = "mfussenegger/nvim-dap",
     config = function()
-      local executable = (os.getenv("VIRTUAL_ENV") or "/usr") .. "/bin/python"
+      local executable = (os.getenv("VIRTUAL_ENV") or "/usr") .. "/usr/bin/env python"
       require("dap-python").test_runner = "pytest"
       require("dap-python").setup(executable)
       table.insert(require('dap').configurations.python, {
@@ -50,10 +51,12 @@ return {
     "linux-cultist/venv-selector.nvim",
     dependencies = {
       "neovim/nvim-lspconfig",
-      "nvim-telescope/telescope.nvim",
     },
     ft = "python",
     opts = { name = ".venv", },
-    branch = "regexp",
+    config = function(_, opts)
+      require("venv-selector").setup(opts)
+      vim.cmd [[VenvSelect]]
+    end
   }
 }

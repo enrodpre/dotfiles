@@ -1,25 +1,9 @@
 return {
   "folke/noice.nvim",
+  enabled = true,
   event = "UiEnter",
   dependencies = {
     "MunifTanjim/nui.nvim",
-    {
-      "rcarriga/nvim-notify",
-      opts = {
-        timeout = 3000,
-        max_height = function()
-          return math.floor(vim.o.lines * 0.75)
-        end,
-        max_width = function()
-          return math.floor(vim.o.columns * 0.75)
-        end,
-        on_open = function(win)
-          vim.api.nvim_win_set_config(win, {
-            zindex = 100,
-          })
-        end,
-      },
-    },
   },
   config = function(_, opts)
     local focused = true
@@ -58,32 +42,23 @@ return {
     },
     commands = {
       history = {
-        view = "popupmenu",
+        view = "nui",
       },
     },
     lsp = {
       override = {
         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
         ["vim.lsp.util.stylize_markdown"] = true,
-        ["cmp.entry.get_documentation"] = true,
       },
     },
     messages = {
       view_history = "popup",
       view_search = false,
     },
-    override = {
-      -- override the default lsp markdown formatter with Noice
-      ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-      -- override the lsp markdown formatter with Noice
-      ["vim.lsp.util.stylize_markdown"] = true,
-      -- override cmp documentation with Noice (needs the other options to work)
-      ["cmp.entry.get_documentation"] = true,
-    },
-    popupmenu = { backend = "cmp", },
+    popupmenu = { backend = "nui", },
     presets = {
       bottom_search = true,
-      command_palette = false,
+      command_palette = true,
       long_message_to_split = false,
       lsp_doc_border = true,
     },
@@ -144,7 +119,7 @@ return {
       popupmenu = {
         relative = "editor",
         position = {
-          row = 8,
+          row = 0,
           col = "50%",
         },
         size = {

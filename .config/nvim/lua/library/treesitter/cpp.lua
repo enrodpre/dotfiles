@@ -40,8 +40,8 @@ function F.Call.new(node)
 
   local call = {
     root = top_node,
-    func = top_node:field("function") [1],
-    args = top_node:field("arguments") [1],
+    func = top_node:field("function")[1],
+    args = top_node:field("arguments")[1],
   }
 
   return call
@@ -115,7 +115,7 @@ F.get_call_argument_node = function(args)
   local index = args.index or 1
 
   local call_node = F.get_full_call_node(node)
-  local arguments = call_node:field("arguments") [1]
+  local arguments = call_node:field("arguments")[1]
   return arguments:child(index)
 end
 
