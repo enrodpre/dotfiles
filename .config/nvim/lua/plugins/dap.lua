@@ -2,10 +2,9 @@ local function dap()
   return require("dap")
 end
 
-local cond = function()
-  return vim.bo.ft ~= 'cpp'
-end
 
+
+vim.g.dap_enabled = false
 return {
   {
     "mfussenegger/nvim-dap",
@@ -13,13 +12,7 @@ return {
       "rcarriga/nvim-dap-ui",
       "theHamsta/nvim-dap-virtual-text",
     },
-    cond = cond,
-    keys = function()
-      if cond() then
-        return {
-        }
-      end
-    end,
+    cond = vim.g.dap_enabled,
     opts = function()
       vim.fn.sign_define('DapStopped', {
         text = '',
@@ -33,11 +26,6 @@ return {
         linehl = '',
         numhl = ''
       })
-      -- require "cmp".setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-      --   sources = {
-      --     { name = "dap" },
-      --   },
-      -- })
       require("which-key").add({
         {
           "<leader>db",
@@ -69,8 +57,10 @@ return {
       "nvim-neotest/nvim-nio",
       "theHamsta/nvim-dap-virtual-text",
     },
-    cond = cond,
+    cond = vim.g.dap_enabled,
     opts = function()
+      if not vim.g.dap_enabled then return {} end
+
       local dapui = require("dapui")
       dap().listeners.before['attach']['dapui'] = function()
         vim.print("Attached")

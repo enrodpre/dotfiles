@@ -1,3 +1,12 @@
+vim.api.nvim_create_autocmd("TextYankPost", {
+  desc = "Highlights when yanking",
+  pattern = "*",
+  callback = function()
+    vim.highlight.on_yank { higroup = "Visual", timeout = 250 }
+  end,
+})
+
+
 return {
   {
     "folke/edgy.nvim",

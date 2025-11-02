@@ -6,9 +6,8 @@ return {
       linters_by_ft = {
         cpp = { "cppcheck", },
         python = { "pylint" },
-        zsh = { "bash",
-          -- "shellcheck",
-          "zsh" },
+        bash = { "shellcheck", "bash" },
+        zsh = { "bash", "zsh" },
       },
     },
     config = function(_, opts)

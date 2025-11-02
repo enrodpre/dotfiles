@@ -39,7 +39,7 @@
     background_jobs         # presence of background jobs
     # direnv                  # direnv status (https://direnv.net/)
     virtualenv              # python virtual environment (https://docs.python.org/3/library/venv.html)
-    vim_shell               
+    # vim_shell               
   )
 
   # Defines character set used by powerlevel10k. It's best to let `p10k configure` set it for you.
@@ -665,8 +665,6 @@
   # Custom icon.
   # typeset -g POWERLEVEL9K_XPLR_VISUAL_IDENTIFIER_EXPANSION='⭐'
 
-  ###########################[ vim_shell: vim shell indicator (:sh) ]###########################
-  # Vim shell indicator color.
   typeset -g POWERLEVEL9K_VIM_SHELL_FOREGROUND=34
   # Custom icon.
   # typeset -g POWERLEVEL9K_VIM_SHELL_VISUAL_IDENTIFIER_EXPANSION='⭐'

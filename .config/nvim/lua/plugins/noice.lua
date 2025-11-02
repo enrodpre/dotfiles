@@ -5,35 +5,6 @@ return {
   dependencies = {
     "MunifTanjim/nui.nvim",
   },
-  config = function(_, opts)
-    local focused = true
-
-    vim.api.nvim_create_autocmd("FocusGained", {
-      callback = function()
-        focused = true
-      end,
-    })
-    vim.api.nvim_create_autocmd("FocusLost", {
-      callback = function()
-        focused = false
-      end,
-    })
-
-    table.insert(opts.routes, 1, {
-      filter = {
-        ["not"] = {
-          event = "lsp",
-          kind = "progress",
-        },
-        cond = function()
-          return not focused
-        end,
-      },
-      view = "notify_send",
-      opts = { stop = false, },
-    })
-    require("noice").setup(opts)
-  end,
   opts = {
     cmdline = {
       view = "cmdline",
@@ -47,14 +18,15 @@ return {
     },
     lsp = {
       override = {
-        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-        ["vim.lsp.util.stylize_markdown"] = true,
+        -- ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        -- ["vim.lsp.util.stylize_markdown"] = true,
       },
     },
     messages = {
       view_history = "popup",
       view_search = false,
     },
+    notify = { enabled = false },
     popupmenu = { backend = "nui", },
     presets = {
       bottom_search = true,
@@ -104,9 +76,6 @@ return {
       },
     },
     views = {
-      notify = {
-        replace = true,
-      },
       cmdline_popup = {
         position = {
           col = "50%",

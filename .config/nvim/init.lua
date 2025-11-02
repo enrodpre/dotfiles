@@ -1,6 +1,7 @@
 require("options")
-require("filetype")
 require("functions")
+require("config").setup()
+require("library.lang")
 
 local lazy_installed = vim.uv.fs_stat(vim.fn.stdpath("data") .. "lazy/lazy.nvim")
 if not lazy_installed then
@@ -10,20 +11,18 @@ end
 require("lazy").setup({ { import = "plugins", }, }, {
   dev = {
     path = "~/dev/nvim/plugins",
-    patterns = { "cmake-tools.nvim" },
+    -- patterns = { "themery.nvim", "cmake-tools.nvim" },
     fallback = true
   },
   defaults = { lazy = true, },
-  -- install = { colorscheme = { "catppuccin", }, },
   rocks = { root = "/home/kike/.local/lib/luarocks/rocks-5.1", },
   change_detection = {
-    -- automatically check for config file changes and reload the ui
     enabled = true,
-    notify = false, -- get a notification when changes are found
+    notify = false,
   },
   performance = {
-    reset = true,
-    reset_packpath = false,
+    -- reset = true,
+    -- reset_packpath = true,
     rtp = {
       disabled_plugins = {
         "gzip",
@@ -36,19 +35,9 @@ require("lazy").setup({ { import = "plugins", }, }, {
       },
     },
   },
-  profiling = {
-    -- Enables extra stats on the debug tab related to the loader cache.
-    -- Additionally gathers stats about all package.loaders
-    loader = false,
-    -- Track each new require in the Lazy profiling tab
-    require = false,
-  },
+  profiling = { loader = true, require = true, },
 })
 
-vim.cmd [[packadd nohlsearch]]
--- vim.print = vim.notify
-require("autocmds")
 require("library")
-require("library.gdb")
-require("library.autosource")
-require("commands")
+
+vim.cmd [[packadd nohlsearch]]

@@ -1,9 +1,3 @@
-local surroundings = {
-  move = { "std::move(", ")", },
-  optional = { "std::optional<", ">", },
-  cref = { "const ", "&", },
-}
-
 local function find_alternate_files()
   local file = vim.fn.expand('%:t')
   local filename = vim.fn.expand('%:t:r')
@@ -16,6 +10,20 @@ local function find_alternate_files()
     fd_opts = table.concat(fd_opts, " ")
   }
 end
+
+local opts = {
+  keymaps = {
+    { "gdh", find_alternate_files, opts = { desc = "[Go] to other compilation unit files", } },
+  },
+}
+Lang:new(opts):setup()
+
+local surroundings = {
+  move = { "std::move(", ")", },
+  optional = { "std::optional<", ">", },
+  cref = { "const ", "&", },
+}
+
 
 
 local function toggle_reference_operator()
@@ -48,17 +56,17 @@ vim.api.nvim_create_user_command("Debug",
 
 
 local local_mapping = {
-  { "<leader>bt", function() return Gdb.toggle_gdb_breakpoint() end, desc = 'Toggle GDB breakpoint' },
-  { "<leader>bc", function() return Gdb.clear_all_breakpoints() end, desc = 'Clear all GDB breakpoints' },
-  { "<leader>bl", function() return Gdb.list_breakpoints() end,      desc = 'List GDB breakpoints' },
-  {
-    "<leader>bs",
-    function()
-      Lua.gdb.clear_all_breakpoints()
-      return Lua.gdb.toggle_gdb_breakpoint()
-    end,
-    desc = 'List GDB breakpoints'
-  },
+  -- { "<leader>bt", function() return Gdb.toggle_gdb_breakpoint() end, desc = 'Toggle GDB breakpoint' },
+  -- { "<leader>bc", function() return Gdb.clear_all_breakpoints() end, desc = 'Clear all GDB breakpoints' },
+  -- { "<leader>bl", function() return Gdb.list_breakpoints() end,      desc = 'List GDB breakpoints' },
+  -- {
+  --   "<leader>bs",
+  --   function()
+  --     Lua.gdb.clear_all_breakpoints()
+  --     return Lua.gdb.toggle_gdb_breakpoint()
+  --   end,
+  --   desc = 'List GDB breakpoints'
+  -- },
   { ",c",  desc = "[C]hange node", },
   { ",cp", desc = "[C]ange node toggle dot <-> arrow", toggle_reference_operator },
   {
@@ -80,8 +88,7 @@ local local_mapping = {
     end,
     desc = "[C]hange node add std::optional",
   },
-  { ",cu", Lua.unfold_node {},   desc = "[N]ode [U]nfold", },
-  { "gdh", find_alternate_files, desc = "[Go] to other compilation unit files", },
+  { ",cu", Lua.unfold_node {}, desc = "[N]ode [U]nfold", },
 }
 
 local function create_commands()
@@ -162,44 +169,6 @@ local function create_commands()
     run_test()
   end, {})
 end
-vim.api.nvim_create_autocmd("FileType", {
-  desc = "Config for c++ files",
-  pattern = "cpp",
-  callback = function()
-    local clangd_opts = {
-      cmd = {
-        "clangd",
-        "--enable-config",
-        "--background-index",
-        "-j", "12",
-        "--malloc-trim",
-        "--clang-tidy",
-        "--pch-storage=disk",
-        "--pretty",
-        "--header-insertion=iwyu",
-        "--header-insertion-decorators",
-        "--completion-style=detailed",
-        "--all-scopes-completion",
-      },
-      filetypes = { "cpp", "hpp", "inl", },
-      init_options = {
-        clangdFileStatus = true,
-        semanticTokens = {
-          timeout = 5000,
-        },
-      },
-    }
-
-    vim.lsp.config("clangd", clangd_opts)
-    vim.lsp.enable("clangd")
-
-    local wk = require("which-key")
-    wk.add(local_mapping)
-
-    vim.cmd [[set makeprg=cmake\ --build\ --preset\ dev-test]]
-    create_commands()
-  end,
-})
 
 vim.api.nvim_create_user_command("CmmSetFile", function(command)
   vim.system({ "ln", "-sf", command.fargs[1], "current.cmm" })
@@ -211,66 +180,35 @@ vim.api.nvim_create_user_command("CmmSetFile", function(command)
   end
 end, { nargs = 1 })
 
-
-return {
-  {
-    "p00f/clangd_extensions.nvim",
-    -- event = "LspAttach",
-    ft = "cpp",
-    init = function()
-      -- load clangd extensions when clangd attaches
-      local augroup = vim.api.nvim_create_augroup("clangd_extensions",
-        { clear = true, })
-      vim.api.nvim_create_autocmd("LspAttach", {
-        group = augroup,
-        desc = "Load clangd_extensions with clangd",
-        callback = function(args)
-          vim.opt.colorcolumn = "100"
-          -- local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-          if assert(vim.lsp.get_client_by_id(args.data.client_id)).name == "clangd" then
-            -- require("workspace-diagnostics").populate_workspace_diagnostics(client, 0)
-            -- add more `clangd` setup here as needed such as loading autocmds
-            vim.api.nvim_del_augroup_by_id(augroup)
-          end
-        end,
-      })
-    end,
-    opts = {
-      inlay_hints = {
-        inline = true,
-      },
-      ast = {
-        role_icons = {
-          type = "",
-          declaration = "",
-          expression = "",
-          specifier = "",
-          statement = "",
-          ["template argument"] = "",
-        },
-        kind_icons = {
-          Compound = "",
-          Recovery = "",
-          TranslationUnit = "",
-          PackExpansion = "",
-          TemplateTypeParm = "",
-          TemplateTemplateParm = "",
-          TemplateParamObject = "",
-        },
-      },
-    },
+local clangd_opts = {
+  cmd = {
+    "clangd",
+    "--enable-config",
+    "--background-index",
+    "-j", "12",
+    "--malloc-trim",
+    "--clang-tidy",
+    "--pch-storage=disk",
+    "--pretty",
+    "--header-insertion=iwyu",
+    "--header-insertion-decorators",
+    "--completion-style=detailed",
+    "--all-scopes-completion",
   },
-  {
-    "madskjeldgaard/cppman.nvim",
-    dependencies = {
-      { "MunifTanjim/nui.nvim", },
+  filetypes = { "cpp", "hpp", "inl", },
+  init_options = {
+    clangdFileStatus = true,
+    semanticTokens = {
+      timeout = 5000,
     },
-    ft = "cpp",
-    keys = {
-      { "<leader>cm", function() require "cppman".open_cppman_for(vim.fn.expand('<cword>')) end, desc = "[C]pp [M]anual on cword", },
-      { "<leader>cc", function() require "cppman".input() end,                                   desc = '[C]pp input word' },
-    },
-    config = true
   },
 }
+
+vim.lsp.config("clangd", clangd_opts)
+vim.lsp.enable("clangd")
+
+local wk = require("which-key")
+wk.add(local_mapping)
+
+vim.cmd [[set makeprg=cmake\ --build\ --preset\ dev-test]]
+create_commands()

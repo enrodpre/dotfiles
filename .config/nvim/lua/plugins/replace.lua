@@ -47,11 +47,12 @@ return {
       "<leader>or",
       function()
         local ext
-        if vim.bo.filetype == "cpp" then
-          ext = "{cpp,hpp,inl}"
-        else
-          ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
-        end
+        -- if vim.bo.filetype == "cpp" then
+        -- ext = "{cpp,hpp,inl}"
+        -- else
+        vim.filetype.get_option("cpp", option)
+        ext = vim.bo.buftype == "" and vim.fn.expand("%:e")
+        -- end
 
         require("grug-far").open {
           transient = true,

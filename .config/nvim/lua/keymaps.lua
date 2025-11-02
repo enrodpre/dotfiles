@@ -1,3 +1,22 @@
+vim.api.nvim_create_autocmd("User", {
+  desc = "Disable some defalt mapping",
+  pattern = "LazyLoad",
+  callback = function()
+    local delete = {
+      gc = { "x", "n", },
+      gcc = { "n", },
+    }
+
+    for lhs, modes in pairs(delete) do
+      --- @type table
+      for _, mode in ipairs(modes) do
+        vim.api.nvim_del_keymap(mode, lhs)
+      end
+    end
+  end,
+  once = true,
+})
+
 return {
 
   { "<leader>p", group = "[P]rint", },
@@ -10,22 +29,6 @@ return {
     desc = "[R]eload current file",
   },
   {
-    "<leader>pa",
-    function()
-      local node = vim.treesitter.cpp.get_template_parameter_node { index = 1, }
-      vim.print(vim.treesitter.get_node_text(node, 0))
-    end,
-    desc = "[P]rint Template [A]rgument",
-  },
-  {
-    "<leader>pt",
-    function()
-      local node = vim.treesitter.cpp.get_full_type_node()
-      vim.print(vim.treesitter.get_node_text(node, 0))
-    end,
-    desc = "[P]rint Full [T]ype",
-  },
-  {
     ",p",
     function()
       Lua.get_lsp_diagnostic_information()
@@ -33,18 +36,9 @@ return {
     desc = "Print more info about diagnostic",
   },
   {
-    "gw",
-    "<c-w>w",
-    desc = "Switch windows",
-  },
-  {
     "<c-[",
     proxy = "<c-o>",
     desc = "Go back (<C-O>)",
-  },
-  {
-    "<leader>a",
-    group = "[A]pply",
   },
   { "<",         "<gv",             mode = "v", },
   { ">",         ">gv",             mode = "v", },
@@ -116,11 +110,6 @@ return {
   },
   { "<leader>e", group = "[E]xecute", },
   -- { "<Esc>",     "<C-c>",             desc = "Better escape", },
-  {
-    "<leader>at",
-    "<Plug>PlenaryTestFile",
-    desc = "[A]pply [T]est current file",
-  },
   {
     "<leader>d",
     group = "[D]ap",

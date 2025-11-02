@@ -137,8 +137,3 @@ vim.api.nvim_create_user_command('FormatLuaTableSimple', simple_format_lua_table
 
 -- Optional: Create a keybinding
 -- vim.keymap.set('n', '<leader>ft', simple_format_lua_table, { desc = 'Format Lua table on current line' })
-
-return {
-  format_lua_table = format_lua_table,
-  simple_format_lua_table = simple_format_lua_table,
-}

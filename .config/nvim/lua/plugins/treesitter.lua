@@ -1,89 +1,12 @@
 #!/usr/bin/lua
 
-local treesitter_enabled = true
 
 return {
+  { "nvim-treesitter/nvim-treesitter-context", event = "VeryLazy", opts = {}, },
   {
     "nvim-treesitter/nvim-treesitter-textobjects",
     event = "VeryLazy",
-    config = function()
-      -- When in diff mode, we want to use the default
-      -- vim text objects c & C instead of the treesitter ones.
-      local move = require("nvim-treesitter.textobjects.move") ---@type table<string,fun(...)>
-      local configs = require("nvim-treesitter.configs")
-      for name, fn in pairs(move) do
-        if name:find("goto") == 1 then
-          move[name] = function(q, ...)
-            if vim.wo.diff then
-              local config = configs.get_module("textobjects.move")
-                  [name] ---@type table<string,string>
-              for key, query in pairs(config or {}) do
-                if q == query and key:find("[%]%[][cC]") then
-                  vim.cmd("normal! " .. key)
-                  return
-                end
-              end
-            end
-            return fn(q, ...)
-          end
-        end
-      end
-    end,
-  },
-  {
-    -- Highlight, edit, and navigate code
-    "nvim-treesitter/nvim-treesitter",
-    enabled = treesitter_enabled,
-    dependencies = {
-      "nvim-treesitter/nvim-treesitter-textobjects",
-      {
-        "nvim-treesitter/nvim-treesitter-context",
-        opts = {
-          max_lines = 2,
-          mode = "topline",
-          multiline_threshold = 10
-        },
-      },
-    },
-    event = { "VeryLazy", },
-    cmd = { "TSUpdateSync", "TSUpdate", "TSInstall", },
-    build = ":TSUpdate",
-    init = function(plugin)
-      require("lazy.core.loader").add_to_rtp(plugin)
-      require("nvim-treesitter.query_predicates")
-    end,
     opts = {
-      ensure_installed = {
-        "c",
-        "cpp",
-        "lua",
-        "nasm",
-        "python",
-        "rasi",
-        "vimdoc",
-        "vim",
-        "bash",
-        "luadoc",
-        "luap",
-        "markdown",
-        "markdown_inline",
-        "printf",
-        "yaml",
-        "regex",
-        "toml",
-        "cmake",
-        "git_config",
-        "gitcommit",
-        "git_rebase",
-        "gitignore",
-        "gitattributes",
-        "java",
-      },
-      auto_install = true,
-      highlight = { enable = true, additional_vim_regex_highlighting = false, },
-      indent = { enable = true, },
-      incremental_selection = { enable = false, },
-      endwise = { enable = true, },
       textobjects = {
         lsp_interop = {
           enable = true,
@@ -136,9 +59,8 @@ return {
           },
         },
       },
+
     },
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
-    end,
+    config = function(_, opts) require("nvim-treesitter.configs").setup(opts) end
   },
 }

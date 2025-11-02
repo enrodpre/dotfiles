@@ -1,7 +1,6 @@
 return {
   {
     'saghen/blink.cmp',
-    -- optional: provides snippets for the snippet source
     dependencies = {
       { 'rafamadriz/friendly-snippets' },
       {
@@ -10,7 +9,6 @@ return {
         opts = {},
         version = not vim.g.lazyvim_blink_main and "*",
       },
-
     },
     event = { "InsertEnter", "CmdlineEnter" },
     version = "1.*",
@@ -49,14 +47,11 @@ return {
         },
       },
       signature = { enabled = true },
-    }
-  },
-  {
-    "catppuccin",
-    optional = true,
-    opts = {
-      integrations = { blink_cmp = true },
     },
-  },
-
+    config = function(_, opts)
+      require("blink.cmp").setup(opts)
+      vim.lsp.config("*", {
+        capabilities = require("blink.cmp").get_lsp_capabilities(vim.lsp.protocol.make_client_capabilities(), true) })
+    end
+  }
 }

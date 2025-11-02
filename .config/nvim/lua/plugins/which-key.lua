@@ -6,7 +6,7 @@ return {
   event = "VeryLazy",
   opts = {
     preset = "modern",
-    spec = require("mapping"),
+    spec = require("keymaps"),
     win = {
       no_overlap = false,
       row = 30

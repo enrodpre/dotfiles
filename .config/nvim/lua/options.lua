@@ -1,42 +1,46 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = "\\"
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_node_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.autoformat = true
+vim.g.minwidth = 80
 
-local opt = vim.opt
 
-opt.confirm = true
-opt.exrc = true
-opt.spelllang = { "en", "es" }
-opt.cmdheight = 1
-opt.grepprg = "rg --vimgrep"
-opt.hidden = true
-opt.bufhidden = "delete"
-opt.hlsearch = true
-opt.wrap = false
-opt.linebreak = true
-opt.matchpairs = "(:),{:},[:],<:>"
-opt.number = true
-opt.relativenumber = true
-opt.cursorline = true
-opt.cursorlineopt = "both"
-opt.clipboard = "unnamedplus"
-opt.breakindent = true
-opt.expandtab = true
-opt.smartindent = true
-opt.smartcase = true
-opt.tabstop = 2
-opt.shiftwidth = 2
-opt.undofile = true
-opt.showcmdloc = "statusline"
-opt.signcolumn = "yes"
-opt.updatetime = 250
-opt.timeoutlen = 300
-opt.laststatus = 2
-
-vim.g.loaded_perl_provider = false
-vim.g.loaded_node_provider = false
-vim.g.loaded_ruby_provider = false
-
-vim.b.minwidth = 80
+vim.o.cmdheight = 0
+vim.o.showmode = false          -- Don't show mode in command line
+vim.o.ruler = false             -- Don't show cursor position
+vim.o.showcmd = true
+vim.o.showcmdloc = "statusline" -- Don't show partial command
+vim.o.confirm = true
+vim.o.exrc = false
+vim.o.grepprg = "rg --vimgrep"
+vim.o.hidden = true
+vim.o.bufhidden = "delete"
+vim.o.hlsearch = true
+vim.o.wrap = false
+vim.o.linebreak = true
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.cursorline = true
+vim.o.cursorlineopt = "both"
+vim.o.breakindent = true
+vim.o.expandtab = true
+vim.o.smartindent = true
+vim.o.smartcase = true
+vim.o.tabstop = 2
+vim.o.shiftwidth = 2
+vim.o.undofile = true
+vim.o.signcolumn = "yes"
+vim.o.updatetime = 250
+vim.o.timeoutlen = 300
+vim.o.laststatus = 2
 vim.o.termguicolors = true
 
-vim.g.linters = vim.g.linters or {}
+-- seen somewhere, its supposed to reduce delay
+vim.schedule(function()
+  vim.o.clipboard = "unnamedplus"
+end)
+
+vim.opt.matchpairs = { "(:)", "{:}", "[:]", "<:>" }
+vim.opt.spelllang = { "en", "es" }

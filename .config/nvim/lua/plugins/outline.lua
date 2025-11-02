@@ -1,7 +1,7 @@
 return {
   "stevearc/aerial.nvim",
   keys = { {
-    "<leader>oa", "<cmd>AerialToggle!<CR>", "Toggle aerial"
+    "<leader>oa", Lua.lazy.req("aerial").fzf_lua_picker, "Toggle aerial"
   } },
   opts = {
     layout = {

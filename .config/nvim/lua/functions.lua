@@ -1,17 +1,91 @@
 local F = {}
 _G.Lua = F
 
-F.add_linting = function(filetype, data)
-  if type(data) == "string" then
-    data = { data }
+F.is_empty = function(var)
+  if var == nil then
+    return true
   end
 
-  require('lint').linters_by_ft[filetype] = data
-  vim.api.nvim_create_autocmd({ "BufWritePost" }, {
-    pattern = filetype,
-    callback = function() require("lint").try_lint() end
-  })
+  if type(var) == "string" and var == "" then
+    return true
+  end
+
+  if type(var) == "table" and next(var) == nil then
+    return true
+  end
+
+  return false
 end
+F.lazy = {
+  req = function(mod)
+    local mt = setmetatable({}, {
+      __index = function(_, picker)
+        return function(...)
+          return require(mod)[picker](...)
+        end
+      end,
+    })
+
+    return mt
+  end,
+  fn = function(fn)
+    local cached_result = nil
+    local executed = false
+
+    return setmetatable({}, {
+      __call = function()
+        if not executed then
+          cached_result = fn()
+          executed = true
+        end
+        return cached_result
+      end,
+      __index = function(_, key)
+        if not executed then
+          cached_result = fn()
+          executed = true
+        end
+        if type(cached_result) == "table" then
+          return cached_result[key]
+        end
+        return nil
+      end,
+    })
+  end,
+  tbl = function(tbl, keys)
+    local cache = {}
+
+    return setmetatable(tbl or {}, {
+      __index = function(t, key)
+        -- If it's a lazy key and not yet cached
+        if keys[key] and cache[key] == nil then
+          cache[key] = keys[key]()
+        end
+
+        -- Return cached value or regular table value
+        return cache[key] or rawget(t, key)
+      end,
+    })
+  end
+}
+F.get_submodules = function(name)
+  if not name or name == "" then return {} end
+  local path = vim.fn.stdpath("config") .. "/lua/" .. name
+
+  local files = vim.fn.globpath(path, "**/*.lua", true, true)
+  local modules = {}
+
+  for _, file in ipairs(files) do
+    local mod = file
+        :gsub(vim.fn.stdpath("config") .. "/lua/", "")
+        :gsub("%.lua$", "")
+        :gsub("/", ".")
+    table.insert(modules, mod)
+  end
+
+  return modules
+end
+
 
 F.wildcard_position = function(w)
   w = w or "<cword>"
