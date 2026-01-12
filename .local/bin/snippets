@@ -1,11 +1,12 @@
 #!/usr/bin/env zsh
 
+
 scripts="$(fd sh $XDG_DATA_HOME/snippets | sort)"
 
 echo "Available scripts:"
 counter=1
-while read -r line; do
-  echo ${counter}. "$(basename $line)"
+while read -r file; do
+  echo ${counter}. "$(basename $file)"
   counter=$((counter + 1))
 done <<<"$scripts"
 
@@ -16,7 +17,7 @@ script=$(sed -n "${option}p" <<<"${scripts}")
 echo "Selected $(basename $script). What do u want to do:"
 echo "1. Execute"
 echo "2. Copy to clipboard"
-echo "3. Open in nvim"
+echo "3. Edit"
 echo "4. Exit"
 read -r action
 
@@ -31,7 +32,7 @@ case $action in
   fi
   ;;
 2)
-  cat $script | tail -n +2 | xclip
+  cat $script | tail -n +2 | wl-copy
   echo Copied to clipboard!
   ;;
 3)

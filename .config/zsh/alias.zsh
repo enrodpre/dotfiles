@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+alias clip="wl-copy"
+alias btop="btop --force-utf"
 alias 2hex="printf '%x\n'"
 alias -g dots='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'
 alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
@@ -27,7 +29,6 @@ alias rgh='rg -p --hidden'
 # alias df="df -h"
 alias luarocks='luarocks --lua-version 5.1'
 alias pacman="sudo pacman"
-alias systemctl="sudo systemctl"
 
 alias adb='HOME="$XDG_DATA_HOME"/android adb'
 alias netbeans=netbeans --userdir "$XDG_CONFIG_HOME"/netbeans

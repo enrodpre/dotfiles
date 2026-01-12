@@ -49,3 +49,6 @@ path=(
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=${XDG_CONFIG_HOME}/java -Djavafx.cachedir=${XDG_CACHE_HOME}/openjfx"
 
 source $ZDOTDIR/functions.zsh
+
+# Theme vars
+export FONT="Fira code"

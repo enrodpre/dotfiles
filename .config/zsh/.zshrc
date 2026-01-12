@@ -1,10 +1,7 @@
 #!/usr/bin/zsh
 
-if [[ -z $DISPLAY && $(tty) == /dev/tty1 ]]; then
-    # Check if no X session is already running
-    if ! pgrep -x X >/dev/null && ! pgrep -x Xorg >/dev/null; then
-        exec startx
-    fi
+if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
+  exec systemd-cat --identifier=sway sway
 fi
 
 bindkey -e
@@ -29,10 +26,6 @@ alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 source $ZDOTDIR/themes/catppuccin_mocha-zsh-syntax-highlighting.zsh
 
 source $ZDOTDIR/alias.zsh
-
-################ p10k ##############
-# If it is not the embedded terminal of neovim
-####################################
 
 # Source plugins
 fd -L -t f -d 2 ".plugin.zsh" "$XDG_DATA_HOME/zsh/autoload" | while read -r zshplugin; do source $zshplugin; done
@@ -59,10 +52,11 @@ setopt PUSHD_SILENT
 [[ -s "/etc/grc.zsh" ]] && source /etc/grc.zsh
 
 source $ZDOTDIR/completion.zsh
-source $ZDOTDIR/mapping.zsh
 
 if [ -z $NVIM ]; then
     source $ZDOTDIR/standalone.zsh
 else
     source $ZDOTDIR/embedded.zsh
 fi
+
+source $ZDOTDIR/mapping.zsh
