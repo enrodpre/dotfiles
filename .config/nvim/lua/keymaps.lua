@@ -17,8 +17,25 @@ vim.api.nvim_create_autocmd("User", {
   once = true,
 })
 
-return {
+local lazyreq = Lua.required_on_exported_call
 
+local smart_splits = function(fn)
+  return lazyreq("smart-splits")[fn]
+end
+
+return {
+  { "<M-h>",     smart_splits("move_cursor_left") },
+  { "<M-j>",     smart_splits("move_cursor_down") },
+  { "<M-k>",     smart_splits("move_cursor_up") },
+  { "<M-l>",     smart_splits("move_cursor_right") },
+  { "<D-h>",     smart_splits("resize_left") },
+  { "<D-j>",     smart_splits("resize_down") },
+  { "<D-k>",     smart_splits("resize_up") },
+  { "<D-l>",     smart_splits("resize_right") },
+  { "<S-M-h>",   smart_splits("swap_buf_left") },
+  { "<S-M-j>",   smart_splits("swap_buf_down") },
+  { "<S-M-k>",   smart_splits("swap_buf_up") },
+  { "<S-M-l>",   smart_splits("swap_buf_right") },
   { "<leader>p", group = "[P]rint", },
   {
     ",r",
@@ -40,8 +57,8 @@ return {
     proxy = "<c-o>",
     desc = "Go back (<C-O>)",
   },
-  { "<",         "<gv",             mode = "v", },
-  { ">",         ">gv",             mode = "v", },
+  { "<", "<gv", mode = "v", },
+  { ">", ">gv", mode = "v", },
   {
     ",o",
     "a<CR><Esc>",
@@ -133,18 +150,6 @@ return {
     },
   },
   {
-    {
-      "<D-h>", [[<Cmd>wincmd h<CR>]], mode = "nt",
-    },
-    {
-      "<D-j>", [[<Cmd>wincmd j<CR>]], mode = "nt",
-    },
-    {
-      "<D-k>", [[<Cmd>wincmd k<CR>]], mode = "nt",
-    },
-    {
-      "<D-l>", [[<Cmd>wincmd l<CR>]], mode = "nt",
-    },
     {
       "<C-w>", [[<C-\><C-n><C-w>]], mode = "t",
     },

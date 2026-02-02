@@ -2,12 +2,17 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlights when yanking",
   pattern = "*",
   callback = function()
-    vim.highlight.on_yank { higroup = "Visual", timeout = 250 }
+    vim.hl.on_yank { higroup = "Visual", timeout = 250 }
   end,
 })
 
 
 return {
+  {
+    'mrjones2014/smart-splits.nvim',
+    build = './kitty/install-kittens.bash',
+    lazy = false,
+  },
   {
     "folke/edgy.nvim",
     init = function()

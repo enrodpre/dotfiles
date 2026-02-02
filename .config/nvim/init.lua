@@ -41,3 +41,5 @@ require("lazy").setup({ { import = "plugins", }, }, {
 require("library")
 
 vim.cmd [[packadd nohlsearch]]
+
+vim.lsp.enable("bashls")

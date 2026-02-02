@@ -1,4 +1,4 @@
-# vim:ft=swayconfig
+# vim:ft=swayfxconfig
 
 set $config $HOME/.config/sway
 
@@ -7,7 +7,7 @@ for_window [title="Picture-in-Picture"] sticky enable
 
 output HDMI-A-1 {
  mode 2560x1440@144Hz
- # mode 1920x1080@144Hz
+#  mode 1920x1080@144Hz
   position 1920 0
 }
 
@@ -30,3 +30,4 @@ input type:keyboard {
 include style
 include mapping
 include systemd
+default_dim_inactive 0

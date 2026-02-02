@@ -16,7 +16,6 @@ local opts = {
     { "gdh", find_alternate_files, opts = { desc = "[Go] to other compilation unit files", } },
   },
 }
-Lang:new(opts):setup()
 
 local surroundings = {
   move = { "std::move(", ")", },
@@ -180,31 +179,6 @@ vim.api.nvim_create_user_command("CmmSetFile", function(command)
   end
 end, { nargs = 1 })
 
-local clangd_opts = {
-  cmd = {
-    "clangd",
-    "--enable-config",
-    "--background-index",
-    "-j", "12",
-    "--malloc-trim",
-    "--clang-tidy",
-    "--pch-storage=disk",
-    "--pretty",
-    "--header-insertion=iwyu",
-    "--header-insertion-decorators",
-    "--completion-style=detailed",
-    "--all-scopes-completion",
-  },
-  filetypes = { "cpp", "hpp", "inl", },
-  init_options = {
-    clangdFileStatus = true,
-    semanticTokens = {
-      timeout = 5000,
-    },
-  },
-}
-
-vim.lsp.config("clangd", clangd_opts)
 vim.lsp.enable("clangd")
 
 local wk = require("which-key")

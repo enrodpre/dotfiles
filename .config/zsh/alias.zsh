@@ -1,6 +1,6 @@
 #!/bin/zsh
 
-alias clip="wl-copy"
+  alias clip="wl-copy"
 alias btop="btop --force-utf"
 alias 2hex="printf '%x\n'"
 alias -g dots='git --git-dir=$HOME/.dotfiles.git --work-tree=$HOME'

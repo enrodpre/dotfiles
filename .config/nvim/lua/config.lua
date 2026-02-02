@@ -29,4 +29,12 @@ C.setup = function()
   })
 end
 
+vim.api.nvim_create_autocmd('BufWritePost', {
+  callback = function() 
+    vim.lsp.buf.format()
+
+  end
+})
+
+
 return C

@@ -6,7 +6,6 @@ vim.g.loaded_ruby_provider = 0
 vim.g.autoformat = true
 vim.g.minwidth = 80
 
-
 vim.o.cmdheight = 0
 vim.o.showmode = false          -- Don't show mode in command line
 vim.o.ruler = false             -- Don't show cursor position
@@ -18,7 +17,8 @@ vim.o.grepprg = "rg --vimgrep"
 vim.o.hidden = true
 vim.o.bufhidden = "delete"
 vim.o.hlsearch = true
-vim.o.wrap = false
+vim.o.wrap = true
+vim.o.sidescroll = 0
 vim.o.linebreak = true
 vim.o.number = true
 vim.o.relativenumber = true

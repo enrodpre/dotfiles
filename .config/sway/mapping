@@ -1,4 +1,4 @@
-# vim:ft=swayconfig
+# vim:ft=swayfxconfig
 
 set $mod Mod1
 set $up k

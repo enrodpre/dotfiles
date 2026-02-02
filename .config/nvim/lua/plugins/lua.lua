@@ -1,42 +1,5 @@
 return {
   {
-    "neovim/nvim-lspconfig",
-    ft = "lua",
-    opts = function()
-      local lua_ls = {
-        settings = {
-          Lua = {
-            workspace = {
-              checkThirdParty = false,
-            },
-            codeLens = {
-              enable = true,
-            },
-            completion = {
-              callSnippet = "Replace",
-            },
-            doc = {
-              privateName = { "^_" },
-            },
-            diagnostics = {
-              globals = vim.tbl_keys(_G) --{ "Lua", "require", "Snacks", "vim", },
-            },
-            hint = {
-              enable = true,
-              setType = false,
-              paramType = true,
-              paramName = "Disable",
-              semicolon = "Disable",
-              arrayIndex = "Disable",
-            },
-          },
-        },
-      }
-      vim.lsp.config("lua_ls", lua_ls)
-      vim.lsp.enable("lua_ls")
-    end
-  },
-  {
     "folke/lazydev.nvim",
     dependencies = {
       "Bilal2453/luvit-meta",
@@ -84,21 +47,23 @@ return {
         end,
         ft = "lua",
         desc = "Launch current Neovim process onto 8086",
-      },
+      },--foreground
     },
-    config = function()
+    opts = function()
       local dap = require "dap"
       dap.configurations.lua = {
         {
           type = "nlua",
           request = "attach",
           name = "Attach to running Neovim instance"
-        },
+        },--foreground
       }
 
       dap.adapters.nlua = function(callback, config)
         callback { type = "server", host = config.host or "127.0.0.1", port = config.port or 8086 }
       end
-    end
+
+      return {}
+    end,
   },
 }
