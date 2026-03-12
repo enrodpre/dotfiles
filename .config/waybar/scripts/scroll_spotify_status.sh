@@ -1,1 +1,0 @@
-/home/kike/.local/share/polybar/modules/polybar-spotify/scroll_spotify_status.sh

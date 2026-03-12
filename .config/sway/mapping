@@ -33,7 +33,7 @@ bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@
 
 set $scripts $HOME/.config/sway/scripts
 #bindsym $mod+u exec --no-startup-id $scripts/set_keymap.sh
-bindsym $mod+c exec --no-startup-id exec bash -c "pulseaudio-control --node-blacklist 'alsa_output.platform-snd_aloop.0.analog-stereo,alsa_output.pci-0000_09_00.1.hdmi-stereo' next-node"
+bindsym $mod+c exec --no-startup-id zsh -c 'toggle-sink.sh'
 bindsym $mod+Shift+t exec 'systemctl --user restart waybar'
 bindsym $mod+Shift+s exec --no-startup-id grimshot --notify copy area
 bindsym $mod+Return exec "$TERM_EMULATOR"

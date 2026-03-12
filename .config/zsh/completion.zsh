@@ -1,5 +1,6 @@
 #!/usr/bin/env zsh
 
+
 zstyle ':completion:*' completer _extensions _complete
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 # zstyle ':completion:*' verbose yes

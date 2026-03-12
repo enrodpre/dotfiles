@@ -66,10 +66,12 @@ F.lazy = {
         return cache[key] or rawget(t, key)
       end,
     })
-  end
+  end,
 }
 F.get_submodules = function(name)
-  if not name or name == "" then return {} end
+  if not name or name == "" then
+    return {}
+  end
   local path = vim.fn.stdpath("config") .. "/lua/" .. name
 
   local files = vim.fn.globpath(path, "**/*.lua", true, true)
@@ -77,15 +79,14 @@ F.get_submodules = function(name)
 
   for _, file in ipairs(files) do
     local mod = file
-        :gsub(vim.fn.stdpath("config") .. "/lua/", "")
-        :gsub("%.lua$", "")
-        :gsub("/", ".")
+      :gsub(vim.fn.stdpath("config") .. "/lua/", "")
+      :gsub("%.lua$", "")
+      :gsub("/", ".")
     table.insert(modules, mod)
   end
 
   return modules
 end
-
 
 F.wildcard_position = function(w)
   w = w or "<cword>"
@@ -110,18 +111,20 @@ F.get_diagnostic_on_cursor = function()
 
   return vim.diagnostic.get(0, {
     lnum = line,
-    col = col
+    col = col,
   })
 end
 
 F.get_lsp_diagnostic_information = function()
   local diagnostic = F.get_diagnostic_on_cursor()[1]
-  if diagnostic == nil then return end
+  if diagnostic == nil then
+    return
+  end
 
   local data = diagnostic.user_data.lsp
   local message = data.message
   local source = data.source
-  local output = string.format("Source = %s\n\"%s\"", source, message)
+  local output = string.format('Source = %s\n"%s"', source, message)
   local related = data.relatedInformation
   if related ~= nil then
     local messages = {}
@@ -135,7 +138,6 @@ F.get_lsp_diagnostic_information = function()
   vim.print(output)
 end
 
-
 F.wildcard_position_rel = function(w)
   local start, end_ = F.wildcard_position(w)
   local _, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -143,15 +145,16 @@ F.wildcard_position_rel = function(w)
 end
 
 F.replace_line = function(str, start, end_)
-  if not str then return end
+  if not str then
+    return
+  end
 
   local line = vim.api.nvim_get_current_line()
   local before = line:sub(1, start)
-  local after = end_ and line:sub((end_) + 1) or ""
+  local after = end_ and line:sub(end_ + 1) or ""
 
   vim.api.nvim_set_current_line(before .. str .. after)
 end
-
 
 F.search = function(pattern, flags)
   local cursor = vim.api.nvim_win_get_cursor(0)
@@ -166,7 +169,9 @@ F.line_match = function(pattern, init)
   local line = vim.api.nvim_get_current_line()
   local surrounded = line:match(pattern, init)
   local start, end_ = line:find(surrounded, init)
-  if not start then return nil end
+  if not start then
+    return nil
+  end
   assert(surrounded == line:sub(start, end_))
   return surrounded, start, end_
 end
@@ -177,17 +182,17 @@ F.replace_text_object_precise = function(motion, transform_fn)
   local saved_regtype = vim.fn.getregtype('"')
 
   -- Feed real keys like the user would type: vi(, vi", etc.
-  local keys = 'vi' .. motion
+  local keys = "vi" .. motion
   vim.api.nvim_feedkeys(
     vim.api.nvim_replace_termcodes(keys, true, false, true),
-    'x', -- visual mode
+    "x", -- visual mode
     false
   )
 
   -- Exit visual mode so the marks are updated
   vim.api.nvim_feedkeys(
     vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
-    'n',
+    "n",
     false
   )
 
@@ -195,11 +200,16 @@ F.replace_text_object_precise = function(motion, transform_fn)
   vim.defer_fn(function()
     local bufnr = 0
 
-    local start_pos = vim.api.nvim_buf_get_mark(bufnr, '<')
-    local end_pos = vim.api.nvim_buf_get_mark(bufnr, '>')
+    local start_pos = vim.api.nvim_buf_get_mark(bufnr, "<")
+    local end_pos = vim.api.nvim_buf_get_mark(bufnr, ">")
 
     -- If marks are still invalid, abort
-    if start_pos[1] == 0 and start_pos[2] == 0 and end_pos[1] == 0 and end_pos[2] == 0 then
+    if
+      start_pos[1] == 0
+      and start_pos[2] == 0
+      and end_pos[1] == 0
+      and end_pos[2] == 0
+    then
       vim.notify("No valid visual selection found", vim.log.levels.ERROR)
       return
     end
@@ -207,21 +217,25 @@ F.replace_text_object_precise = function(motion, transform_fn)
     -- Extract selected text
     local lines = vim.api.nvim_buf_get_text(
       bufnr,
-      start_pos[1] - 1, start_pos[2],
-      end_pos[1] - 1, end_pos[2] + 1,
+      start_pos[1] - 1,
+      start_pos[2],
+      end_pos[1] - 1,
+      end_pos[2] + 1,
       {}
     )
 
-    local original_text = table.concat(lines, '\n')
+    local original_text = table.concat(lines, "\n")
     local new_text = transform_fn(original_text)
 
     if new_text then
-      local new_lines = vim.split(new_text, '\n', { plain = true })
+      local new_lines = vim.split(new_text, "\n", { plain = true })
 
       vim.api.nvim_buf_set_text(
         bufnr,
-        start_pos[1] - 1, start_pos[2],
-        end_pos[1] - 1, end_pos[2] + 1,
+        start_pos[1] - 1,
+        start_pos[2],
+        end_pos[1] - 1,
+        end_pos[2] + 1,
         new_lines
       )
 
@@ -229,7 +243,6 @@ F.replace_text_object_precise = function(motion, transform_fn)
     else
       vim.notify("Transformation returned nil, nothing replaced.")
     end
-
 
     -- Restore register
     vim.fn.setreg('"', saved_reg, saved_regtype)
@@ -281,23 +294,31 @@ F.replace_node = function(before, after)
   F.replace_line(after_text, start, end_)
 end
 
-
-F.unfold_template_node                 = function(args)
+F.unfold_template_node = function(args)
   local index = args.index or 1
   local template_node = args.node or vim.treesitter.get_node()
-  if not template_node then return end
+  if not template_node then
+    return
+  end
 
-  local parameter = vim.treesitter.cpp.get_template_parameter_node { node = template_node, index = index, }
+  local parameter = vim.treesitter.cpp.get_template_parameter_node({
+    node = template_node,
+    index = index,
+  })
   local node = vim.treesitter.cpp.get_full_type_node(template_node)
-  if not node then return end
+  if not node then
+    return
+  end
 
   F.replace_node(node, parameter)
 end
 
-F.unfold_call_node                     = function(args)
+F.unfold_call_node = function(args)
   local index = args.index or 1
   local cword = args.node or vim.treesitter.get_node()
-  if not cword then return end
+  if not cword then
+    return
+  end
 
   local call = vim.treesitter.cpp.Call.new(cword)
   local top_node = call.top_node
@@ -305,20 +326,22 @@ F.unfold_call_node                     = function(args)
   F.replace_node(top_node, ith_arg)
 end
 
-F.unfold_node                          = function(args)
+F.unfold_node = function(args)
   local node = args.node or vim.treesitter.get_node()
-  if not node then return end
+  if not node then
+    return
+  end
 
   if vim.treesitter.cpp.is_type(node) then
-    F.unfold_template_node { node = node, index = 1, }
+    F.unfold_template_node({ node = node, index = 1 })
   elseif vim.treesitter.cpp.is_call(node) then
-    F.unfold_call_node { node = node, index = 1, }
+    F.unfold_call_node({ node = node, index = 1 })
   else
     vim.print("Unrecognized node")
   end
 end
 
-F.required_on_exported_call            = function(mod)
+F.required_on_exported_call = function(mod)
   local mt = setmetatable({}, {
     __index = function(_, picker)
       return function(...)
@@ -342,11 +365,12 @@ F.require_on_exported_call_with_params = function(mod, opts_table)
         if opts == nil then
           return require(mod)[picker](...)
         else
-          opts = vim.tbl_deep_extend('force', opts, { ... })
+          opts = vim.tbl_deep_extend("force", opts, { ... })
           return require(mod)[picker](opts)
         end
       end
     end,
   })
 end
+
 return F

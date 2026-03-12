@@ -8,7 +8,7 @@ function scripts() {
 # $1 text to send
 # $2 time to wait until send reset
 notifybar() {
-  if [[ -n "$1" ]]; then
+    if [[ -n "$1" ]]; then
     polybar-msg action message send "$1" >/dev/null
     {
       sleep ${2-3}
