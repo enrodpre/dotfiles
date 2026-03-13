@@ -1,1 +1,0 @@
-/home/kike/.local/share/scripts/listen.sh

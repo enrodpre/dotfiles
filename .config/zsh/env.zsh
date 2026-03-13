@@ -25,6 +25,7 @@ export BUNDLE_USER_CACHE="$XDG_CACHE_HOME"/bundle
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
 export GDBHISTFILE="$XDG_STATE_HOME/gdb_history"
 export WINEPREFIX="$XDG_DATA_HOME"/wine
+export MAVEN_OPTS="-Dmaven.repo.local=$XDG_DATA_HOME/m2"
 
 export TERM_EMULATOR=/usr/bin/kitty
 
