@@ -76,7 +76,6 @@
 		"format-muted": "󰝟 {node_name} 0%",
 		"format-icons": ["", "", ""],
 		"on-click": "wpctl set-mute @DEFAULT_SINK@ toggle",
-		// "on-click-middle": "pwvucontrol",
 		"on-click-right": "toggle-sink.sh",
 		"scroll-step": 5
 	}
