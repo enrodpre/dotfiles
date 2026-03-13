@@ -1,4 +1,4 @@
-# vim:ft=swayfxconfig:
+# vim:ft=swayconfig:
 
 gaps inner 2
 gaps outer 0

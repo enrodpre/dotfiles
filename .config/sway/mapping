@@ -1,4 +1,4 @@
-# vim:ft=swayfxconfig
+# vim:ft=swayconfig
 
 set $mod Mod1
 set $up k
@@ -32,11 +32,11 @@ bindsym --locked XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@
 bindsym --locked XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%+ -l 1.2
 
 set $scripts $HOME/.config/sway/scripts
-#bindsym $mod+u exec --no-startup-id $scripts/set_keymap.sh
 bindsym $mod+c exec --no-startup-id zsh -c 'toggle-sink.sh'
 bindsym $mod+Shift+t exec 'systemctl --user restart waybar'
 bindsym $mod+Shift+s exec --no-startup-id grimshot --notify copy area
 bindsym $mod+Return exec "$TERM_EMULATOR"
+bindsym $mod+Shift+Return exec kitten quick-access-terminal 
 bindsym $mod+Shift+q kill
 bindsym $mod+b split h
 bindsym $mod+v split v

@@ -2,8 +2,7 @@ vim.filetype.add({
   extension = {
     tpp = "cpp",
     cmm = "cpp",
-    zsh = "sh",
-    bash = "sh"
+    bash = "sh",
   },
 })
 

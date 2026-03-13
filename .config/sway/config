@@ -1,4 +1,4 @@
-# vim:ft=swayfxconfig
+# vim:ft=swayconfig
 
 set $config $HOME/.config/sway
 
@@ -30,4 +30,4 @@ input type:keyboard {
 include style
 include mapping
 include systemd
-default_dim_inactive 0
+#default_dim_inactive 0

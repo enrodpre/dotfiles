@@ -8,7 +8,7 @@ bindkey -e
 
 ########### SHELL VARS ############
 export EZA_COLORS="$(cat $ZDOTDIR/themes/eza)"
-export HISTFILE=$ZDOTCACHE/.zsh_history
+export HISTFILE=$XDG_STATE_HOME/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
 export GRAVEYARD="$XDG_STATE_HOME/graveyard"
@@ -19,6 +19,9 @@ export VISUAL='nvim'
 export DOWNLOADSDIR="$XDG_DATA_HOME/downloads"
 export GTEST_COLOR=1
 ###################################
+
+# # Share history between terminal sessions
+# setopt SHARE_HISTORY
 
 alias wget=wget --hsts-file="$XDG_DATA_HOME/wget-hsts"
 

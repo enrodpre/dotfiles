@@ -17,14 +17,14 @@ export SANE_CONFIG_DIR="$XDG_CONFIG_HOME"/sane
 export CARGO_HOME="$XDG_DATA_HOME"/cargo
 export GNUPGHOME="$XDG_DATA_HOME"/gnupg
 export ANDROID_USER_HOME="$XDG_DATA_HOME"/android
-export XINITRC="$XDG_CONFIG_HOME"/X11/xinitrc
-export XAUTHORITY="$XDG_CONFIG_HOME"/Xauthority
 export DOCKER_CONFIG="$XDG_CONFIG_HOME"/docker
 export GOPATH="$XDG_DATA_HOME"/go
 export M2_HOME="$XDG_DATA_HOME"/m2
 export BUNDLE_USER_CONFIG="$XDG_CONFIG_HOME"/bundle
 export BUNDLE_USER_CACHE="$XDG_CACHE_HOME"/bundle
 export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
+export GDBHISTFILE="$XDG_STATE_HOME/gdb_history"
+export WINEPREFIX="$XDG_DATA_HOME"/wine
 
 export TERM_EMULATOR=/usr/bin/kitty
 
@@ -35,20 +35,17 @@ export PYTHONPATH=$XDG_DATA_HOME/python/functions:$HOME/.local/bin:/bin/python
 export LUA_PATH='/usr/share/lua/5.1/?.lua;./?.lua;./?/init.lua;'
 export LUA_CPATH='$HOME/.local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;./?.so;$HOME/.local/lib/lua/5.1/?.so'
 
-typeset -U path
 path=(
-  $HOME/.local/bin
-  $CARGO_HOME/bin
-  /usr/lib/jvm/default/bin
-  /usr/bin/site_perl
-  /usr/bin/vendor_perl
-  /usr/bin/core_perl
-  $path
+  "$HOME"/.local/bin
+  "$CARGO_HOME"/bin
+  "$path[@]"
 )
 
 export _JAVA_OPTIONS="-Djava.util.prefs.userRoot=${XDG_CONFIG_HOME}/java -Djavafx.cachedir=${XDG_CACHE_HOME}/openjfx"
 
-source $ZDOTDIR/functions.zsh
+source "$ZDOTDIR"/functions.zsh
 
 # Theme vars
 export FONT="Fira code"
+typeset -U EXCLUDED_DIRS
+EXCLUDED_DIRS=(/dev /proc /run /sys)

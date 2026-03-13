@@ -53,6 +53,11 @@ vim.api.nvim_create_user_command("Toggle", function(args)
     vim.g[opt] = not vim.g[opt]
     vim.print(string.format("%s option is now %s", opt, vim.g[opt]))
   end
-end, { nargs = 1 })
+end, {
+  nargs = 1,
+  complete = function()
+    return { "autoformat" }
+  end,
+})
 
 return C
