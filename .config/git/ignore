@@ -1,9 +1,6 @@
 /*
 
-!.gitignore
-!.gitmodules
-!.gitconfig
-!.Xauthority
-
 !.config/
 !.local/
+
+!dev/rmm/

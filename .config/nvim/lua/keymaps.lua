@@ -3,8 +3,8 @@ vim.api.nvim_create_autocmd("User", {
   pattern = "LazyLoad",
   callback = function()
     local delete = {
-      gc = { "x", "n", },
-      gcc = { "n", },
+      gc = { "x", "n" },
+      gcc = { "n" },
     }
 
     for lhs, modes in pairs(delete) do
@@ -24,19 +24,20 @@ local smart_splits = function(fn)
 end
 
 return {
-  { "<M-h>",     smart_splits("move_cursor_left") },
-  { "<M-j>",     smart_splits("move_cursor_down") },
-  { "<M-k>",     smart_splits("move_cursor_up") },
-  { "<M-l>",     smart_splits("move_cursor_right") },
-  { "<D-h>",     smart_splits("resize_left") },
-  { "<D-j>",     smart_splits("resize_down") },
-  { "<D-k>",     smart_splits("resize_up") },
-  { "<D-l>",     smart_splits("resize_right") },
-  { "<S-M-h>",   smart_splits("swap_buf_left") },
-  { "<S-M-j>",   smart_splits("swap_buf_down") },
-  { "<S-M-k>",   smart_splits("swap_buf_up") },
-  { "<S-M-l>",   smart_splits("swap_buf_right") },
-  { "<leader>p", group = "[P]rint", },
+  { "<MiddleMouse>", "<Nop>" },
+  { "<M-h>", smart_splits("move_cursor_left") },
+  { "<M-j>", smart_splits("move_cursor_down") },
+  { "<M-k>", smart_splits("move_cursor_up") },
+  { "<M-l>", smart_splits("move_cursor_right") },
+  { "<D-h>", smart_splits("resize_left") },
+  { "<D-j>", smart_splits("resize_down") },
+  { "<D-k>", smart_splits("resize_up") },
+  { "<D-l>", smart_splits("resize_right") },
+  { "<S-M-h>", smart_splits("swap_buf_left") },
+  { "<S-M-j>", smart_splits("swap_buf_down") },
+  { "<S-M-k>", smart_splits("swap_buf_up") },
+  { "<S-M-l>", smart_splits("swap_buf_right") },
+  { "<leader>p", group = "[P]rint" },
   {
     ",r",
     function()
@@ -57,8 +58,8 @@ return {
     proxy = "<c-o>",
     desc = "Go back (<C-O>)",
   },
-  { "<", "<gv", mode = "v", },
-  { ">", ">gv", mode = "v", },
+  { "<", "<gv", mode = "v" },
+  { ">", ">gv", mode = "v" },
   {
     ",o",
     "a<CR><Esc>",
@@ -125,7 +126,7 @@ return {
     desc = "Escape will clear search pattern",
     silent = true,
   },
-  { "<leader>e", group = "[E]xecute", },
+  { "<leader>e", group = "[E]xecute" },
   -- { "<Esc>",     "<C-c>",             desc = "Better escape", },
   {
     "<leader>d",
@@ -151,8 +152,9 @@ return {
   },
   {
     {
-      "<C-w>", [[<C-\><C-n><C-w>]], mode = "t",
+      "<C-w>",
+      [[<C-\><C-n><C-w>]],
+      mode = "t",
     },
-
   },
 }
