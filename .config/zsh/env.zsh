@@ -33,10 +33,8 @@ export TERM_EMULATOR=/usr/bin/kitty
 export PYTHON_HISTORY="$XDG_STATE_HOME/python_history"
 export PYTHONPATH=$XDG_DATA_HOME/python/functions:$HOME/.local/bin:/bin/python
 
-export LUA_PATH='/usr/share/lua/5.1/?.lua;./?.lua;./?/init.lua;'
-export LUA_CPATH='$HOME/.local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;./?.so;$HOME/.local/lib/lua/5.1/?.so'
-
-echo "$path"
+#export LUA_PATH='/usr/share/lua/5.1/?.lua;./?.lua;./?/init.lua;'
+#export LUA_CPATH='$HOME/.local/lib/lua/5.1/?.so;/usr/lib/lua/5.1/?.so;./?.so;$HOME/.local/lib/lua/5.1/?.so'
 
 path=(
   "$HOME"/.local/bin
