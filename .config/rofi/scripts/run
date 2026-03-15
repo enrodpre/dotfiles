@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+## Author : Aditya Shakya (adi1090x)
+## Github : @adi1090x
+
+theme='run'
+
+## Run
+G_MESSAGES_DEBUG=Parser rofi \
+	-show "drun" \
+	-theme "$theme"

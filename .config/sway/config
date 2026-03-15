@@ -1,0 +1,33 @@
+# vim:ft=swayconfig
+
+set $config $HOME/.config/sway
+
+for_window [title="Exclude"] floating enable
+for_window [title="Picture-in-Picture"] sticky enable
+
+output HDMI-A-1 {
+ mode 2560x1440@144Hz
+#  mode 1920x1080@144Hz
+  position 0 0
+}
+
+#output DP-3 {
+#  mode 1920x1080@60Hz
+#  position 0 0
+#}
+
+
+workspace 1 output HDMI-A-1
+workspace 2 output DP-3
+workspace 3 output HDMI-A-1
+workspace 4 output HDMI-A-1
+
+input type:keyboard {
+  xkb_layout "mine"
+  xkb_options ctrl:nocaps
+}
+
+include style
+include mapping
+include systemd
+#default_dim_inactive 0
