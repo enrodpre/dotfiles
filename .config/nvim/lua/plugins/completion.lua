@@ -55,7 +55,7 @@ return {
       signature = { enabled = true },
       fuzzy = {
         implementation = "prefer_rust",
-        prebuilt_binaries = { force_version = "1.9.1" },
+        prebuilt_binaries = { force_version = nil },
       },
     },
   },

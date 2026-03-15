@@ -8,6 +8,7 @@ alias dotsreload='dots rm -r --cached $HOME; dots add $HOME; dots status'
 alias ds='dots status'
 alias icat="kitty +kitten icat"
 alias visudo='EDITOR=nvim visudo'
+alias reload='exec zsh'
 
 alias coredebug='zsh -c "cd && coredumpctl debug"'
 alias py='python'
@@ -35,8 +36,3 @@ unalias run-help
 autoload run-help
 HELPDIR=/usr/share/zsh/"$ZSH_VERSION"/help
 alias help=run-help
-
-# Changing dirs easily
-alias d='dirs -v'
-for i in """$(seq 9)"; do alias """$i=cd +""$i"; done
-unset i

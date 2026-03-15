@@ -51,13 +51,6 @@ local mapping = {
     desc = "[G]o [D]ocument [D]iagnostics",
   },
   {
-    "<leader>ac",
-    function()
-      vim.lsp.buf.code_action({ apply = true })
-    end,
-    desc = "[A]pply [C]ode Action",
-  },
-  {
     "<leader>od",
     vim.diagnostic.open_float,
     desc = "[O]pen Dianostic",
@@ -116,26 +109,20 @@ return {
           prefix = "●",
         },
       })
-      -- for server, conf in pairs(opts) do
-      --   vim.lsp.config(server, conf)
-      --   vim.lsp.enable(server)
-      -- end
+      vim.lsp.config("*", {
+        capabilities = require("blink.cmp").get_lsp_capabilities(
+          vim.lsp.protocol.make_client_capabilities(),
+          true
+        ),
+      })
 
-      -- vim.lsp.set_log_level("warn")
-      -- init_format_on_save()
+      for server, conf in pairs(opts) do
+        vim.lsp.config(server, conf)
+        vim.lsp.enable(server)
+      end
+
+      vim.lsp.set_log_level("warn")
+      init_format_on_save()
     end,
   },
-  -- {
-  --   'mfussenegger/nvim-lint',
-  --   event = "LspAttach",
-  --   opts = {
-  --     linters_by_ft
-  --   },
-  --   config = function()
-  --     local lint = require("lint")
-  --     for _, linter in ipairs(vim.g.linters) do
-  --       lint.try_lint(linter)
-  --     end
-  --   end
-  -- }
 }

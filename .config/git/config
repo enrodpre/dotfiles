@@ -8,5 +8,8 @@
 [init]
 	defaultBranch = main
 
+[core]
+  excludesFiles = false
+
 [push]
   autoSetupRemote = true
