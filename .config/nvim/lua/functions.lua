@@ -1,53 +1,6 @@
 local F = {}
 _G.Lua = F
 
-local MAX_INSPECT_LINES = 2000
-function F.inspect(opts)
-  local obj = opts.items
-  if not obj then
-    vim.notify("no items to inspect", 3)
-    return
-  end
-
-  local len = #obj
-  local caller = debug.getinfo(1, "S")
-  for level = 2, 10 do
-    local info = debug.getinfo(level, "S")
-    if
-        info
-        and info.source ~= caller.source
-        and info.what ~= "C"
-        and info.source ~= "lua"
-        and info.source ~= "@" .. (os.getenv("MYVIMRC") or "")
-    then
-      caller = info
-      break
-    end
-  end
-  vim.schedule(function()
-    local title = "Debug: "
-        .. vim.fn.fnamemodify(caller.source:sub(2), ":~:.")
-        .. ":"
-        .. caller.linedefined
-    local lines = vim.split(
-      vim.inspect(len == 1 and obj[1] or len > 0 and obj or nil),
-      "\n"
-    )
-    if #lines > MAX_INSPECT_LINES then
-      local c = #lines
-      lines = vim.list_slice(lines, 1, MAX_INSPECT_LINES)
-      lines[#lines + 1] = ""
-      lines[#lines + 1] = (c - MAX_INSPECT_LINES)
-          .. " more lines have been truncated …"
-    end
-    local cb = opts.callback
-    if not cb then
-      Snacks.notify.warn(lines, { title = title, ft = "lua" })
-    else
-      cb(lines)
-    end
-  end)
-end
 
 F.is_empty = function(var)
   if var == nil then
@@ -340,6 +293,15 @@ F.replace_node = function(before, after)
   local _, start, _, end_ = before:range()
   local after_text = vim.treesitter.get_node_text(after, 0)
   F.replace_line(after_text, start, end_)
+end
+
+F.run_test = function()
+  vim.cmd('e')
+  vim.schedule(function()
+    vim.cmd [[Lazy reload blink.cmp]]
+    local result = vim.fn.getcompletion('=require("', 'cmdline')
+    vim.print(result)
+  end)
 end
 
 return F

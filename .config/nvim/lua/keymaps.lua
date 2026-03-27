@@ -17,27 +17,13 @@ vim.api.nvim_create_autocmd("User", {
   once = true,
 })
 
--- local lazyreq = Lua.required_on_exported_call
---
--- local smart_splits = function(fn)
---   return Lua.lazy.req("smart-splits")[fn]
--- end
 
 return {
-  { "<MiddleMouse>", "<Nop>" },
-  -- { "<M-h>", smart_splits("move_cursor_left") },
-  -- { "<M-j>", smart_splits("move_cursor_down") },
-  -- { "<M-k>", smart_splits("move_cursor_up") },
-  -- { "<M-l>", smart_splits("move_cursor_right") },
-  -- { "<D-h>", smart_splits("resize_left") },
-  -- { "<D-j>", smart_splits("resize_down") },
-  -- { "<D-k>", smart_splits("resize_up") },
-  -- { "<D-l>", smart_splits("resize_right") },
-  -- { "<S-M-h>", smart_splits("swap_buf_left") },
-  -- { "<S-M-j>", smart_splits("swap_buf_down") },
-  -- { "<S-M-k>", smart_splits("swap_buf_up") },
-  -- { "<S-M-l>", smart_splits("swap_buf_right") },
-  { "<leader>p", group = "[P]ick" },
+  { "<MiddleMouse>",   "<Nop>",         mode = { "n", "i" }, },
+  { "<2-MiddleMouse>", "<Nop>",         mode = { "n", "i" }, },
+  { "<3-MiddleMouse>", "<Nop>",         mode = { "n", "i" }, },
+  { "<4-MiddleMouse>", "<Nop>",         mode = { "n", "i" }, },
+  { "<leader>p",       group = "[P]ick" },
   {
     ",r",
     function()
@@ -67,19 +53,14 @@ return {
   {
     {
       "<C-Q>",
-      ":q <CR>",
+      "<cmd>q<cr>",
       desc = "Quit neovim",
-      noremap = false,
     },
     {
       "<C-Q><C-Q>",
-      ":q! <CR>",
+      "<cmd>q!<cr>",
       desc = "Force quit",
     },
-  },
-  {
-    "<leader>s",
-    group = "[S]et",
   },
   {
     "<C-s>",
@@ -96,20 +77,12 @@ return {
     group = "[G]o",
   },
   {
-    "<leader>t",
-    group = "[T]elescope",
-  },
-  {
     "<leader>f",
     group = "[F]ind",
   },
   {
     "<leader>fg",
     group = "[G]rep",
-  },
-  {
-    "<leader>l",
-    group = "[L]azy",
   },
   {
     "<S-CR>",
@@ -125,30 +98,23 @@ return {
     desc = "Escape will clear search pattern",
     silent = true,
   },
-  { "<leader>e", group = "[E]xecute" },
   {
     "<leader>d",
     group = "[D]ap",
   },
   {
-    {
-      "<leader>l",
-      group = "[L]azy",
-    },
-    {
-      "<leader>lo",
-      function()
-        require("lazy").show()
-      end,
-      desc = "[L]azy [O]pen",
-    },
-    {
-      "<leader>lr",
-      function()
-        require("library.pickers").completions("Lazy reload")
-      end,
-      desc = "[L]azy [R]eload",
-    },
+    "<leader>ol",
+    function()
+      require("lazy").show()
+    end,
+    desc = "[O]pen [L]azy",
+  },
+  {
+    "<leader>ar",
+    function()
+      require("library.pickers").completions("Lazy reload")
+    end,
+    desc = "[A]pply [R]eload",
   },
   {
     "<leader>om",
@@ -162,4 +128,5 @@ return {
       mode = "t",
     },
   },
+  { ",t", function() Lua.run_test() end }
 }

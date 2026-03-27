@@ -1,3 +1,5 @@
+-- _G.__is_log = true
+
 local C = {
   colorscheme = "tokyonight",
   fuzzy_finder = "fzf-lua",

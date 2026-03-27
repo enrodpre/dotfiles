@@ -3,7 +3,7 @@ load(vim.fn.system("curl -s https://raw.githubusercontent.com/folke/lazy.nvim/ma
 
 require("lazy.minit").repro({
   spec = {
-    'stevearc/overseer.nvim',
+    -- 'stevearc/overseer.nvim',
 
   },
 })

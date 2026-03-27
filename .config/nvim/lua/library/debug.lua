@@ -85,7 +85,5 @@ T.setup = function()
   -- Snacks.toggle.profiler():map("<leader>pp")
   -- Toggle the profiler highlights
   -- Snacks.toggle.profiler_highlights():map("<leader>ph")
-  _G.dd = Snacks.debug.inspect
-  _G.bt = Snacks.debug.backtrace
 end
 return T

@@ -15,7 +15,6 @@ local function lsp_status()
 end
 
 local function default_sections()
-  -- local overseer = Lua.lazy.req("overseer")
   return {
     lualine_a = {
       {
@@ -46,18 +45,6 @@ local function default_sections()
     },
     lualine_c = {
       "diagnostics",
-      {
-        "overseer",
-        label = "",
-        colored = true,
-        -- symbols = {
-        --   [overseer.STATUS.FAILURE] = "󰅚 CMake",
-        --   [overseer.STATUS.CANCELED] = " CMake",
-        --   [overseer.STATUS.SUCCESS] = "󰄴 CMake",
-        --   [overseer.STATUS.RUNNING] = "󰑮 CMake",
-        -- },
-        unique = true,
-      },
     },
     lualine_x = {
       "%S",
@@ -98,7 +85,7 @@ return {
       "man",
       "aerial",
       "fzf",
-      require("library.terminal").statusline,
+      -- require("library.terminal").statusline,
     },
     options = {
       globalstatus = vim.o.laststatus == 3,

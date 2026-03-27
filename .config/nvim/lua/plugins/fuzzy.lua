@@ -110,11 +110,6 @@ local keymap = {
     desc = "[F]ind [K]eymaps",
   },
   {
-    "grr",
-    fzflua.lsp_references,
-    desc = "[G]o to [R]eferences",
-  },
-  {
     "gri",
     fzflua.lsp_implementations,
     desc = "[G]o to [I]mplementations",
@@ -183,9 +178,9 @@ return {
     cmd = "FzfNerdfont",
     keys = {
       {
-        "<leader>fi",
+        "<leader>pi",
         "<Cmd>FzfNerdfont<CR>",
-        desc = "[F]ind [I]con",
+        desc = "[P]ick [I]con",
       },
     },
     opts = {

@@ -3,7 +3,7 @@ return {
   enabled = true,
   event = "UiEnter",
   dependencies = {
-    "MunifTanjim/nui.nvim",
+    "MunifTanjim/nui.nvim", "rcarriga/nvim-notify",
   },
   opts = {
     cmdline = {
@@ -13,20 +13,20 @@ return {
     },
     commands = {
       history = {
-        view = "nui",
+        view = "split",
       },
     },
     lsp = {
       override = {
-        -- ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
-        -- ["vim.lsp.util.stylize_markdown"] = true,
+        ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+        ["vim.lsp.util.stylize_markdown"] = true,
       },
     },
     messages = {
       view_history = "popup",
       view_search = false,
     },
-    notify = { enabled = false },
+    notify = { enabled = true },
     popupmenu = { backend = "nui", },
     presets = {
       bottom_search = true,
@@ -39,13 +39,6 @@ return {
         filter = {
           event = "msg_show",
           kind = "search_count",
-        },
-        opts = { skip = true, },
-      },
-      {
-        filter = {
-          event = "notify",
-          find = "No code actions available",
         },
         opts = { skip = true, },
       },

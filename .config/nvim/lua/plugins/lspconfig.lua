@@ -1,71 +1,44 @@
 local mapping = {
+
+  { "<leader>l", group = "[L]sp", },
   {
-    "gl",
-    group = "[G]o [L]sp",
-  },
-  {
-    "<leader>wd",
-    "<cmd>Trouble diagnostics toggle<cr>",
-    desc = "[W]orkspace [D]iagnostics",
-  },
-  {
-    "<leader>wa",
-    vim.lsp.buf.add_workspace_folder,
-    desc = "[W]orkspace [A]dd Folder",
-  },
-  {
-    "<leader>wr",
-    vim.lsp.buf.remove_workspace_folder,
-    desc = "[W]orkspace [R]emove Folder",
-  },
-  {
-    "<leader>wl",
+    "<leader>lr",
     function()
-      vim.print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+      require('trouble').open("lsp_references")
     end,
-    desc = "[W]orkspace [L]ist Folders",
+    desc = "[L]sp [R]eferences",
   },
   {
-    "<leader>ws",
-    function(...)
-      require("telescope").lsp_dynamic_workspace_symbols(...)
+    "<leader>ls",
+    vim.lsp.buf.signature_help,
+    desc = "[L]sp [S]ignature",
+  },
+  {
+    "<leader>ld",
+    function()
+      require("trouble").toggle("diagnostics_preview")
     end,
-    desc = "[W]orkspace [S]ymbols",
+    desc = "[L]azy [D]iagnostics",
+  },
+  {
+    "<leader>oo",
+    "<cmd>Trouble symbols toggle focus=false<cr>",
+    desc = "[O]pen [O]utline",
   },
   {
     "<leader>rr",
-    function(...)
-      vim.lsp.buf.rename(...)
-    end,
+    vim.lsp.buf.rename,
     desc = "[R]ename",
     silent = true,
     noremap = true,
-  },
-  {
-    "gd",
-    group = "[G]o [D]ocument",
-  },
-  {
-    "gdd",
-    "<cmd>Trouble diagnostics toggle<cr>",
-    desc = "[G]o [D]ocument [D]iagnostics",
   },
   {
     "<leader>od",
     vim.diagnostic.open_float,
     desc = "[O]pen Dianostic",
   },
-  {
-    "<leader>oi",
-    vim.lsp.buf.incoming_calls,
-    desc = "[O]pen incoming calls",
-  },
-  {
-    "<leader>os",
-    vim.lsp.buf.signature_help,
-    desc = "[O]pen [S]ignature",
-  },
 }
+
 
 return {
   {
@@ -105,4 +78,29 @@ return {
       end
     end,
   },
+  {
+    "folke/trouble.nvim",
+    cmd = { "Trouble" },
+    keys = {
+      ---group = "[X] Trouble",
+    },
+    opts = {
+      focus = true,
+      keys = {
+        ["<c-p>"] = "prev",
+        ["<c-n>"] = "next",
+      },
+      modes = {
+        diagnostics_preview = {
+          mode = "diagnostics",
+          preview = {
+            type = "split",
+            relative = "win",
+            position = "right",
+            size = 0.3,
+          },
+        },
+      },
+    },
+  }
 }

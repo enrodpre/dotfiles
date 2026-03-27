@@ -26,6 +26,7 @@ end
 
 return {
   {
+    enabled = false,
     'stevearc/overseer.nvim',
     opts = function()
       setup()
@@ -34,7 +35,7 @@ return {
         template_dirs = { "overseer.template", "overseer.template" },
         component_aliases = {
           compile = {
-            { "display_duration",   detail_level = 2 },
+            { "display_duration",  detail_level = 2 },
             "on_output_summarize",
             "on_exit_set_status",
             "on_complete_notify",

@@ -17,11 +17,6 @@ return {
         "<cmd>Trouble symbols toggle focus=false<cr>",
         desc = "[O]pen [O]utline",
       },
-      {
-        "<leader>ol",
-        "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
-        desc = "LSP Definitions / references / ... (Trouble)",
-      },
     },
     opts = {
       focus = true,
