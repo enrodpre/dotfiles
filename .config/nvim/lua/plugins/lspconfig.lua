@@ -67,23 +67,6 @@ local mapping = {
   },
 }
 
-local function init_format_on_save()
-  local fos = vim.lsp.format_on_save
-  if fos == nil then
-    vim.lsp.format_on_save = {
-      value = true,
-      toggle = function(self)
-        if self.value then
-          self.value = false
-        else
-          self.value = true
-        end
-        vim.print("format_on_save = " .. tostring(self.value))
-      end,
-    }
-  end
-end
-
 return {
   {
     "neovim/nvim-lspconfig",
@@ -120,9 +103,6 @@ return {
         vim.lsp.config(server, conf)
         vim.lsp.enable(server)
       end
-
-      vim.lsp.set_log_level("warn")
-      init_format_on_save()
     end,
   },
 }

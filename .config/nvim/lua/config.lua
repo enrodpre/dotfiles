@@ -44,6 +44,26 @@ C.setup = function()
   })
 end
 
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ctx)
+    local bufnr = ctx.buf
+    local client = assert(vim.lsp.get_client_by_id(ctx.data.client_id))
+    if client:supports_method("textDocument/formatting") then
+      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          if vim.g.autoformat then
+            vim.lsp.buf.format({ bufnr = bufnr })
+          end
+        end,
+      })
+    end
+  end
+})
+
 vim.api.nvim_create_user_command("Toggle", function(args)
   -- if args.nargs < 1 then
   --   return
@@ -59,5 +79,6 @@ end, {
     return { "autoformat" }
   end,
 })
+
 
 return C

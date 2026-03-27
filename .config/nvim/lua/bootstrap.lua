@@ -22,9 +22,9 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({ { import = "plugins" } }, {
+  lockfile = vim.fn.stdpath("data") .. "/lazy-lock.json",
   dev = {
     path = "~/dev/nvim/plugins",
-    -- patterns = { "themery.nvim", "cmake-tools.nvim" },
     fallback = true,
   },
   defaults = { lazy = true },
@@ -46,5 +46,5 @@ require("lazy").setup({ { import = "plugins" } }, {
       },
     },
   },
-  profiling = { loader = true, require = true },
+  profiling = { loader = false, require = true },
 })

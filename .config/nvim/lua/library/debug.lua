@@ -13,7 +13,8 @@ end
 
 T.fuzzy_table = function(tbl, name)
   if not tbl or not next(tbl) then
-    vim.ui.input({ prompt = "Enter object to inspect" }, function(choice) T.fuzzy_table(_G[choice], choice) end)
+    vim.print("Not a valid object")
+    return
   end
 
   name = name or "Table Explorer"
@@ -38,10 +39,10 @@ T.fuzzy_table = function(tbl, name)
     return chunks[1]
   end
 
-  local fzf = require('fzf-lua')
+  local fzf = require("fzf-lua")
 
   fzf.fzf_exec(serialize_table(tbl), {
-    prompt = name .. '> ',
+    prompt = name .. "> ",
     preview = function(selected)
       if not selected or #selected == 0 then
         return ""
@@ -59,7 +60,7 @@ T.fuzzy_table = function(tbl, name)
       end
     end,
     actions = {
-      ['default'] = function(selected)
+      ["default"] = function(selected)
         if not selected or #selected == 0 then
           return
         end
@@ -81,9 +82,9 @@ end
 
 T.setup = function()
   -- Toggle the profiler
-  Snacks.toggle.profiler():map("<leader>pp")
+  -- Snacks.toggle.profiler():map("<leader>pp")
   -- Toggle the profiler highlights
-  Snacks.toggle.profiler_highlights():map("<leader>ph")
+  -- Snacks.toggle.profiler_highlights():map("<leader>ph")
   _G.dd = Snacks.debug.inspect
   _G.bt = Snacks.debug.backtrace
 end

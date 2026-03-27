@@ -1,38 +1,26 @@
 return {
   {
     "folke/trouble.nvim",
-    cmd = "Trouble",
+    cmd = { "Trouble" },
     keys = {
       ---group = "[X] Trouble",
       {
         "<leader>ox",
-        "<cmd>Trouble diagnostics toggle<cr>",
+        function()
+          require("trouble").toggle("diagnostics_preview")
+        end,
+
         desc = "Diagnostics (Trouble)",
       },
       {
-        "<leader>oX",
-        "<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-        desc = "Buffer Diagnostics (Trouble)",
-      },
-      {
-        "<leader>os",
+        "<leader>oo",
         "<cmd>Trouble symbols toggle focus=false<cr>",
-        desc = "Symbols (Trouble)",
+        desc = "[O]pen [O]utline",
       },
       {
         "<leader>ol",
         "<cmd>Trouble lsp toggle focus=false win.position=right<cr>",
         desc = "LSP Definitions / references / ... (Trouble)",
-      },
-      {
-        "<leader>oL",
-        "<cmd>Trouble loclist toggle<cr>",
-        desc = "Location List (Trouble)",
-      },
-      {
-        "<leader>oQ",
-        "<cmd>Trouble qflist toggle<cr>",
-        desc = "Quickfix List (Trouble)",
       },
     },
     opts = {
@@ -41,8 +29,17 @@ return {
         ["<c-p>"] = "prev",
         ["<c-n>"] = "next",
       },
-      quickfix = { auto_open = true, auto_close = true, },
-
+      modes = {
+        diagnostics_preview = {
+          mode = "diagnostics",
+          preview = {
+            type = "split",
+            relative = "win",
+            position = "right",
+            size = 0.3,
+          },
+        },
+      },
     },
   }
 }

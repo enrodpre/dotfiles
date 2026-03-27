@@ -7,8 +7,8 @@ vim.g.autoformat = true
 vim.g.minwidth = 80
 
 vim.o.cmdheight = 0
-vim.o.showmode = false          -- Don't show mode in command line
-vim.o.ruler = false             -- Don't show cursor position
+vim.o.showmode = false -- Don't show mode in command line
+vim.o.ruler = false -- Don't show cursor position
 vim.o.showcmd = true
 vim.o.showcmdloc = "statusline" -- Don't show partial command
 vim.o.confirm = true
@@ -40,6 +40,7 @@ vim.o.termguicolors = true
 -- seen somewhere, its supposed to reduce delay
 vim.schedule(function()
   vim.o.clipboard = "unnamedplus"
+  vim.g.clipboard = "wl-copy"
 end)
 
 vim.opt.matchpairs = { "(:)", "{:}", "[:]", "<:>" }

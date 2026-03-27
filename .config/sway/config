@@ -3,6 +3,7 @@
 set $config $HOME/.config/sway
 
 for_window [title="Exclude"] floating enable
+for_window [title="Picture-in-Picture"] floating enable
 for_window [title="Picture-in-Picture"] sticky enable
 
 output HDMI-A-1 {
@@ -30,4 +31,3 @@ input type:keyboard {
 include style
 include mapping
 include systemd
-#default_dim_inactive 0

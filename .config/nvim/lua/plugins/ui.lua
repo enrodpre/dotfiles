@@ -2,12 +2,20 @@ vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlights when yanking",
   pattern = "*",
   callback = function()
-    vim.hl.on_yank({ higroup = "Visual", timeout = 250 })
+    vim.hl.on_yank({ higroup = "Cursor", timeout = 200 })
   end,
 })
 
 return {
-  -- { "ziontee113/color-picker.nvim", opts = {}, event = "UiEnter" },
+  { "nvim-tree/nvim-web-devicons", opts = {} },
+  {
+    "uga-rosa/ccc.nvim",
+    opts = {},
+    event = "UiEnter",
+    keys = {
+      { "<leader>pc", "<cmd>CccPick<cr>", desc = "[P]ick [C]olor" },
+    },
+  },
   {
     "folke/edgy.nvim",
     init = function()

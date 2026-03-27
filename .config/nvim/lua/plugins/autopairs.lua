@@ -2,17 +2,10 @@ return {
   "windwp/nvim-autopairs",
   event = "InsertEnter",
   opts = {
-    fast_wrap = {},
-    enable_check_bracket_line = false,
     check_ts = true,
-    ts_config = {
-      lua = { "string", },
-      cpp = {},
-    },
+    map_cr = true,
   },
   config = function(_, opts)
-    --- Setup
-    opts = opts or {}
     local Rule = require("nvim-autopairs.rule")
     local cond = require("nvim-autopairs.conds")
     local npairs = require("nvim-autopairs")
@@ -20,9 +13,91 @@ return {
 
     npairs.setup(opts)
 
-    --- custom rules
-    npairs.add_rules(require("nvim-autopairs.rules.endwise-lua"))
+    -- Add comma when table
+    local trailling_comma_in_table = function(l, r)
+      npairs.remove_rule(l)
+      npairs.add_rule(
+        Rule(l, r .. ",", "lua"):with_pair(ts.is_ts_node("table_constructor"))
+      )
+    end
+    trailling_comma_in_table("{", "}")
+    trailling_comma_in_table('"', '"')
+
+    for _, punct in ipairs({ ",", ";" }) do
+      npairs.add_rules({
+        Rule("", punct)
+            :with_move(function(o)
+              return o.char == punct
+            end)
+            :with_pair(function()
+              return false
+            end)
+            :with_del(function()
+              return false
+            end)
+            :with_cr(function()
+              return false
+            end)
+            :use_key(punct),
+      })
+    end
+    -- https://github.com/rstacruz/vim-closer/blob/master/autoload/closer.vim
+    -- local get_closing_for_line = function(line)
+    --   local i = -1
+    --   local clo = ""
+    --
+    --   while true do
+    --     i, _ = string.find(line, "[%(%)%{%}%[%]]", i + 1)
+    --     if i == nil then
+    --       break
+    --     end
+    --     local ch = string.sub(line, i, i)
+    --     local st = string.sub(clo, 1, 1)
+    --
+    --     if ch == "{" then
+    --       clo = "}" .. clo
+    --     elseif ch == "}" then
+    --       if st ~= "}" then
+    --         return ""
+    --       end
+    --       clo = string.sub(clo, 2)
+    --     elseif ch == "(" then
+    --       clo = ")" .. clo
+    --     elseif ch == ")" then
+    --       if st ~= ")" then
+    --         return ""
+    --       end
+    --       clo = string.sub(clo, 2)
+    --     elseif ch == "[" then
+    --       clo = "]" .. clo
+    --     elseif ch == "]" then
+    --       if st ~= "]" then
+    --         return ""
+    --       end
+    --       clo = string.sub(clo, 2)
+    --     end
+    --   end
+    --
+    --   return clo
+    -- end
+
+    -- npairs.remove_rule("(")
+    -- npairs.remove_rule("{")
+    -- npairs.remove_rule("[")
+
+    -- npairs.add_rule(Rule("[%(%{%[]", "")
+    --   :use_regex(true)
+    --   :replace_endpair(function(opt)
+    --     return get_closing_for_line(opt.line)
+    --   end)
+    --   :end_wise(function(opt)
+    --     -- Do not endwise if there is no closing
+    --     return get_closing_for_line(opt.line) ~= ""
+    --   end))
+    -- Autopair on <> generics but not arithmetic
     npairs.add_rule(Rule("<", ">", {
+      -- if you use nvim-ts-autotag, you may want to exclude these filetypes from this rule
+      -- so that it doesn't conflict with nvim-ts-autotag
       "-html",
       "-javascriptreact",
       "-typescriptreact",
@@ -32,13 +107,8 @@ return {
     -- The `:?:?` part makes it also
     -- work on Rust generics like `some_func::<T>()`
       cond.before_regex("%a+:?:?$", 3)
-    ):with_move(function(o)
-      return o.char == ">"
+    ):with_move(function(opt)
+      return opt.char == ">"
     end))
-    -- lua -- add comma if brackets in table
-    npairs.add_rule(Rule("{", "},", { "lua", }):with_pair(ts.is_ts_node(
-      "table_constructor")))
-    npairs.add_rule(Rule("\"", "\",", { "lua", }):with_pair(ts.is_ts_node(
-      "table_constructor")))
   end,
 }

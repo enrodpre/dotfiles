@@ -1,16 +1,5 @@
-local lazyreq = Lua.required_on_exported_call
-
 ---@module "fzf-lua"
-local fzflua = lazyreq("fzf-lua")
-
-local function cwd_picker(picker)
-  local cwd = vim.fn.expand("%:p:h")
-  -- local cwd_opts = { cwd = cwd, prompt = cwd }
-  local cwd_opts = { cwd = cwd, prompt = cwd }
-  return function()
-    return picker(cwd_opts)
-  end
-end
+local fzflua = Lua.lazy.req("fzf-lua")
 
 local function is_valid(obj)
   return vim.tbl_contains(_G, obj)
@@ -24,13 +13,35 @@ local function debug_object()
   if is_valid(cword) then
     obj = _G[cword]
     name = cword
+  else
+    local CWORD = vim.fn.expand("<cWORD>")
+    if is_valid(CWORD) then
+      obj = _G[CWORD]
+      name = CWORD
+    end
   end
-  local CWORD = vim.fn.expand("<CWORD>")
-  if is_valid(CWORD) then
-    obj = _G[CWORD]
-    name = CWORD
+
+  if not is_valid(obj) then
+    vim.ui.input({ prompt = "Enter object to inspect" }, function(choice)
+      obj = choice
+    end)
   end
   debug.fuzzy_table(obj, name)
+end
+
+local function run_current_cwd(picker)
+  return function()
+    local cwd = vim.fn.expand("%:p:h")
+    local cwd_opts = { cwd = cwd, prompt = cwd }
+    picker(cwd_opts)
+  end
+end
+
+local function run_with_cword(picker)
+  return function()
+    local cword = vim.fn.expand("<cWORD>")
+    picker({ query = cword })
+  end
 end
 
 local function test_debug()
@@ -55,13 +66,32 @@ local keymap = {
     desc = "[F]ind [F]iles",
   },
   {
+    "<leader>fF",
+    run_with_cword(fzflua.files),
+    desc = "[F]ind [F]iles with CWORD",
+  },
+  {
     "<leader>fc",
-    cwd_picker(fzflua.files),
+    group = "[F]ind in [C]wd",
+  },
+  {
+    "<leader>fcf",
+    run_current_cwd(fzflua.files),
     desc = "[F]ind Files in [C]wd",
+  },
+  {
+    "<leader>fcg",
+    run_current_cwd(fzflua.live_grep),
+    desc = "[F]ind Grep in [C]wd",
   },
   {
     "<leader>fg",
     fzflua.live_grep,
+    desc = "[F]ind [G]rep",
+  },
+  {
+    "<leader>fG",
+    run_with_cword(fzflua.live_grep),
     desc = "[F]ind [G]rep",
   },
   {
@@ -144,6 +174,7 @@ return {
         },
         fzf_opts = { ["--cycle"] = true },
         fzf_colors = true,
+        grep = { follow = true },
       }
     end,
   },

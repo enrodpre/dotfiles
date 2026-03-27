@@ -1,18 +1,36 @@
+local function lsp_status()
+  local count_clients = function()
+    local bufnr = vim.api.nvim_get_current_buf()
+    return #vim.lsp.get_clients { bufnr = bufnr }
+  end
+  return {
+    function()
+      return
+          " " .. count_clients()
+    end,
+    cond = function()
+      return count_clients() > 0
+    end
+  }
+end
+
 local function default_sections()
-  local overseer = Lua.required_on_exported_call("overseer")
+  -- local overseer = Lua.lazy.req("overseer")
   return {
     lualine_a = {
       {
         "mode",
         fmt = function(str)
-          if not package.loaded["submode"] then return str end
+          if not package.loaded["submode"] then
+            return str
+          end
 
           local ok, submode = pcall(require, "submode")
           if ok and submode.mode() ~= nil and submode.mode() ~= "" then
             return submode.mode():upper()
           end
           return str
-        end
+        end,
       },
       {
         function()
@@ -38,17 +56,21 @@ local function default_sections()
         --   [overseer.STATUS.SUCCESS] = "󰄴 CMake",
         --   [overseer.STATUS.RUNNING] = "󰑮 CMake",
         -- },
-        unique = true
+        unique = true,
       },
     },
     lualine_x = {
       "%S",
       "filesize",
       "filetype",
-      "lsp_status",
+      lsp_status(),
       {
-        function() return "venv-selector" end,
-        cond = function() return vim.bo.filetype == "python" end
+        function()
+          return "venv-selector"
+        end,
+        cond = function()
+          return vim.bo.filetype == "python"
+        end,
       },
     },
     lualine_y = {
@@ -56,16 +78,15 @@ local function default_sections()
       "selectioncount",
     },
     lualine_z = {
-      'location',
-      'progress'
+      "location",
+      "progress",
     },
   }
 end
 
-
 return {
   "nvim-lualine/lualine.nvim",
-  dependencies = { "echasnovski/mini.icons", },
+  dependencies = { "echasnovski/mini.icons" },
   event = "UiEnter",
   opts = {
     extensions = {
@@ -77,13 +98,13 @@ return {
       "man",
       "aerial",
       "fzf",
-      require('library.terminal').statusline,
+      require("library.terminal").statusline,
     },
     options = {
       globalstatus = vim.o.laststatus == 3,
       -- disabled_filetypes = { statusline = { "snacks_terminal" } },
       component_separators = "",
     },
-    sections = default_sections()
-  }
+    sections = default_sections(),
+  },
 }

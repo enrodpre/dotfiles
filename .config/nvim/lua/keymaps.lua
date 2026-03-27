@@ -17,27 +17,27 @@ vim.api.nvim_create_autocmd("User", {
   once = true,
 })
 
-local lazyreq = Lua.required_on_exported_call
-
-local smart_splits = function(fn)
-  return lazyreq("smart-splits")[fn]
-end
+-- local lazyreq = Lua.required_on_exported_call
+--
+-- local smart_splits = function(fn)
+--   return Lua.lazy.req("smart-splits")[fn]
+-- end
 
 return {
   { "<MiddleMouse>", "<Nop>" },
-  { "<M-h>", smart_splits("move_cursor_left") },
-  { "<M-j>", smart_splits("move_cursor_down") },
-  { "<M-k>", smart_splits("move_cursor_up") },
-  { "<M-l>", smart_splits("move_cursor_right") },
-  { "<D-h>", smart_splits("resize_left") },
-  { "<D-j>", smart_splits("resize_down") },
-  { "<D-k>", smart_splits("resize_up") },
-  { "<D-l>", smart_splits("resize_right") },
-  { "<S-M-h>", smart_splits("swap_buf_left") },
-  { "<S-M-j>", smart_splits("swap_buf_down") },
-  { "<S-M-k>", smart_splits("swap_buf_up") },
-  { "<S-M-l>", smart_splits("swap_buf_right") },
-  { "<leader>p", group = "[P]rint" },
+  -- { "<M-h>", smart_splits("move_cursor_left") },
+  -- { "<M-j>", smart_splits("move_cursor_down") },
+  -- { "<M-k>", smart_splits("move_cursor_up") },
+  -- { "<M-l>", smart_splits("move_cursor_right") },
+  -- { "<D-h>", smart_splits("resize_left") },
+  -- { "<D-j>", smart_splits("resize_down") },
+  -- { "<D-k>", smart_splits("resize_up") },
+  -- { "<D-l>", smart_splits("resize_right") },
+  -- { "<S-M-h>", smart_splits("swap_buf_left") },
+  -- { "<S-M-j>", smart_splits("swap_buf_down") },
+  -- { "<S-M-k>", smart_splits("swap_buf_up") },
+  -- { "<S-M-l>", smart_splits("swap_buf_right") },
+  { "<leader>p", group = "[P]ick" },
   {
     ",r",
     function()
@@ -48,15 +48,14 @@ return {
   },
   {
     ",p",
-    function()
-      Lua.get_lsp_diagnostic_information()
-    end,
+    Lua.get_lsp_diagnostic_information,
     desc = "Print more info about diagnostic",
   },
   {
     "<c-[",
     proxy = "<c-o>",
     desc = "Go back (<C-O>)",
+    mode = "n",
   },
   { "<", "<gv", mode = "v" },
   { ">", ">gv", mode = "v" },
@@ -127,28 +126,34 @@ return {
     silent = true,
   },
   { "<leader>e", group = "[E]xecute" },
-  -- { "<Esc>",     "<C-c>",             desc = "Better escape", },
   {
     "<leader>d",
     group = "[D]ap",
   },
   {
     {
-      "<leader>o",
-      group = "[O]pen",
+      "<leader>l",
+      group = "[L]azy",
     },
     {
-      "<leader>op",
+      "<leader>lo",
       function()
         require("lazy").show()
       end,
-      desc = "[O]pen Lazy",
+      desc = "[L]azy [O]pen",
     },
     {
-      "<leader>om",
-      "<cmd>messages<cr>",
-      desc = "[O]pen [M]essages",
+      "<leader>lr",
+      function()
+        require("library.pickers").completions("Lazy reload")
+      end,
+      desc = "[L]azy [R]eload",
     },
+  },
+  {
+    "<leader>om",
+    "<cmd>messages<cr>",
+    desc = "[O]pen [M]essages",
   },
   {
     {

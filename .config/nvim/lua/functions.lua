@@ -1,6 +1,54 @@
 local F = {}
 _G.Lua = F
 
+local MAX_INSPECT_LINES = 2000
+function F.inspect(opts)
+  local obj = opts.items
+  if not obj then
+    vim.notify("no items to inspect", 3)
+    return
+  end
+
+  local len = #obj
+  local caller = debug.getinfo(1, "S")
+  for level = 2, 10 do
+    local info = debug.getinfo(level, "S")
+    if
+        info
+        and info.source ~= caller.source
+        and info.what ~= "C"
+        and info.source ~= "lua"
+        and info.source ~= "@" .. (os.getenv("MYVIMRC") or "")
+    then
+      caller = info
+      break
+    end
+  end
+  vim.schedule(function()
+    local title = "Debug: "
+        .. vim.fn.fnamemodify(caller.source:sub(2), ":~:.")
+        .. ":"
+        .. caller.linedefined
+    local lines = vim.split(
+      vim.inspect(len == 1 and obj[1] or len > 0 and obj or nil),
+      "\n"
+    )
+    if #lines > MAX_INSPECT_LINES then
+      local c = #lines
+      lines = vim.list_slice(lines, 1, MAX_INSPECT_LINES)
+      lines[#lines + 1] = ""
+      lines[#lines + 1] = (c - MAX_INSPECT_LINES)
+          .. " more lines have been truncated …"
+    end
+    local cb = opts.callback
+    if not cb then
+      Snacks.notify.warn(lines, { title = title, ft = "lua" })
+    else
+      cb(lines)
+    end
+  end)
+end
+
 F.is_empty = function(var)
   if var == nil then
     return true
@@ -79,9 +127,9 @@ F.get_submodules = function(name)
 
   for _, file in ipairs(files) do
     local mod = file
-      :gsub(vim.fn.stdpath("config") .. "/lua/", "")
-      :gsub("%.lua$", "")
-      :gsub("/", ".")
+        :gsub(vim.fn.stdpath("config") .. "/lua/", "")
+        :gsub("%.lua$", "")
+        :gsub("/", ".")
     table.insert(modules, mod)
   end
 
@@ -205,10 +253,10 @@ F.replace_text_object_precise = function(motion, transform_fn)
 
     -- If marks are still invalid, abort
     if
-      start_pos[1] == 0
-      and start_pos[2] == 0
-      and end_pos[1] == 0
-      and end_pos[2] == 0
+        start_pos[1] == 0
+        and start_pos[2] == 0
+        and end_pos[1] == 0
+        and end_pos[2] == 0
     then
       vim.notify("No valid visual selection found", vim.log.levels.ERROR)
       return
@@ -292,85 +340,6 @@ F.replace_node = function(before, after)
   local _, start, _, end_ = before:range()
   local after_text = vim.treesitter.get_node_text(after, 0)
   F.replace_line(after_text, start, end_)
-end
-
-F.unfold_template_node = function(args)
-  local index = args.index or 1
-  local template_node = args.node or vim.treesitter.get_node()
-  if not template_node then
-    return
-  end
-
-  local parameter = vim.treesitter.cpp.get_template_parameter_node({
-    node = template_node,
-    index = index,
-  })
-  local node = vim.treesitter.cpp.get_full_type_node(template_node)
-  if not node then
-    return
-  end
-
-  F.replace_node(node, parameter)
-end
-
-F.unfold_call_node = function(args)
-  local index = args.index or 1
-  local cword = args.node or vim.treesitter.get_node()
-  if not cword then
-    return
-  end
-
-  local call = vim.treesitter.cpp.Call.new(cword)
-  local top_node = call.top_node
-  local ith_arg = call.args[index]
-  F.replace_node(top_node, ith_arg)
-end
-
-F.unfold_node = function(args)
-  local node = args.node or vim.treesitter.get_node()
-  if not node then
-    return
-  end
-
-  if vim.treesitter.cpp.is_type(node) then
-    F.unfold_template_node({ node = node, index = 1 })
-  elseif vim.treesitter.cpp.is_call(node) then
-    F.unfold_call_node({ node = node, index = 1 })
-  else
-    vim.print("Unrecognized node")
-  end
-end
-
-F.required_on_exported_call = function(mod)
-  local mt = setmetatable({}, {
-    __index = function(_, picker)
-      return function(...)
-        return require(mod)[picker](...)
-      end
-    end,
-  })
-
-  return mt
-end
-
-F.require_on_exported_call_with_params = function(mod, opts_table)
-  return setmetatable({}, {
-    __index = function(_, picker)
-      return function(...)
-        local opts = nil
-        if opts_table ~= nil then
-          opts = opts_table[picker]
-        end
-
-        if opts == nil then
-          return require(mod)[picker](...)
-        else
-          opts = vim.tbl_deep_extend("force", opts, { ... })
-          return require(mod)[picker](opts)
-        end
-      end
-    end,
-  })
 end
 
 return F

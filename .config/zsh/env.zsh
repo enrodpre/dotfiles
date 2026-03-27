@@ -26,6 +26,7 @@ export BUNDLE_USER_PLUGIN="$XDG_DATA_HOME"/bundle
 export GDBHISTFILE="$XDG_STATE_HOME/gdb_history"
 export WINEPREFIX="$XDG_DATA_HOME"/wine
 export MAVEN_OPTS="-Dmaven.repo.local=$XDG_DATA_HOME/m2"
+export RUSTUP_HOME="$XDG_DATA_HOME"/rustup
 
 export TERM_EMULATOR=/usr/bin/kitty
 
@@ -38,7 +39,6 @@ export PYTHONPATH=$XDG_DATA_HOME/python/functions:$HOME/.local/bin:/bin/python
 
 path=(
   "$HOME"/.local/bin
-  "$CARGO_HOME"/bin
   "$path[@]"
 )
 
@@ -50,3 +50,4 @@ source "$ZDOTDIR"/functions.zsh
 export FONT="Fira code"
 typeset -U EXCLUDED_DIRS
 EXCLUDED_DIRS=(/dev /proc /run /sys)
+. "/home/kike/.local/share/cargo/env"

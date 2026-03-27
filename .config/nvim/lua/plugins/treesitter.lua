@@ -1,12 +1,21 @@
 #!/usr/bin/lua
 
-
 return {
-  { "nvim-treesitter/nvim-treesitter-context", event = "VeryLazy", opts = {}, },
   {
-    "nvim-treesitter/nvim-treesitter-textobjects",
-    event = "VeryLazy",
+    "nvim-treesitter/nvim-treesitter",
+    dependencies = {
+      { "nvim-treesitter/nvim-treesitter-context" },
+      { "RRethy/nvim-treesitter-endwise" },
+      {
+        "nvim-treesitter/nvim-treesitter-textobjects",
+        branch = "main",
+      },
+    },
+    lazy = false,
+    build = ":TSUpdate",
     opts = {
+      auto_install = true,
+      endwise = { enable = true },
       textobjects = {
         lsp_interop = {
           enable = true,
@@ -59,8 +68,9 @@ return {
           },
         },
       },
-
     },
-    config = function(_, opts) require("nvim-treesitter.configs").setup(opts) end
+    config = function(_, opts)
+      require('nvim-treesitter.configs').setup(opts)
+    end
   },
 }
