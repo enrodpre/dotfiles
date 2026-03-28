@@ -4,9 +4,8 @@ return {
   lazy = false,
   ---@type snacks.Config
   opts = {
-    explorer = { enabled = true },
+    explorer = { enabled = false },
     picker = { enabled = false },
-    styles = { enabled = true, },
     statuscolumn = {
       enabled = true,
       left = { "mark", "sign" }, -- priority of signs on the left (high to low)
