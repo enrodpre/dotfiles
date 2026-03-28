@@ -5,14 +5,12 @@ return {
     cmd = "LazyDev",
     opts = {
       library = {
-        -- { path = "snacks.nvim",        words = { "Snacks" } },
         "lazy.nvim",
+        { path = "snacks.nvim",        words = { "Snacks" } },
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
         -- "nvim-dap-ui",
       },
-      integrations = { cmp = false },
-      debug = true
-
+      integrations = { cmp = true },
     },
   },
   {

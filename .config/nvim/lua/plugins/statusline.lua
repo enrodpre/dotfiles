@@ -88,6 +88,7 @@ return {
       -- require("library.terminal").statusline,
     },
     options = {
+      theme = vim.g.colorscheme,
       globalstatus = vim.o.laststatus == 3,
       -- disabled_filetypes = { statusline = { "snacks_terminal" } },
       component_separators = "",

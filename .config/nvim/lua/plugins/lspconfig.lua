@@ -1,5 +1,4 @@
 local mapping = {
-
   { "<leader>l", group = "[L]sp", },
   {
     "<leader>lr",
@@ -33,50 +32,71 @@ local mapping = {
     noremap = true,
   },
   {
+    "<leader>rR",
+    function()
+      Snacks.rename.rename_file()
+    end,
+    desc = "[R]ename File",
+    silent = true,
+    noremap = true,
+  },
+  {
     "<leader>od",
     vim.diagnostic.open_float,
     desc = "[O]pen Dianostic",
   },
 }
 
+local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(ctx)
+    local bufnr = ctx.buf
+    local client = assert(vim.lsp.get_client_by_id(ctx.data.client_id))
+    if client:supports_method("textDocument/formatting") then
+      vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        group = augroup,
+        buffer = bufnr,
+        callback = function()
+          if vim.g.autoformat then
+            vim.lsp.buf.format({ bufnr = bufnr })
+          end
+        end,
+      })
+    end
+  end
+})
+
+vim.api.nvim_create_user_command("Toggle", function(args)
+  -- if args.nargs < 1 then
+  --   return
+  -- end
+
+  for _, opt in ipairs(args.fargs) do
+    vim.g[opt] = not vim.g[opt]
+    vim.print(string.format("%s option is now %s", opt, vim.g[opt]))
+  end
+end, {
+  nargs = 1,
+  complete = function()
+    return { "autoformat" }
+  end,
+})
 
 return {
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = {
+      rename = { enabled = true },
+      words = { enabled = true },
+    }
+  },
   {
     "neovim/nvim-lspconfig",
     event = { "VeryLazy" },
     keys = mapping,
-    opts = {
-      tombi = {},
-      bashls = { filetypes = { "zsh" } },
-      asm_lsp = {},
-      jsonls = {
-        cmd = { "vscode-json-language-server", "--stdio" },
-      },
-      yamlls = {},
-    },
-    config = function(_, opts)
-      vim.diagnostic.config({
-        underline = true,
-        update_in_insert = true,
-        severity_sort = true,
-        virtual_text = {
-          spacing = 4,
-          source = "if_many",
-          prefix = "●",
-        },
-      })
-      vim.lsp.config("*", {
-        capabilities = require("blink.cmp").get_lsp_capabilities(
-          vim.lsp.protocol.make_client_capabilities(),
-          true
-        ),
-      })
-
-      for server, conf in pairs(opts) do
-        vim.lsp.config(server, conf)
-        vim.lsp.enable(server)
-      end
-    end,
   },
   {
     "folke/trouble.nvim",

@@ -79,23 +79,23 @@ return {
         branch = "main",
       },
     },
-    build = ":TSUpdate",
+    build = "TSUpdate",
     event = "VeryLazy",
     config = function()
       ---@diagnostic disable: missing-fields
-      require("nvim-treesitter.configs").setup {
-        select = {
-          lookahead = true,
-          selection_modes = {
-            ['@parameter.outer'] = 'v', -- charwise
-            ['@function.outer'] = 'V',  -- linewise
-            -- ['@class.outer'] = '<c-v>', -- blockwise
-          },
-          include_surrounding_whitespace = false,
-        },
-        move = {
-          set_jumps = true,
-        }, }
+      -- require("nvim-treesitter.configs").setup {
+      --   select = {
+      --     lookahead = true,
+      --     selection_modes = {
+      --       ['@parameter.outer'] = 'v', -- charwise
+      --       ['@function.outer'] = 'V',  -- linewise
+      --       -- ['@class.outer'] = '<c-v>', -- blockwise
+      --     },
+      --     include_surrounding_whitespace = false,
+      --   },
+      --   move = {
+      --     set_jumps = true,
+      --   }, }
       ---@diagnostic enable: missing-fields
 
       for k, action in pairs(modules.select.keymaps) do
@@ -111,13 +111,13 @@ return {
         end
       end
 
-      for motion, keymaps in pairs(modules.move) do
-        for k, action in pairs(keymaps) do
-          vim.keymap.set("n", k, function()
-            require("nvim-treesitter-textobjects.move")[motion](action)
-          end)
-        end
-      end
+      -- for motion, keymaps in pairs(modules.move) do
+      --   for k, action in pairs(keymaps) do
+      --     vim.keymap.set("n", k, function()
+      --       require("nvim-treesitter-textobjects.move")[motion](action)
+      --     end)
+      --   end
+      -- end
     end
   },
 }

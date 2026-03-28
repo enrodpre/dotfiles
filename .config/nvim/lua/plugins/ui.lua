@@ -1,12 +1,31 @@
-vim.api.nvim_create_autocmd("TextYankPost", {
-  desc = "Highlights when yanking",
-  pattern = "*",
-  callback = function()
-    vim.hl.on_yank({ higroup = "Cursor", timeout = 200 })
-  end,
-})
-
 return {
+  {
+    "folke/which-key.nvim",
+    dependencies = {
+      "echasnovski/mini.icons",
+    },
+    event = "VeryLazy",
+    opts = {
+      preset = "modern",
+      spec = require("keymaps"),
+      win = {
+        no_overlap = false,
+        row = 30
+      },
+      debug = false,
+    },
+  },
+  {
+    "folke/snacks.nvim",
+    priority = 1000,
+    lazy = false,
+    opts = {
+      input = { enabled = true },
+      notify = { enabled = true },
+
+      notifier = { enabled = true },
+    },
+  },
   { "nvim-tree/nvim-web-devicons", opts = {} },
   {
     "uga-rosa/ccc.nvim",
@@ -35,9 +54,9 @@ return {
           title = "",
           filter = function(_, win)
             return vim.w[win].snacks_win
-              and vim.w[win].snacks_win.position ~= "float"
-              and vim.w[win].snacks_win.relative == "editor"
-              and not vim.w[win].trouble_preview
+                and vim.w[win].snacks_win.position ~= "float"
+                and vim.w[win].snacks_win.relative == "editor"
+                and not vim.w[win].trouble_preview
           end,
         },
       },
@@ -86,20 +105,6 @@ return {
   {
     "tpope/vim-sleuth",
     event = "UiEnter",
-  },
-  {
-    "nvim-mini/mini.hipatterns",
-    version = false,
-    event = "UiEnter",
-    opts = function()
-      local hi = require("mini.hipatterns")
-      local ret = {
-        highlighters = {
-          hex_color = hi.gen_highlighter.hex_color(),
-        },
-      }
-      return ret
-    end,
   },
   {
     "nvim-mini/mini.cursorword",

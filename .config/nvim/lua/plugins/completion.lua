@@ -1,129 +1,146 @@
-local cmdline = {
-  keymap = {
-    -- recommended, as the default keymap will only show and select the next item
-    ["<C-n>"] = { "show", "select_next" },
-    ["<C-p>"] = { "show", "select_prev" },
-    ["<C-y>"] = { "accept", },
-  },
-  sources = function()
-    local cmdtype = vim.fn.getcmdtype()
-    if cmdtype == ":" then
-      local line = vim.fn.getcmdline()
-      local is = vim.startswith(line, '=')
-      vim.print(is)
-      if line:match("^lua.*") or is then
-        return { "lazydev", }
-      else
-        return { 'cmdline', 'buffer' }
-      end
-    elseif cmdtype == '/' or cmdtype == '?' then
-      return { 'buffer' }
-    else
-      return {}
-    end
-    -- Commands
-  end,
-  completion = {
-    -- ghost_text = { enabled = true },
-    menu = {
-      auto_show = true
-    },
-  }
-}
-
-local opts = {
-  snippets   = {
-    expand = function(snippet, _)
-      -- return LazyVim.cmp.expand(snippet)
-    end,
-  },
-  completion = {
-    documentation = { auto_show = true },
-    keyword = { range = "prefix" },
-    ghost_text = {
-      enabled = true,
-      show_with_menu = true
-    },
-    menu = {
-      draw = {
-        treesitter = { "lsp" },
-        columns = {
-          {
-            "label",
-            "label_description",
-            gap = 1
-          }, {
-          "source_name",
-          "kind"
-        }
-        },
-      },
-      auto_show = true
-    },
-    list = {
-      selection = { preselect = false, auto_insert = true },
-      cycle = {
-        from_bottom = true,
-        from_top = true,
-      },
-    },
-    trigger = {
-      show_on_insert = true,
-    },
-  },
-  sources    = {
-    default = { "lsp", "path", "snippets" },
-    per_filetype = {
-      lua = {
-        inherit_defaults = true,
-        "lazydev",
-      }
-    },
-    providers = {
-      lazydev = {
-        name = "LazyDev",
-        module = "lazydev.integrations.blink",
-        -- make lazydev completions top priority (see `:h blink.cmp`)
-        score_offset = 100,
-      },
-    }
-  },
-  keymap     = {
-    ["<C-n>"] = {
-      "show",
-      "select_next",
-      "fallback_to_mappings",
-    },
-    ["<C-p>"] = { "show", "select_prev", "fallback_to_mappings", },
-    ['<C-y>'] = { 'select_and_accept', 'fallback' },
-    ['<C-e>'] = { 'cancel', 'fallback' },
-  },
-  signature  = { enabled = true },
-  fuzzy      = {
-    implementation = "rust",
-    -- prebuilt_binaries = { force_version = nil },
-  },
-  cmdline    = cmdline
-}
 return {
   {
-    "saghen/blink.cmp",
-    -- build = 'cargo build --release',
+    "hrsh7th/nvim-cmp",
     dependencies = {
-      "rafamadriz/friendly-snippets",
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-path",
+      "hrsh7th/cmp-buffer",
+      "hrsh7th/cmp-cmdline",
+      "ray-x/cmp-treesitter",
+      "chrisgrieser/cmp-nerdfont",
       {
-        "saghen/blink.compat",
-        optional = true, -- make optional so it's only enabled if any extras need it
-        opts = {},
-        version = "*",
+        "garymjr/nvim-snippets",
+        opts = {
+          friendly_snippets = true,
+        },
+        dependencies = { "rafamadriz/friendly-snippets", },
       },
     },
-    opts_extend = {
-      "sources.completion.enabled_providers",
-      "sources.compat",
-      "sources.default",
-    },
-    event = { "InsertEnter", "CmdlineEnter" },
-    opts = opts,
+    event = { "CmdlineEnter", "InsertEnter", },
+    config = function(_, opts)
+      local cmp = require("cmp")
+      local auto_select = false
+      local mapping = {
+        ["<C-n>"] = cmp.mapping(function()
+          if not cmp.visible() then
+            cmp.complete()
+          else
+            cmp.select_next_item({
+              behavior = cmp
+                  .SelectBehavior.Select,
+            })
+          end
+        end, { "i", "c", }),
+        ["<C-p>"] = cmp.mapping(function()
+          if not cmp.visible() then
+            cmp.complete()
+          else
+            cmp.select_prev_item({
+              behavior = cmp
+                  .SelectBehavior.Select,
+            })
+          end
+        end, { "i", "c", }),
+        ["<C-b>"] = cmp.mapping(function()
+          cmp.scroll_docs(-4)
+        end, { "i", "c", }),
+        ["<C-f>"] = cmp.mapping(function()
+          cmp.scroll_docs(4)
+        end, { "i", "c", }),
+        ["<CR>"] = cmp.mapping(function(fallback)
+          if cmp.visible() and cmp.get_active_entry() then
+            cmp.confirm()
+          else
+            fallback()
+          end
+        end, { "i", "c", }),
+        ["<C-CR>"] = cmp.mapping(function(fallback)
+          if cmp.visible() and cmp.get_active_entry() then
+            cmp.confirm()
+          else
+            fallback()
+          end
+        end, { "i", "c", }),
+        ["<C-y>"] = cmp.mapping(function()
+          cmp.confirm({ select = true, })
+        end, { "i", "c", }),
+        ["<C-e>"] = cmp.mapping(function()
+          cmp.abort()
+        end, { "i", "c", }),
+        ["<Tab>"] = cmp.mapping(function(failback)
+          return failback
+        end, { "c", }),
+      }
+
+      local cmp_opts = {
+        completion = {
+          completeopt = "menu,menuone,noinsert" ..
+              (auto_select and "" or ",noselect"),
+        },
+        formatting = {
+          format = function(entry, item)
+            local icon = require("mini.icons").get("lsp", item.kind)
+            if entry.source.name == "cmdline" then
+              item.kind = "󰘳 Cmdline"
+            elseif icon then
+              item.kind = icon .. " " .. item.kind
+            end
+
+            local widths = {
+              abbr = vim.g.cmp_widths and vim.g.cmp_widths.abbr or 40,
+              menu = vim.g.cmp_widths and vim.g.cmp_widths.menu or 30,
+            }
+
+            for key, width in pairs(widths) do
+              if item[key] and vim.fn.strdisplaywidth(item[key]) > width then
+                item[key] = vim.fn.strcharpart(item[key], 0, width - 1) .. "…"
+              end
+            end
+
+            return item
+          end,
+        },
+        mapping = mapping,
+        preselect = true,
+        sources = cmp.config.sources({
+          { name = "lazydev",  group_index = 0, },
+          { name = "snippets", },
+          { name = "nvim_lsp", },
+        }),
+        -- view = {
+        --   entries = {
+        --     selection_order = 'near_cursor',
+        --     follow_cursor = true,
+        --   },
+        -- },
+        window = {
+          completion = cmp.config.window.bordered(),
+          documentation = cmp.config.window.bordered(),
+        },
+      }
+
+      opts = vim.tbl_deep_extend("force", cmp_opts, opts)
+      cmp.setup(opts)
+
+      -- `/` cmdline setup.
+      cmp.setup.cmdline({ "/", "?", }, {
+        mapping = cmp.mapping.preset.cmdline(),
+        sources = {
+          { name = "buffer", },
+        },
+      })
+
+      -- `:` cmdline setup.
+      cmp.setup.cmdline(":", {
+        mapping = mapping,
+        sources = cmp.config.sources({
+          { name = "path", },
+          { name = "dotenv", },
+        }, {
+          { name = "cmdline", },
+        }),
+        matching = { disallow_symbol_nonprefix_matching = false, },
+      })
+    end,
   },
 }

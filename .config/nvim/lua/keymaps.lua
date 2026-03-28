@@ -2,16 +2,10 @@ vim.api.nvim_create_autocmd("User", {
   desc = "Disable some defalt mapping",
   pattern = "LazyLoad",
   callback = function()
-    local delete = {
-      gc = { "x", "n" },
-      gcc = { "n" },
-    }
+    local delete = {}
 
     for lhs, modes in pairs(delete) do
-      --- @type table
-      for _, mode in ipairs(modes) do
-        vim.api.nvim_del_keymap(mode, lhs)
-      end
+      vim.keymap.del(modes, lhs)
     end
   end,
   once = true,

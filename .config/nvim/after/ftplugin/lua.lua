@@ -1,8 +1,9 @@
 -- Function to format Lua tables by breaking on { and } characters
 local function format_lua_table()
   -- Get current line number and content
-  local line_num = vim.api.nvim_win_get_cursor(0)[1]
-  local line_content = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num, false)[1]
+  local line_num = vim.api.nvim_win_get_cursor(0) [1]
+  local line_content = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num,
+    false) [1]
 
 
   if not line_content or line_content == "" then
@@ -40,13 +41,13 @@ local function format_lua_table()
       current_line = indent .. string.rep("  ", brace_depth) .. "}"
       table.insert(result_lines, current_line)
       current_line = indent .. string.rep("  ", brace_depth)
-    elseif char == "," then
-      current_line = current_line .. char
-      -- Add line break after comma if we're inside braces
-      if brace_depth > 0 then
-        table.insert(result_lines, current_line)
-        current_line = indent .. string.rep("  ", brace_depth)
-      end
+      -- elseif char == "," then
+      --   current_line = current_line .. char
+      --   -- Add line break after comma if we're inside braces
+      --   if brace_depth > 0 then
+      --     table.insert(result_lines, current_line)
+      --     current_line = indent .. string.rep("  ", brace_depth)
+      --   end
     else
       current_line = current_line .. char
     end
@@ -64,7 +65,9 @@ local function format_lua_table()
     if trimmed ~= "" then
       -- Preserve proper indentation
       local proper_indent = indent ..
-          string.rep("  ", math.max(0, select(2, line:gsub("{", "")) - select(2, line:gsub("}", ""))))
+        string.rep("  ",
+          math.max(0,
+            select(2, line:gsub("{", "")) - select(2, line:gsub("}", ""))))
       table.insert(cleaned_lines, line)
     end
   end
@@ -73,13 +76,14 @@ local function format_lua_table()
   vim.api.nvim_buf_set_lines(0, line_num - 1, line_num, false, cleaned_lines)
 
   -- Position cursor at the start of the formatted block
-  vim.api.nvim_win_set_cursor(0, { line_num, 0 })
+  vim.api.nvim_win_set_cursor(0, { line_num, 0, })
 end
 
 -- Simpler version that just breaks on { and } without fancy indentation
 local function simple_format_lua_table()
-  local line_num = vim.api.nvim_win_get_cursor(0)[1]
-  local line_content = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num, false)[1]
+  local line_num = vim.api.nvim_win_get_cursor(0) [1]
+  local line_content = vim.api.nvim_buf_get_lines(0, line_num - 1, line_num,
+    false) [1]
 
   if not line_content or line_content == "" then
     return
@@ -133,8 +137,9 @@ local function simple_format_lua_table()
 end
 
 -- Create a command to call the function
-vim.api.nvim_create_user_command('LuaTableSimple', format_lua_table, {})
-vim.api.nvim_create_user_command('FormatLuaTableSimple', simple_format_lua_table, {})
+vim.api.nvim_create_user_command("LuaTableSimple",       format_lua_table,        {})
+vim.api.nvim_create_user_command("FormatLuaTableSimple", simple_format_lua_table,
+                                                                                    {})
 
 -- Optional: Create a keybinding
 -- vim.keymap.set('n', '<leader>ft', simple_format_lua_table, { desc = 'Format Lua table on current line' })

@@ -1,9 +1,7 @@
 require("options")
 require("functions")
-require("config").setup()
-require("library.lang")
-require("bootstrap")
+require("lazy-nvim")
 require("library")
 
--- vim.packadd()
 vim.cmd([[packadd nohlsearch]])
+vim.cmd('colorscheme ' .. vim.g.colorscheme)

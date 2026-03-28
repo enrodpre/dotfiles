@@ -1,11 +1,3 @@
-Lang:new {
-  formatter = "cmake",
-  lsp = { server = "cmake" },
-  linter = "cmake_lint",
-  plugins = {},
-}:setup()
-
-
 -- vim.lsp.config("neocmake", {
 
 -- single_file_support = true, -- suggested

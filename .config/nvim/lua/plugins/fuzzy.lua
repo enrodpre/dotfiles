@@ -1,33 +1,7 @@
 ---@module "fzf-lua"
 local fzflua = Lua.lazy.req("fzf-lua")
 
-local function is_valid(obj)
-  return vim.tbl_contains(_G, obj)
-end
 
-local function debug_object()
-  local debug = require("library.debug")
-  local cword = vim.fn.expand("<cword>")
-  local obj
-  local name
-  if is_valid(cword) then
-    obj = _G[cword]
-    name = cword
-  else
-    local CWORD = vim.fn.expand("<cWORD>")
-    if is_valid(CWORD) then
-      obj = _G[CWORD]
-      name = CWORD
-    end
-  end
-
-  if not is_valid(obj) then
-    vim.ui.input({ prompt = "Enter object to inspect" }, function(choice)
-      obj = choice
-    end)
-  end
-  debug.fuzzy_table(obj, name)
-end
 
 local function run_current_cwd(picker)
   return function()
@@ -42,17 +16,6 @@ local function run_with_cword(picker)
     local cword = vim.fn.expand("<cWORD>")
     picker({ query = cword })
   end
-end
-
-local function test_debug()
-  local data = {
-    "apple",
-    b = "banana",
-    aa = { "cherry", "date", { "elderberry", "fig", "grape" } },
-    "kiwi",
-  }
-  local debug = require("library.debug")
-  debug.fuzzy_table(data, "data")
 end
 
 local keymap = {

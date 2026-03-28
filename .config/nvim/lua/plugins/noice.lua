@@ -3,7 +3,7 @@ return {
   enabled = true,
   event = "UiEnter",
   dependencies = {
-    "MunifTanjim/nui.nvim", "rcarriga/nvim-notify",
+    "MunifTanjim/nui.nvim",
   },
   opts = {
     cmdline = {
