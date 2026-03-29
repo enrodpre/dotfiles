@@ -49,6 +49,15 @@ local mapping = {
 
 local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function()
+    vim.api.nvim_create_user_command("LspInfo", "checkhealth vim.lsp", {
+      desc = "Alias of `checkhealth vim.lsp`",
+    })
+  end,
+  once = true
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
   callback = function(ctx)
     local bufnr = ctx.buf
     local client = assert(vim.lsp.get_client_by_id(ctx.data.client_id))
@@ -68,10 +77,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 })
 
 vim.api.nvim_create_user_command("Toggle", function(args)
-  -- if args.nargs < 1 then
-  --   return
-  -- end
-
   for _, opt in ipairs(args.fargs) do
     vim.g[opt] = not vim.g[opt]
     vim.print(string.format("%s option is now %s", opt, vim.g[opt]))

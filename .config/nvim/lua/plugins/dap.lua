@@ -2,9 +2,7 @@ local function dap()
   return require("dap")
 end
 
-
-
-vim.g.dap_enabled = false
+vim.g.dap_enabled = true
 return {
   {
     "mfussenegger/nvim-dap",

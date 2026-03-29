@@ -10,7 +10,6 @@ vim.g.fuzzyprg = "fzf-lua"
 vim.g.cmpprg = "blink.cmp"
 vim.g.colorscheme = "tokyonight"
 
-
 vim.o.cmdheight = 0
 vim.o.showmode = false          -- Don't show mode in command line
 vim.o.ruler = false             -- Don't show cursor position

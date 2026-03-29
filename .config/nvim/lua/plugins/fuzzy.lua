@@ -1,8 +1,6 @@
 ---@module "fzf-lua"
 local fzflua = Lua.lazy.req("fzf-lua")
 
-
-
 local function run_current_cwd(picker)
   return function()
     local cwd = vim.fn.expand("%:p:h")

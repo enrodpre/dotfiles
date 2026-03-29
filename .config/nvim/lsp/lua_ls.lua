@@ -1,7 +1,11 @@
 return {
+  root_markers = { ".editorconfig", },
   settings = {
     Lua = {
-      runtime = { version = "LuaJIT" },
+      runtime = {
+        version = "LuaJIT",
+        pathStrict = false,
+      },
       workspace = {
         checkThirdParty = false,
       },
@@ -14,11 +18,8 @@ return {
       completion = {
         callSnippet = "Replace",
       },
-      diagnostics = {
-        globals = { "vim" },
-      },
       doc = {
-        privateName = { "^_" },
+        privateName = { "^_", },
       },
       hint = {
         enable = true,

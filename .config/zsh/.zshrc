@@ -1,13 +1,13 @@
 #!/usr/bin/zsh
 
-if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ] ; then
+if [ -z "$WAYLAND_DISPLAY" ] && [ -n "$XDG_VTNR" ] && [ "$XDG_VTNR" -eq 1 ]; then
   exec systemd-cat --identifier=sway sway
 fi
 
 bindkey -e
 
 ########### SHELL VARS ############
-export EZA_COLORS="$(cat $ZDOTDIR/themes/eza)"
+export EZA_CONFIG_DIR="$XDG_CONFIG_HOME/eza"
 export HISTFILE=$XDG_STATE_HOME/.zsh_history
 export HISTSIZE=10000
 export SAVEHIST=10000
@@ -34,13 +34,13 @@ source $ZDOTDIR/alias.zsh
 fd -L -t f -d 2 ".plugin.zsh" "$XDG_DATA_HOME/zsh/autoload" | while read -r zshplugin; do source $zshplugin; done
 
 typeset mods=(
-    zsh/complist
-    zsh/nearcolor
-    zsh/zprof
+  zsh/complist
+  zsh/nearcolor
+  zsh/zprof
 )
 
 for module in "${mods[@]}"; do
-    zmodload "$module"
+  zmodload "$module"
 done
 
 # autoload -Uz vcs_info
@@ -57,9 +57,9 @@ setopt PUSHD_SILENT
 source $ZDOTDIR/completion.zsh
 
 if [ -z $NVIM ]; then
-    source $ZDOTDIR/standalone.zsh
+  source $ZDOTDIR/standalone.zsh
 else
-    source $ZDOTDIR/embedded.zsh
+  source $ZDOTDIR/embedded.zsh
 fi
 
 source $ZDOTDIR/mapping.zsh

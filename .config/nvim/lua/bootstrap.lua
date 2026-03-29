@@ -31,13 +31,13 @@ require("lazy").setup({ { import = "plugins" } }, {
   rocks = { root = "/home/kike/.local/lib/luarocks/rocks-5.1" },
   change_detection = {
     enabled = true,
-    notify = false,
+    notify = true,
   },
   performance = {
     rtp = {
       disabled_plugins = {
         "gzip",
-        -- "netrwPlugin",
+        "netrwPlugin",
         "rpmPlugin",
         "tarPlugin",
         "tohtml",

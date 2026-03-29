@@ -1,4 +1,5 @@
 return {
+
   {
     "folke/lazydev.nvim",
     ft = "lua",
@@ -8,9 +9,10 @@ return {
         "lazy.nvim",
         { path = "snacks.nvim",        words = { "Snacks" } },
         { path = "${3rd}/luv/library", words = { "vim%.uv" } },
+        { path = "fzf-lua",            words = { "FzfLua" } },
         -- "nvim-dap-ui",
       },
-      integrations = { cmp = true },
+      integrations = { cmp = vim.g.cmpprg == "nvim-cmp", },
     },
   },
   {
@@ -26,7 +28,7 @@ return {
         end,
         ft = "lua",
         desc = "Launch current Neovim process onto 8086",
-      }, --foreground
+      },
     },
     opts = function()
       local dap = require("dap")
